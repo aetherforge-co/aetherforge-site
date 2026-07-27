@@ -1259,65 +1259,85 @@ cartOverlayBg.addEventListener('click', closeCart);
 const checkoutModal = document.getElementById('checkoutModal');
 const checkoutContent = document.getElementById('checkoutContent');
 
-function checkoutFormHTML(){
+function checkoutSummaryHTML(){
   const { items, subtotal } = cartTotals();
-  const shipping = subtotal > 0 ? 9.5 : 0;
-  const total = subtotal + shipping;
   return `
     <div class="checkout-eyebrow">// ORDER REVIEW</div>
     <h2>Checkout</h2>
     <div class="checkout-summary">
       ${items.map(i => `<div class="checkout-summary__line"><span>${i.qty} × ${i.name}</span><span>$${(i.qty*i.price).toFixed(2)}</span></div>`).join('')}
-      <div class="checkout-summary__line"><span>SHIPPING</span><span>$${shipping.toFixed(2)}</span></div>
-      <div class="checkout-summary__total"><span>TOTAL</span><span>$${total.toFixed(2)}</span></div>
+      <div class="checkout-summary__total"><span>SUBTOTAL</span><span>$${subtotal.toFixed(2)}</span></div>
     </div>
-    <form class="checkout-form" id="checkoutForm">
-      <label>Full name</label>
-      <input type="text" required>
-      <label>Email</label>
-      <input type="email" required>
-      <label>Shipping address</label>
-      <input type="text" required>
-      <div class="checkout-row">
-        <div><label>City</label><input type="text" required></div>
-        <div><label>ZIP / Postal code</label><input type="text" required></div>
-      </div>
-      <div class="checkout-note">// DEMO CHECKOUT — no payment is collected and no order is actually placed. This confirms the flow only.</div>
-      <button type="submit" class="btn" style="width:100%;">PLACE ORDER</button>
-    </form>
+    <p style="color:var(--af-grey); font-size:0.85rem; margin-bottom:20px; line-height:1.6;">Shipping and payment are collected on Stripe's secure checkout page — you'll be redirected there next.</p>
+    <div class="checkout-note" id="checkoutStatus">// Preparing secure checkout...</div>
   `;
 }
 
-function orderConfirmHTML(){
-  const orderId = 'AF-' + Math.floor(100000 + Math.random()*900000);
+function checkoutErrorHTML(message){
   return `
     <div class="order-confirm">
-      <div class="stamp">ORDER ${orderId} — CONFIRMED</div>
-      <h2>Order Received</h2>
-      <p>This is a demo confirmation — no charge was made and nothing ships. Wire this up to real checkout when you're ready.</p>
+      <div class="stamp" style="border-color:var(--af-grey-dim); color:var(--af-grey);">CHECKOUT ERROR</div>
+      <h2>Couldn't start checkout</h2>
+      <p>${message}</p>
       <button class="btn btn--ghost" id="checkoutDoneBtn">CLOSE</button>
     </div>
   `;
 }
 
-function openCheckout(){
+async function openCheckout(){
   if (cartTotals().count === 0) return;
-  checkoutContent.innerHTML = checkoutFormHTML();
-  document.getElementById('checkoutForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    Object.keys(cart).forEach(k => delete cart[k]);
-    renderCart();
-    checkoutContent.innerHTML = orderConfirmHTML();
-    document.getElementById('checkoutDoneBtn').addEventListener('click', closeCheckout);
-  });
+  const { items } = cartTotals();
+  checkoutContent.innerHTML = checkoutSummaryHTML();
   checkoutModal.classList.add('show');
   closeCart();
+
+  try {
+    const res = await fetch('/api/create-checkout-session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        items: items.map(i => ({ name: i.name, price: i.price, qty: i.qty }))
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.url) {
+      checkoutContent.innerHTML = checkoutErrorHTML(data.error || 'Something went wrong — try again in a moment.');
+      document.getElementById('checkoutDoneBtn').addEventListener('click', closeCheckout);
+      return;
+    }
+    window.location.href = data.url; // hand off to Stripe's hosted checkout page
+  } catch (err) {
+    checkoutContent.innerHTML = checkoutErrorHTML('Could not reach the server — check your connection and try again.');
+    document.getElementById('checkoutDoneBtn').addEventListener('click', closeCheckout);
+  }
 }
 function closeCheckout(){ checkoutModal.classList.remove('show'); }
 
 document.getElementById('checkoutBtn').addEventListener('click', openCheckout);
 document.getElementById('checkoutClose').addEventListener('click', closeCheckout);
 checkoutModal.addEventListener('click', (e) => { if (e.target === checkoutModal) closeCheckout(); });
+
+// handle the return trip from Stripe (success or cancel)
+(function handleCheckoutReturn(){
+  const params = new URLSearchParams(window.location.search);
+  const status = params.get('checkout');
+  if (status === 'success') {
+    Object.keys(cart).forEach(k => delete cart[k]);
+    renderCart();
+    checkoutContent.innerHTML = `
+      <div class="order-confirm">
+        <div class="stamp">PAYMENT CONFIRMED</div>
+        <h2>Order Received</h2>
+        <p>Thanks for your order — a confirmation is on its way from Stripe. We'll follow up with shipping details shortly.</p>
+        <button class="btn btn--ghost" id="checkoutDoneBtn">CLOSE</button>
+      </div>`;
+    checkoutModal.classList.add('show');
+    document.getElementById('checkoutDoneBtn').addEventListener('click', closeCheckout);
+    window.history.replaceState({}, '', window.location.pathname);
+  } else if (status === 'canceled') {
+    window.history.replaceState({}, '', window.location.pathname);
+  }
+})();
 
 renderCart();
 
