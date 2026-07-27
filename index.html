@@ -162,6 +162,40 @@ nav{
   padding:9px 14px;
 }
 .cart-btn:hover{ border-color:var(--af-red); color:var(--af-red); }
+
+/* ===== MOBILE NAV ===== */
+.hamburger-btn{
+  display:none; flex-direction:column; justify-content:center; gap:5px;
+  width:38px; height:38px; background:transparent; border:1px solid var(--af-grey-dim);
+  cursor:pointer; padding:0; margin-left:8px;
+}
+.hamburger-btn span{ display:block; width:18px; height:1.5px; background:var(--af-white); margin:0 auto; transition:transform .3s var(--ease), opacity .3s var(--ease); }
+.hamburger-btn:hover{ border-color:var(--af-red); }
+.hamburger-btn[aria-expanded="true"] span:nth-child(1){ transform:translateY(6.5px) rotate(45deg); }
+.hamburger-btn[aria-expanded="true"] span:nth-child(2){ opacity:0; }
+.hamburger-btn[aria-expanded="true"] span:nth-child(3){ transform:translateY(-6.5px) rotate(-45deg); }
+
+.mobile-nav-overlay{
+  position:fixed; inset:0; background:rgba(10,10,10,0.4); z-index:140;
+  opacity:0; pointer-events:none; transition:opacity .3s var(--ease);
+}
+.mobile-nav-overlay.open{ opacity:1; pointer-events:auto; }
+.mobile-nav-drawer{
+  position:fixed; top:0; right:-320px; width:300px; max-width:88vw; height:100vh;
+  background:var(--af-panel); border-left:1px solid var(--af-border); z-index:150;
+  transition:right .4s var(--ease); display:flex; flex-direction:column;
+  box-shadow:-24px 0 60px rgba(20,20,20,0.14);
+}
+.mobile-nav-drawer.open{ right:0; }
+.mobile-nav-drawer__header{ padding:20px 22px; border-bottom:1px solid var(--af-border); display:flex; justify-content:space-between; align-items:center; }
+.mobile-nav-drawer__links{ display:flex; flex-direction:column; padding:10px 0; }
+.mobile-nav-drawer__links a{
+  padding:16px 22px; font-family:var(--mono); font-size:0.85rem; letter-spacing:0.04em;
+  color:var(--af-white); border-bottom:1px solid var(--af-border);
+  display:flex; align-items:center; gap:8px;
+}
+.mobile-nav-drawer__links a:hover{ color:var(--af-red); background:var(--af-black); }
+
 .cart-count{ color:var(--af-red); }
 .navlinks-mobile{display:none;}
 
@@ -246,6 +280,10 @@ nav{
 .blueprint:hover .blueprint__coord{ opacity:1; }
 .blueprint svg{ position:relative; z-index:2; width:100%; height:100%; }
 .blueprint canvas{ position:relative; z-index:2; width:100%; height:100%; display:block; }
+.hero-photo{
+  position:relative; z-index:2; width:100%; height:100%; object-fit:cover; display:block;
+  filter:grayscale(1) contrast(1.08);
+}
 .draw-path{
   stroke-dasharray:1000; stroke-dashoffset:1000;
   animation:draw 2.2s ease forwards;
@@ -537,6 +575,7 @@ footer{ border-top:1px solid var(--af-border); position:relative; z-index:1; }
 @media (max-width: 880px){
   .hero{ grid-template-columns:1fr; padding-top:50px; }
   .navlinks{ display:none; }
+  .hamburger-btn{ display:flex; }
   .grid{ grid-template-columns:1fr; }
   .print-top{ grid-template-columns:1fr; }
   .howitworks{ grid-template-columns:1fr 1fr; }
@@ -582,8 +621,28 @@ footer{ border-top:1px solid var(--af-border); position:relative; z-index:1; }
       <a href="#contact">CONTACT</a>
     </div>
     <button class="cart-btn" id="cartBtn" aria-label="Cart">CART <span class="cart-count" id="cartCount">[00]</span></button>
+    <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 </header>
+
+<div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+<div class="mobile-nav-drawer" id="mobileNavDrawer">
+  <div class="mobile-nav-drawer__header">
+    <div class="mono" style="font-size:0.7rem; color:var(--af-grey); letter-spacing:0.1em;">// MENU</div>
+    <button class="cart-drawer__close" id="mobileNavClose">CLOSE // ESC</button>
+  </div>
+  <div class="mobile-nav-drawer__links">
+    <a href="#print">3D PRINTING</a>
+    <a href="#metalwork">METAL WORK<span class="nav-badge">SOON</span></a>
+    <a href="#printCatalog">SHOP</a>
+    <a href="#manifesto">PROCESS</a>
+    <a href="#specs">SPECS</a>
+    <a href="#faq">FAQ</a>
+    <a href="#contact">CONTACT</a>
+  </div>
+</div>
 
 <section class="hero">
   <div class="hero__left">
@@ -603,12 +662,12 @@ footer{ border-top:1px solid var(--af-border); position:relative; z-index:1; }
 
   <div class="hero__right">
     <div class="blueprint" id="blueprint">
-      <div class="blueprint__frame-label">FIG. 01 — <span>LIVE PRINT SIM</span></div>
+      <div class="blueprint__frame-label">FIG. 01 — <span>PRINT FARM / LIVE</span></div>
       <div class="blueprint__crosshair" id="crosshair"></div>
       <div class="blueprint__coord" id="coordReadout">X 000.0 · Y 000.0</div>
-      <canvas id="printCanvas"></canvas>
+      <img src="https://picsum.photos/seed/af-hero-printfarm/900/900" alt="3D printer running on the Aetherforge print farm" class="hero-photo">
       <div class="print-visual__readout" style="position:absolute; bottom:12px; left:12px;">
-        <div id="layerReadout">LAYER 000 / 240</div>
+        <div id="layerReadout">LAYER 184 / 240</div>
         <div>NOZZLE 0.40MM · 210°C</div>
       </div>
     </div>
@@ -622,15 +681,24 @@ footer{ border-top:1px solid var(--af-border); position:relative; z-index:1; }
       <div class="tag mono">// PRINT FARM — <span id="printStatusTag">LIVE</span></div>
     </div>
 
-    <div class="print-intro reveal">
-      <p class="lede">Every printed piece is made in-house, checked against spec, and shipped from the same building it was printed in. Browse the shop below, or upload a model for something custom.</p>
-      <div class="print-stats">
-        <div><strong>4</strong>PRINTERS RUNNING</div>
-        <div><strong>0.08MM</strong>MIN LAYER HEIGHT</div>
-        <div><strong>6</strong>MATERIALS STOCKED</div>
-        <div><strong>24-48H</strong>TYPICAL TURNAROUND</div>
+    <div class="print-top">
+      <div class="print-copy reveal">
+        <p class="lede">Every printed piece is made in-house, checked against spec, and shipped from the same building it was printed in. Browse the shop below, or upload a model for something custom.</p>
+        <div class="print-stats">
+          <div><strong>4</strong>PRINTERS RUNNING</div>
+          <div><strong>0.08MM</strong>MIN LAYER HEIGHT</div>
+          <div><strong>6</strong>MATERIALS STOCKED</div>
+          <div><strong>24-48H</strong>TYPICAL TURNAROUND</div>
+        </div>
+        <div class="hero__cta">
+          <a href="#printCatalog" class="btn">VIEW PRINT SHOP</a>
+        </div>
       </div>
-    </div></div>
+      <div class="print-visual reveal">
+        <div class="print-visual__label">FIG. 02 — <span>FRESH OFF THE BED</span></div>
+        <img src="https://picsum.photos/seed/af-print-freshpart/900/900" alt="Finished 3D print fresh off the build plate" class="hero-photo">
+      </div>
+    </div>
 
     <div class="howitworks reveal-stagger">
       <div class="step">
@@ -1005,16 +1073,7 @@ printGrid.innerHTML = printProducts.map(p => `
   </div>
 `).join('');
 
-// layer counter readout, climbs then loops
-const layerReadout = document.getElementById('layerReadout');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-if (layerReadout && !reducedMotion) {
-  let layer = 0;
-  setInterval(() => {
-    layer = (layer + 1) % 241;
-    layerReadout.textContent = `LAYER ${String(layer).padStart(3,'0')} / 240`;
-  }, 90);
-}
 
 const products = [
   {
@@ -1430,92 +1489,6 @@ aetherInput.addEventListener('keydown', (e) => {
   }
 });
 
-// === GENERATIVE CANVAS: 3D PRINT BUILD ===
-function setupPrintCanvas(canvas){
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  const parent = canvas.parentElement;
-  const W = parent.clientWidth, H = parent.clientHeight;
-  canvas.width = W * dpr; canvas.height = H * dpr;
-  ctx.scale(dpr, dpr);
-
-  const cols = 26;
-  const colW = W / cols;
-  const baseline = H * 0.86;
-  const maxH = H * 0.66;
-  // deterministic pleasant silhouette (two overlapping sine humps)
-  const targets = Array.from({length: cols}, (_, i) => {
-    const t = i / (cols - 1);
-    const h = Math.sin(t * Math.PI) * 0.75 + Math.sin(t * Math.PI * 3) * 0.18 + 0.15;
-    return Math.max(0.08, Math.min(1, h)) * maxH;
-  });
-
-  const cycle = 5200; // ms
-  let start = performance.now();
-
-  function drawFrame(progressFrontier){
-    ctx.clearRect(0, 0, W, H);
-    // grid backdrop
-    ctx.strokeStyle = '#e3e1d8'; ctx.lineWidth = 1;
-    for (let x = 0; x < W; x += 28) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
-    for (let y = 0; y < H; y += 28) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
-
-    // build plate
-    ctx.strokeStyle = '#141414'; ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.moveTo(W*0.08, baseline); ctx.lineTo(W*0.92, baseline); ctx.stroke();
-    ctx.strokeStyle = '#8a8a8a'; ctx.lineWidth = 1;
-    for (let x = W*0.1; x < W*0.9; x += 18) { ctx.beginPath(); ctx.moveTo(x, baseline); ctx.lineTo(x-8, baseline+10); ctx.stroke(); }
-
-    const frontier = baseline - progressFrontier * maxH;
-    // bars
-    for (let i = 0; i < cols; i++) {
-      const targetTop = baseline - targets[i];
-      const top = Math.max(targetTop, frontier);
-      const x = W*0.08 + i * (W*0.84/cols);
-      const w = (W*0.84/cols) * 0.72;
-      const h = baseline - top;
-      if (h <= 0) continue;
-      ctx.fillStyle = '#141414';
-      ctx.fillRect(x, top, w, h);
-      // layer lines
-      ctx.strokeStyle = '#f5f3ee'; ctx.lineWidth = 1;
-      for (let ly = top + 6; ly < baseline; ly += 7) {
-        ctx.beginPath(); ctx.moveTo(x, ly); ctx.lineTo(x+w, ly); ctx.stroke();
-      }
-    }
-
-    // nozzle sweep at current frontier
-    if (progressFrontier < 1) {
-      const sweepX = W*0.08 + (Math.sin(performance.now()/260) * 0.5 + 0.5) * W*0.84;
-      ctx.fillStyle = '#d81324';
-      ctx.beginPath();
-      ctx.moveTo(sweepX, frontier - 10);
-      ctx.lineTo(sweepX + 6, frontier + 4);
-      ctx.lineTo(sweepX - 6, frontier + 4);
-      ctx.closePath(); ctx.fill();
-    }
-  }
-
-  function loop(now){
-    const t = (now - start) % cycle;
-    const p = t / cycle;
-    // ease: grow 0-0.6, hold 0.6-0.8, reset 0.8-1
-    let frontier;
-    if (p < 0.6) frontier = p / 0.6;
-    else if (p < 0.8) frontier = 1;
-    else frontier = 1 - (p - 0.8) / 0.2;
-    drawFrame(Math.max(0, Math.min(1, frontier)));
-    requestAnimationFrame(loop);
-  }
-
-  if (reducedMotion) {
-    drawFrame(0.7);
-  } else {
-    requestAnimationFrame(loop);
-  }
-}
-
 // === GENERATIVE CANVAS: CNC TOOLPATH / SPARKS ===
 function setupMetalCanvas(canvas){
   if (!canvas) return;
@@ -1603,7 +1576,6 @@ function setupMetalCanvas(canvas){
   }
 }
 
-setupPrintCanvas(document.getElementById('printCanvas'));
 setupMetalCanvas(document.getElementById('metalCanvas'));
 
 // crosshair follows cursor in blueprint hero, prints coordinates
@@ -1646,6 +1618,7 @@ window.addEventListener('keydown', (e) => {
     closeCheckout();
     closeCapture();
     closeAether();
+    closeMobileNav();
   }
 });
 document.getElementById('eggClose').addEventListener('click', () => eggOverlay.classList.remove('show'));
@@ -1706,6 +1679,30 @@ if (siteHeader) {
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 }
+
+// === mobile nav drawer ===
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileNavDrawer = document.getElementById('mobileNavDrawer');
+const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+
+function openMobileNav(){
+  mobileNavDrawer.classList.add('open');
+  mobileNavOverlay.classList.add('open');
+  hamburgerBtn.setAttribute('aria-expanded', 'true');
+}
+function closeMobileNav(){
+  mobileNavDrawer.classList.remove('open');
+  mobileNavOverlay.classList.remove('open');
+  hamburgerBtn.setAttribute('aria-expanded', 'false');
+}
+hamburgerBtn.addEventListener('click', () => {
+  mobileNavDrawer.classList.contains('open') ? closeMobileNav() : openMobileNav();
+});
+document.getElementById('mobileNavClose').addEventListener('click', closeMobileNav);
+mobileNavOverlay.addEventListener('click', closeMobileNav);
+document.querySelectorAll('.mobile-nav-drawer__links a').forEach(a => {
+  a.addEventListener('click', closeMobileNav);
+});
 </script>
 </body>
 </html>
