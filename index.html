@@ -623,35 +623,32 @@ footer .logo__mark path{ fill:#f2f0ea; }
   transition:transform .3s var(--ease), box-shadow .3s var(--ease);
 }
 .aether-launcher:hover{ transform:scale(1.07); box-shadow:0 10px 30px rgba(20,20,20,0.24); }
-.aether-launcher__core{
-  width:18px; height:18px; border-radius:50%;
-  background:radial-gradient(circle at 35% 30%, #ffffff 0%, #e5e5e3 45%, #8a8a8a 100%);
-  box-shadow:0 0 10px 2px rgba(255,255,255,0.3), 0 0 20px 6px rgba(216,19,36,0.16);
-  position:relative;
-  animation:orbBreathe 4s ease-in-out infinite;
-}
-.aether-launcher__core::before{
-  content:"";
-  position:absolute; inset:-7px;
-  border-radius:50%;
-  border:1px solid rgba(216,19,36,0.5);
-  border-top-color:transparent; border-left-color:transparent;
-  animation:orbRingSpin 5s linear infinite;
-}
-.aether-launcher__core::after{
-  content:"";
-  position:absolute; top:50%; left:50%; width:3px; height:3px;
-  background:var(--af-red); border-radius:50%;
-  transform:translate(-50%,-50%);
-  box-shadow:0 0 5px 1.5px rgba(216,19,36,0.6);
-}
-@keyframes orbBreathe{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.08); } }
-@keyframes orbRingSpin{ from{ transform:rotate(0deg); } to{ transform:rotate(360deg); } }
+
+/* Mirrors the real AETHER dashboard's center hub: three concentric rings at
+   different sizes/speeds/colors around a glowing gradient core, scaled down
+   from the dashboard's 280px orb to fit a 48px launcher icon. */
+.aether-orb{ position:relative; width:48px; height:48px; display:flex; align-items:center; justify-content:center; }
+.aether-orb__ring{ position:absolute; border-radius:50%; border:1px solid; opacity:0.55; }
+.aether-orb__ring.r1{ width:48px; height:48px; border-color:rgba(245,243,238,0.18); animation:orbSpin 22s linear infinite; }
+.aether-orb__ring.r2{ width:38px; height:38px; border-color:rgba(216,19,36,0.28); animation:orbSpin 16s linear infinite reverse; }
+.aether-orb__ring.r3{ width:27px; height:27px; border-color:rgba(245,243,238,0.3); animation:orbPulseRing 3s ease-in-out infinite; }
+@keyframes orbSpin{ from{ transform:rotate(0deg); } to{ transform:rotate(360deg); } }
+@keyframes orbPulseRing{ 0%,100%{ transform:scale(1); opacity:0.4; } 50%{ transform:scale(1.06); opacity:0.75; } }
 @keyframes orbPulse{
   0%{ box-shadow:0 0 0 0 rgba(216,19,36,0.45); }
   70%{ box-shadow:0 0 0 14px rgba(216,19,36,0); }
   100%{ box-shadow:0 0 0 0 rgba(216,19,36,0); }
 }
+
+.aether-orb__core{
+  width:19px; height:19px; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #ffffff 0%, #e5e5e3 35%, #a6a6a4 70%, #3a3a3a 100%);
+  box-shadow:0 0 11px 2px rgba(255,255,255,0.3), 0 0 19px 5px rgba(216,19,36,0.16);
+  animation:orbBreathe 4s ease-in-out infinite;
+  display:flex; align-items:center; justify-content:center;
+}
+@keyframes orbBreathe{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.04); } }
+
 .aether-launcher__badge{
   position:absolute; top:-4px; right:-4px; background:var(--af-red); color:#fff;
   font-family:var(--mono); font-size:0.52rem; letter-spacing:0.03em;
@@ -1171,7 +1168,12 @@ footer .logo__mark path{ fill:#f2f0ea; }
 </div>
 
 <button class="aether-launcher" id="aetherLauncher" aria-label="Open AETHER">
-  <span class="aether-launcher__core"></span>
+  <span class="aether-orb">
+    <span class="aether-orb__ring r1"></span>
+    <span class="aether-orb__ring r2"></span>
+    <span class="aether-orb__ring r3"></span>
+    <span class="aether-orb__core"></span>
+  </span>
   <span class="aether-launcher__badge">NEW</span>
 </button>
 
