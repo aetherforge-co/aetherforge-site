@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Baseline CSP: this is a single-file static site with no build step, so
+     inline <script>/<style> are allowed (no nonce/hash pipeline available),
+     but everything else is locked to the exact external hosts this page
+     actually talks to — Google Fonts, picsum.photos placeholder images,
+     Formspree (capture forms), and the AETHER chat proxy on Vercel. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://picsum.photos; connect-src 'self' https://formspree.io https://aether-tts-proxy.vercel.app; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none';">
 <title>AETHERFORGE — Precision 3D Printing (Metal Work Coming Soon)</title>
 
 <!-- Open Graph / social link previews. og:image is a placeholder photo (1200x630,
@@ -1463,7 +1469,7 @@ async function openCheckout(){
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        items: items.map(i => ({ name: i.name, price: i.price, qty: i.qty }))
+        items: items.map(i => ({ id: i.id, qty: i.qty }))
       }),
     });
     const data = await res.json();
@@ -1625,10 +1631,20 @@ aetherLauncher.addEventListener('click', () => {
 });
 document.getElementById('aetherClose').addEventListener('click', closeAether);
 
+// Escapes HTML-significant characters so chat content is always rendered as
+// text, never parsed as markup — protects against both a user typing HTML
+// into the input and, less likely but still worth closing off, the AI reply
+// itself containing HTML-like text.
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = String(str);
+  return div.innerHTML;
+}
+
 function addAetherMsg(text, from){
   const div = document.createElement('div');
   div.className = `aether-msg ${from}`;
-  div.innerHTML = `<span class="tag-mini">${from === 'bot' ? 'AETHER' : 'YOU'}</span>${text}`;
+  div.innerHTML = `<span class="tag-mini">${from === 'bot' ? 'AETHER' : 'YOU'}</span>${escapeHtml(text)}`;
   aetherBody.appendChild(div);
   aetherBody.scrollTop = aetherBody.scrollHeight;
 }
@@ -1675,7 +1691,7 @@ async function handleAetherQuery(text){
   aetherBody.appendChild(thinkingMsg);
   aetherBody.scrollTop = aetherBody.scrollHeight;
   const reply = await aetherReply(text);
-  thinkingMsg.innerHTML = `<span class="tag-mini">AETHER</span>${reply}`;
+  thinkingMsg.innerHTML = `<span class="tag-mini">AETHER</span>${escapeHtml(reply)}`;
   aetherBody.scrollTop = aetherBody.scrollHeight;
 }
 
