@@ -20,11 +20,15 @@ const STRIPE_API_URL = 'https://api.stripe.com/v1/checkout/sessions';
 const SITE_URL = 'https://www.aetherforgeco.com';
 
 // Server-side source of truth for price — the ONLY place price is decided.
-// id -> { name, unitAmount (in cents) }
-const CATALOG = {
-  'PF-03': { name: 'PRINTED ACCESSORIES', unitAmount: 1800 },
-  'PF-04': { name: 'MATERIAL LIBRARY', unitAmount: 2200 },
-};
+// A Map (not a plain object) on purpose: a plain {} inherits from
+// Object.prototype, so a client-submitted id like "constructor" or
+// "toString" would resolve to an inherited property instead of undefined,
+// sneaking past the "unknown item" check below. Map.get() has no such
+// prototype-chain lookup, so an unlisted id is always exactly undefined.
+const CATALOG = new Map([
+  ['PF-03', { name: 'PRINTED ACCESSORIES', unitAmount: 1800 }],
+  ['PF-04', { name: 'MATERIAL LIBRARY', unitAmount: 2200 }],
+]);
 
 // Fallback in-memory limiter — used only if Upstash isn't configured yet.
 // Resets on cold start and doesn't share state across instances, so it's
@@ -126,7 +130,7 @@ module.exports = async function handler(req, res) {
   // request rather than guessing.
   const lineItems = [];
   for (const item of items) {
-    const entry = CATALOG[item?.id];
+    const entry = typeof item?.id === 'string' ? CATALOG.get(item.id) : undefined;
     if (!entry) {
       res.status(400).json({ error: `Unknown item: ${String(item?.id).slice(0, 40)}` });
       return;
