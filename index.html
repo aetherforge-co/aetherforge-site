@@ -1451,7 +1451,7 @@ function checkoutErrorHTML(message){
     <div class="order-confirm">
       <div class="stamp" style="border-color:var(--af-grey-dim); color:var(--af-grey);">CHECKOUT ERROR</div>
       <h2>Couldn't start checkout</h2>
-      <p>${message}</p>
+      <p>${escapeHtml(message)}</p>
       <button class="btn btn--ghost" id="checkoutDoneBtn">CLOSE</button>
     </div>
   `;
