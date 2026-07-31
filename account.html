@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Account — Aetherforge</title>
+<meta name="robots" content="noindex">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://zxzoxzzbktlxdoacxupa.supabase.co; base-uri 'self'; object-src 'none';">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --af-black:#f7f8fa; --af-panel:#ffffff; --af-white:#141414; --af-red:#d81324;
+  --af-grey:#5c5c5c; --af-grey-dim:#d8d6ce; --af-border:#e3e1d8;
+  --mono:'JetBrains Mono',monospace; --disp:'Rajdhani',sans-serif; --body:'Inter',sans-serif;
+  --shadow-sm: 0 1px 2px rgba(20,20,20,0.04), 0 1px 1px rgba(20,20,20,0.03);
+}
+*{box-sizing:border-box;}
+body{ margin:0; background:var(--af-black); color:var(--af-white); font-family:var(--body); line-height:1.6; }
+header{ display:flex; align-items:center; justify-content:space-between; padding:20px 5%; border-bottom:1px solid var(--af-border); background:var(--af-panel); }
+.logo{ font-family:var(--disp); font-weight:700; font-size:1.1rem; letter-spacing:0.02em; text-decoration:none; color:var(--af-white); display:flex; align-items:center; gap:10px; }
+header nav{ display:flex; align-items:center; gap:16px; }
+header a.back, #logoutBtn{ font-family:var(--mono); font-size:0.78rem; color:var(--af-grey); text-decoration:none; background:transparent; border:1px solid var(--af-grey-dim); padding:8px 14px; cursor:pointer; }
+header a.back:hover, #logoutBtn:hover{ border-color:var(--af-red); color:var(--af-red); }
+main{ max-width:720px; margin:0 auto; padding:50px 24px 100px; }
+.eyebrow{ font-family:var(--mono); font-size:0.72rem; color:var(--af-red); letter-spacing:0.08em; margin-bottom:10px; }
+h1{ font-family:var(--disp); font-weight:700; font-size:2rem; text-transform:uppercase; margin:0 0 8px; }
+.sub{ color:var(--af-grey); font-size:0.9rem; margin-bottom:40px; }
+h2{ font-family:var(--disp); font-weight:600; font-size:1.05rem; text-transform:uppercase; margin:0 0 16px; }
+
+.panel{ background:var(--af-panel); border:1px solid var(--af-border); padding:30px; margin-bottom:40px; box-shadow:var(--shadow-sm); }
+.af-form label{ display:block; font-family:var(--mono); font-size:0.62rem; letter-spacing:0.06em; color:var(--af-grey); margin-bottom:6px; text-transform:uppercase; }
+.af-form input, .af-form textarea{ width:100%; background:transparent; border:1px solid var(--af-grey-dim); color:var(--af-white); font-family:var(--body); font-size:0.9rem; padding:10px 12px; margin-bottom:16px; }
+.af-form input:focus, .af-form textarea:focus{ outline:none; border-color:var(--af-red); }
+.af-form input[type="file"]{ padding:8px 0; border:none; }
+.btn{ font-family:var(--mono); font-size:0.78rem; letter-spacing:0.04em; background:var(--af-white); color:#fff; border:1px solid var(--af-white); padding:12px 20px; cursor:pointer; transition:opacity .2s; }
+.btn:hover{ opacity:0.85; }
+.btn:disabled{ opacity:0.5; cursor:default; }
+.btn--ghost{ background:transparent; color:var(--af-white); border:1px solid var(--af-grey-dim); }
+.note{ font-family:var(--mono); font-size:0.72rem; color:var(--af-grey); margin-top:-6px; margin-bottom:14px; }
+.note--error{ color:var(--af-red); }
+.note--ok{ color:#1a7a2e; }
+
+.design-card{ background:var(--af-panel); border:1px solid var(--af-border); padding:20px 22px; margin-bottom:14px; }
+.design-card__top{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:8px; }
+.design-card h3{ font-family:var(--disp); font-weight:600; font-size:1.15rem; margin:0; text-transform:uppercase; }
+.status{ font-family:var(--mono); font-size:0.62rem; letter-spacing:0.05em; text-transform:uppercase; padding:3px 8px; border:1px solid var(--af-grey-dim); color:var(--af-grey); white-space:nowrap; }
+.status--submitted{ color:var(--af-red); border-color:var(--af-red); }
+.design-card p{ font-size:0.88rem; color:#3a3a3a; margin:0 0 12px; }
+.design-card__meta{ display:flex; justify-content:space-between; align-items:center; font-family:var(--mono); font-size:0.68rem; color:var(--af-grey); }
+.design-card__meta a{ color:var(--af-red); text-decoration:none; }
+.design-card__meta button{ background:none; border:none; color:var(--af-grey); font-family:var(--mono); font-size:0.68rem; cursor:pointer; text-decoration:underline; padding:0; }
+.design-card__meta button:hover{ color:var(--af-red); }
+.empty{ color:var(--af-grey); font-size:0.88rem; font-style:italic; }
+
+.gate{ text-align:center; padding:60px 20px; }
+.gate .af-form{ max-width:340px; margin:24px auto 0; text-align:left; }
+footer{ text-align:center; font-family:var(--mono); font-size:0.68rem; color:var(--af-grey); padding:30px; border-top:1px solid var(--af-border); }
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="/">AETHERFORGE</a>
+  <nav>
+    <a class="back" href="/">← BACK TO SITE</a>
+    <button id="logoutBtn" style="display:none;">LOG OUT</button>
+  </nav>
+</header>
+
+<main>
+  <div id="gateView" style="display:none;" class="gate">
+    <div class="eyebrow">// MY ACCOUNT</div>
+    <h1>Log in to see your designs</h1>
+    <p class="sub">Save the things you want us to build, and check on their status any time.</p>
+    <div id="gateForm" class="af-form"></div>
+  </div>
+
+  <div id="dashView" style="display:none;">
+    <div class="eyebrow">// MY ACCOUNT</div>
+    <h1>Saved Designs</h1>
+    <p class="sub" id="welcomeMsg"></p>
+
+    <div class="panel">
+      <h2>Submit a New Design</h2>
+      <form class="af-form" id="designForm">
+        <label>Title</label>
+        <input type="text" name="title" required maxlength="120" placeholder="e.g. Bracket for wall-mounted monitor arm">
+        <label>Description</label>
+        <textarea name="description" rows="4" placeholder="Dimensions, material, quantity, deadline, anything we should know..."></textarea>
+        <label>Reference file (optional — image, STL, PDF, etc.)</label>
+        <input type="file" name="file">
+        <div id="designFormNote"></div>
+        <button type="submit" class="btn" id="designSubmitBtn">SUBMIT DESIGN</button>
+      </form>
+    </div>
+
+    <h2>Your Submissions</h2>
+    <div id="designList"><p class="empty">Loading...</p></div>
+  </div>
+</main>
+
+<footer>© 2026 AETHERFORGE LLC — <a href="/terms.html" style="color:var(--af-grey);">TERMS</a> · <a href="/privacy.html" style="color:var(--af-grey);">PRIVACY</a></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="assets/auth.js"></script>
+<script>
+const gateView = document.getElementById('gateView');
+const dashView = document.getElementById('dashView');
+const gateForm = document.getElementById('gateForm');
+const logoutBtn = document.getElementById('logoutBtn');
+const welcomeMsg = document.getElementById('welcomeMsg');
+const designList = document.getElementById('designList');
+const designForm = document.getElementById('designForm');
+const designFormNote = document.getElementById('designFormNote');
+const designSubmitBtn = document.getElementById('designSubmitBtn');
+
+function loginFormHTML(errorMsg){
+  return `
+    <label>Email</label>
+    <input type="email" id="gEmail" required>
+    <label>Password</label>
+    <input type="password" id="gPassword" required>
+    ${errorMsg ? `<div class="note note--error">${errorMsg}</div>` : ''}
+    <button class="btn" id="gSubmit" style="width:100%;">LOG IN</button>
+    <p style="font-size:0.8rem; color:var(--af-grey); margin-top:16px;">No account? <a href="#" id="gSwitch" style="color:var(--af-red);">Sign up</a></p>
+  `;
+}
+function signupFormHTML(errorMsg){
+  return `
+    <label>Email</label>
+    <input type="email" id="gEmail" required>
+    <label>Password</label>
+    <input type="password" id="gPassword" required minlength="6">
+    ${errorMsg ? `<div class="note note--error">${errorMsg}</div>` : ''}
+    <button class="btn" id="gSubmit" style="width:100%;">SIGN UP</button>
+    <p style="font-size:0.8rem; color:var(--af-grey); margin-top:16px;">Already have an account? <a href="#" id="gSwitch" style="color:var(--af-red);">Log in</a></p>
+  `;
+}
+
+function wireGateForm(mode){
+  document.getElementById('gSubmit').addEventListener('click', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('gEmail').value.trim();
+    const password = document.getElementById('gPassword').value;
+    const btn = document.getElementById('gSubmit');
+    btn.disabled = true;
+    btn.textContent = mode === 'login' ? 'LOGGING IN...' : 'SIGNING UP...';
+    try {
+      if (mode === 'login') {
+        const { error } = await afSignIn(email, password);
+        if (error) { gateForm.innerHTML = loginFormHTML(error.message); wireGateForm('login'); return; }
+        init();
+      } else {
+        const { data, error } = await afSignUp(email, password);
+        if (error) { gateForm.innerHTML = signupFormHTML(error.message); wireGateForm('signup'); return; }
+        if (data.session) {
+          init();
+        } else {
+          gateForm.innerHTML = `<div class="note note--ok">Check ${email} for a confirmation link, then log in below.</div>` + loginFormHTML();
+          wireGateForm('login');
+        }
+      }
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = mode === 'login' ? 'LOG IN' : 'SIGN UP';
+      alert('Could not reach the server — check your connection and try again.');
+    }
+  });
+  const switchLink = document.getElementById('gSwitch');
+  if (switchLink) {
+    switchLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      gateForm.innerHTML = mode === 'login' ? signupFormHTML() : loginFormHTML();
+      wireGateForm(mode === 'login' ? 'signup' : 'login');
+    });
+  }
+}
+
+function statusLabel(s){ return (s || 'submitted').replace(/_/g,' ').toUpperCase(); }
+
+async function loadDesigns(user){
+  const { data, error } = await afSb
+    .from('designs')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    designList.innerHTML = `<p class="empty">Couldn't load your designs — try refreshing.</p>`;
+    return;
+  }
+  if (!data || data.length === 0) {
+    designList.innerHTML = `<p class="empty">Nothing submitted yet — use the form above to send us your first design.</p>`;
+    return;
+  }
+
+  designList.innerHTML = '';
+  for (const d of data) {
+    const card = document.createElement('div');
+    card.className = 'design-card';
+    const date = new Date(d.created_at).toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' });
+    card.innerHTML = `
+      <div class="design-card__top">
+        <h3>${escapeHtml(d.title)}</h3>
+        <span class="status ${d.status === 'submitted' ? 'status--submitted' : ''}">${statusLabel(d.status)}</span>
+      </div>
+      ${d.description ? `<p>${escapeHtml(d.description)}</p>` : ''}
+      <div class="design-card__meta">
+        <span>SUBMITTED ${date}</span>
+        <span style="display:flex; gap:14px; align-items:center;">
+          ${d.file_path ? `<a href="#" class="file-link" data-path="${d.file_path}">VIEW FILE</a>` : ''}
+          <button class="delete-btn" data-id="${d.id}">DELETE</button>
+        </span>
+      </div>
+    `;
+    designList.appendChild(card);
+  }
+
+  designList.querySelectorAll('.file-link').forEach(link => {
+    link.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const path = link.dataset.path;
+      const { data: signed, error: sErr } = await afSb.storage.from('designs').createSignedUrl(path, 3600);
+      if (sErr || !signed) { alert('Could not open that file right now.'); return; }
+      window.open(signed.signedUrl, '_blank');
+    });
+  });
+  designList.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (!confirm('Delete this design permanently?')) return;
+      const { error } = await afSb.from('designs').delete().eq('id', btn.dataset.id);
+      if (error) { alert('Could not delete — try again.'); return; }
+      const user = await afGetUser();
+      loadDesigns(user);
+    });
+  });
+}
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+designForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const user = await afGetUser();
+  if (!user) return;
+  const title = designForm.title.value.trim();
+  const description = designForm.description.value.trim();
+  const file = designForm.file.files[0];
+
+  designSubmitBtn.disabled = true;
+  designSubmitBtn.textContent = 'SUBMITTING...';
+  designFormNote.innerHTML = '';
+
+  try {
+    let file_path = null;
+    if (file) {
+      const path = `${user.id}/${Date.now()}_${file.name}`;
+      const { error: upErr } = await afSb.storage.from('designs').upload(path, file);
+      if (upErr) {
+        designFormNote.innerHTML = `<div class="note note--error">Upload failed: ${upErr.message}</div>`;
+        designSubmitBtn.disabled = false;
+        designSubmitBtn.textContent = 'SUBMIT DESIGN';
+        return;
+      }
+      file_path = path;
+    }
+    const { error: insErr } = await afSb.from('designs').insert({
+      user_id: user.id, title, description, file_path
+    });
+    if (insErr) {
+      designFormNote.innerHTML = `<div class="note note--error">${insErr.message}</div>`;
+      designSubmitBtn.disabled = false;
+      designSubmitBtn.textContent = 'SUBMIT DESIGN';
+      return;
+    }
+    designForm.reset();
+    designFormNote.innerHTML = `<div class="note note--ok">Submitted — we'll take a look.</div>`;
+    loadDesigns(user);
+  } catch (err) {
+    designFormNote.innerHTML = `<div class="note note--error">Could not reach the server — try again.</div>`;
+  } finally {
+    designSubmitBtn.disabled = false;
+    designSubmitBtn.textContent = 'SUBMIT DESIGN';
+  }
+});
+
+logoutBtn.addEventListener('click', async () => {
+  await afSignOut();
+  window.location.href = '/';
+});
+
+async function init(){
+  const user = await afGetUser();
+  if (user) {
+    gateView.style.display = 'none';
+    dashView.style.display = 'block';
+    logoutBtn.style.display = 'inline-block';
+    welcomeMsg.textContent = `Logged in as ${user.email}`;
+    loadDesigns(user);
+  } else {
+    dashView.style.display = 'none';
+    logoutBtn.style.display = 'none';
+    gateView.style.display = 'block';
+    gateForm.innerHTML = loginFormHTML();
+    wireGateForm('login');
+  }
+}
+init();
+</script>
+</body>
+</html>
