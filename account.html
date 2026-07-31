@@ -52,10 +52,21 @@ h2{ font-family:var(--disp); font-weight:600; font-size:1.05rem; text-transform:
   width:72px; height:72px; margin:0 auto 16px; background:var(--af-white); color:#fff;
   display:flex; align-items:center; justify-content:center; font-family:var(--disp); font-weight:700;
   font-size:2rem; letter-spacing:0.02em; position:relative; border:1px solid var(--af-white);
+  cursor:pointer; overflow:hidden; background-size:cover; background-position:center;
 }
-.profile-avatar::before, .profile-avatar::after{ content:''; position:absolute; width:8px; height:8px; border-color:var(--af-red); }
+.profile-avatar::before, .profile-avatar::after{ content:''; position:absolute; width:8px; height:8px; border-color:var(--af-red); z-index:2; }
 .profile-avatar::before{ top:-1px; left:-1px; border-top:2px solid; border-left:2px solid; }
 .profile-avatar::after{ bottom:-1px; right:-1px; border-bottom:2px solid; border-right:2px solid; }
+.profile-avatar__overlay{
+  position:absolute; inset:0; background:rgba(20,20,20,0.72); color:#fff; opacity:0;
+  display:flex; align-items:center; justify-content:center; text-align:center;
+  font-family:var(--mono); font-size:0.56rem; letter-spacing:0.03em; text-transform:uppercase;
+  transition:opacity .2s; z-index:1; padding:6px;
+}
+.profile-avatar:hover .profile-avatar__overlay{ opacity:1; }
+.profile-avatar input{ display:none; }
+.profile-avatar-remove{ font-family:var(--mono); font-size:0.6rem; color:var(--af-grey); text-decoration:underline; cursor:pointer; background:none; border:none; margin:0 0 18px; display:block; margin-left:auto; margin-right:auto; }
+.profile-avatar-remove:hover{ color:var(--af-red); }
 .profile-email{ font-family:var(--disp); font-weight:600; font-size:1.05rem; word-break:break-word; margin-bottom:4px; }
 .profile-since{ font-family:var(--mono); font-size:0.64rem; color:var(--af-grey); letter-spacing:0.05em; text-transform:uppercase; margin-bottom:22px; }
 .profile-stats{ border-top:1px solid var(--af-border); padding-top:18px; margin-bottom:20px; text-align:left; }
@@ -168,7 +179,12 @@ footer{ text-align:center; font-family:var(--mono); font-size:0.68rem; color:var
       <div class="sidebar">
         <div class="profile-card">
           <span class="profile-card__corner tl"></span><span class="profile-card__corner br"></span>
-          <div class="profile-avatar" id="profileAvatar">A</div>
+          <div class="profile-avatar" id="profileAvatar">
+            <span id="profileAvatarInitial">A</span>
+            <div class="profile-avatar__overlay" id="avatarOverlay">CHANGE<br>PHOTO</div>
+            <input type="file" id="avatarInput" accept="image/*">
+          </div>
+          <button class="profile-avatar-remove" id="avatarRemoveBtn" style="display:none;">Remove photo</button>
           <div class="profile-email" id="profileEmail"></div>
           <div class="profile-since" id="profileSince"></div>
           <div class="profile-stats">
@@ -232,6 +248,10 @@ const dashView = document.getElementById('dashView');
 const gateForm = document.getElementById('gateForm');
 const logoutBtn = document.getElementById('logoutBtn');
 const profileAvatar = document.getElementById('profileAvatar');
+const profileAvatarInitial = document.getElementById('profileAvatarInitial');
+const avatarOverlay = document.getElementById('avatarOverlay');
+const avatarInput = document.getElementById('avatarInput');
+const avatarRemoveBtn = document.getElementById('avatarRemoveBtn');
 const profileEmail = document.getElementById('profileEmail');
 const profileSince = document.getElementById('profileSince');
 const designList = document.getElementById('designList');
@@ -252,6 +272,7 @@ const STAGES = [
   { key:'completed', label:'Completed' },
 ];
 const MAX_FILE_BYTES = 50 * 1024 * 1024;
+const MAX_AVATAR_BYTES = 5 * 1024 * 1024;
 
 function loginFormHTML(errorMsg){
   return `
@@ -341,6 +362,70 @@ function updateDropzoneLabel(){
   const f = fileInput.files[0];
   dropzoneFile.textContent = f ? `${f.name} (${(f.size/1024/1024).toFixed(1)}MB)` : '';
 }
+
+// --- profile avatar ---
+profileAvatar.addEventListener('click', () => avatarInput.click());
+
+async function loadAvatar(avatarPath){
+  if (!avatarPath) {
+    profileAvatar.style.backgroundImage = 'none';
+    profileAvatarInitial.style.display = 'block';
+    avatarRemoveBtn.style.display = 'none';
+    return;
+  }
+  const { data: signed, error } = await afSb.storage.from('avatars').createSignedUrl(avatarPath, 3600);
+  if (error || !signed) {
+    profileAvatar.style.backgroundImage = 'none';
+    profileAvatarInitial.style.display = 'block';
+    avatarRemoveBtn.style.display = 'none';
+    return;
+  }
+  profileAvatar.style.backgroundImage = `url(${signed.signedUrl})`;
+  profileAvatarInitial.style.display = 'none';
+  avatarRemoveBtn.style.display = 'block';
+}
+
+avatarInput.addEventListener('change', async () => {
+  const user = await afGetUser();
+  const file = avatarInput.files[0];
+  if (!user || !file) return;
+  if (!file.type.startsWith('image/')) {
+    alert('Please choose an image file.');
+    avatarInput.value = '';
+    return;
+  }
+  if (file.size > MAX_AVATAR_BYTES) {
+    alert('That image is too large (max 5MB).');
+    avatarInput.value = '';
+    return;
+  }
+  avatarOverlay.textContent = 'UPLOADING...';
+  const path = `${user.id}/avatar`;
+  const { error: upErr } = await afSb.storage.from('avatars').upload(path, file, { upsert: true, contentType: file.type });
+  avatarOverlay.innerHTML = 'CHANGE<br>PHOTO';
+  avatarInput.value = '';
+  if (upErr) {
+    alert('Could not upload that photo — try again.');
+    return;
+  }
+  const { error: metaErr } = await afSb.auth.updateUser({ data: { avatar_path: path } });
+  if (metaErr) {
+    alert('Photo uploaded, but could not save it to your profile — try again.');
+    return;
+  }
+  loadAvatar(path);
+});
+
+avatarRemoveBtn.addEventListener('click', async (e) => {
+  e.stopPropagation();
+  const user = await afGetUser();
+  if (!user) return;
+  if (!confirm('Remove your profile photo?')) return;
+  const path = `${user.id}/avatar`;
+  await afSb.storage.from('avatars').remove([path]);
+  await afSb.auth.updateUser({ data: { avatar_path: null } });
+  loadAvatar(null);
+});
 
 function fileTag(filename){
   const ext = (filename.split('.').pop() || '').toLowerCase();
@@ -565,7 +650,8 @@ async function init(){
   if (user) {
     gateView.style.display = 'none';
     dashView.style.display = 'block';
-    profileAvatar.textContent = (user.email || '?').charAt(0).toUpperCase();
+    profileAvatarInitial.textContent = (user.email || '?').charAt(0).toUpperCase();
+    loadAvatar(user.user_metadata && user.user_metadata.avatar_path);
     profileEmail.textContent = user.email;
     if (user.created_at) {
       const since = new Date(user.created_at).toLocaleDateString(undefined, { year:'numeric', month:'short' });
