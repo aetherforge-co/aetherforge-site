@@ -19,6 +19,32 @@
 const STRIPE_API_URL = 'https://api.stripe.com/v1/checkout/sessions';
 const SITE_URL = 'https://www.aetherforgeco.com';
 
+// Same project the rest of the site's accounts system uses. Only the
+// public anon key is needed here — verifying a token this way relies on
+// Supabase itself checking the token's signature, not on anything secret
+// we hold. This lets us confirm "this really is user X" without trusting
+// a client-submitted user id at face value.
+const SUPABASE_URL = 'https://zxzoxzzbktlxdoacxupa.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4em94enpia3RseGRvYWN4dXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU0NTIyMjUsImV4cCI6MjEwMTAyODIyNX0.oXKff-ptYkdIZj-Hg0ZU7Z2qj2mKQxsLzqWMXy5n49k';
+
+// Returns a verified user id if accessToken is a genuine, current Supabase
+// session token, or null otherwise (missing, expired, tampered, or any
+// network hiccup — checkout should never fail just because this couldn't
+// be confirmed, it should just fall back to a guest checkout).
+async function verifySupabaseUser(accessToken) {
+  if (!accessToken || typeof accessToken !== 'string') return null;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+      headers: { Authorization: `Bearer ${accessToken}`, apikey: SUPABASE_ANON_KEY },
+    });
+    if (!res.ok) return null;
+    const user = await res.json();
+    return typeof user?.id === 'string' ? user.id : null;
+  } catch {
+    return null;
+  }
+}
+
 // Server-side source of truth for price — the ONLY place price is decided.
 // A Map (not a plain object) on purpose: a plain {} inherits from
 // Object.prototype, so a client-submitted id like "constructor" or
@@ -114,7 +140,7 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const { items } = req.body || {};
+  const { items, access_token } = req.body || {};
   if (!Array.isArray(items) || items.length === 0) {
     res.status(400).json({ error: '"items" array is required.' });
     return;
@@ -124,11 +150,17 @@ module.exports = async function handler(req, res) {
     return;
   }
 
+  // If the customer is logged in, confirm it's really them before trusting
+  // it — this never blocks checkout, it just decides whether the order
+  // gets tied to an account or proceeds as a guest purchase.
+  const verifiedUserId = await verifySupabaseUser(access_token);
+
   // Look up every item in CATALOG by id — client-submitted name/price are
   // ignored entirely. If an id isn't in the catalog (typo, tampering, or a
   // stale cart referencing something no longer sold), reject the whole
   // request rather than guessing.
   const lineItems = [];
+  const orderSummary = [];
   for (const item of items) {
     const entry = typeof item?.id === 'string' ? CATALOG.get(item.id) : undefined;
     if (!entry) {
@@ -144,6 +176,15 @@ module.exports = async function handler(req, res) {
       },
       quantity: qty,
     });
+    orderSummary.push({ name: entry.name, qty, amount: entry.unitAmount });
+  }
+
+  // Stripe metadata values are capped at 500 chars — with today's small,
+  // fixed catalog this comfortably fits, but fall back to a short summary
+  // rather than risk the whole checkout failing if that ever changes.
+  let itemsJson = JSON.stringify(orderSummary);
+  if (itemsJson.length > 480) {
+    itemsJson = JSON.stringify([{ name: `${orderSummary.length} items`, qty: 1, amount: null }]);
   }
 
   const payload = {
@@ -152,7 +193,11 @@ module.exports = async function handler(req, res) {
     success_url: `${SITE_URL}/?checkout=success`,
     cancel_url: `${SITE_URL}/?checkout=canceled`,
     shipping_address_collection: { allowed_countries: ['US'] },
+    metadata: { items_json: itemsJson },
   };
+  if (verifiedUserId) {
+    payload.client_reference_id = verifiedUserId;
+  }
 
   try {
     const stripeRes = await fetch(STRIPE_API_URL, {
