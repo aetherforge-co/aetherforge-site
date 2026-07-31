@@ -8,7 +8,7 @@
      but everything else is locked to the exact external hosts this page
      actually talks to — Google Fonts, picsum.photos placeholder images,
      Formspree (capture forms), and the AETHER chat proxy on Vercel. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://picsum.photos; connect-src 'self' https://formspree.io https://aether-tts-proxy.vercel.app; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://picsum.photos; connect-src 'self' https://formspree.io https://aether-tts-proxy.vercel.app https://zxzoxzzbktlxdoacxupa.supabase.co; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none';">
 <title>AETHERFORGE — Precision 3D Printing (Metal Work Coming Soon)</title>
 
 <!-- Open Graph / social link previews. og:image is a placeholder photo (1200x630,
@@ -300,7 +300,10 @@ nav{
   position:relative; z-index:2; width:100%; height:100%; object-fit:cover; display:block;
   filter:grayscale(1) contrast(1.08);
 }
-.hero-photo--color{ filter:none; }
+/* Desaturated rather than full color or full grayscale — keeps it reading
+   as a real, documentary photo of the shop floor without its amber/blue
+   tones clashing against the site's black/white/red system. */
+.hero-photo--color{ filter:saturate(0.32) contrast(1.12) brightness(0.97); }
 .draw-path{
   stroke-dasharray:1000; stroke-dashoffset:1000;
   animation:draw 2.2s ease forwards;
@@ -420,7 +423,7 @@ section{ position:relative; z-index:1; }
 /* ===== PRODUCT GRID ===== */
 .grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--af-border); border:1px solid var(--af-border); }
 .card{
-  background:var(--af-panel); padding:30px 26px 26px; position:relative;
+  background:var(--af-panel); padding:32px 28px 28px; position:relative;
   transition:background .3s var(--ease), transform .3s var(--ease), box-shadow .3s var(--ease);
   box-shadow:var(--shadow-sm);
   z-index:1;
@@ -443,14 +446,19 @@ section{ position:relative; z-index:1; }
 .card p.desc{ font-size:0.86rem; color:#54524c; line-height:1.5; margin-bottom:16px; min-height:42px;}
 .card__specs{ font-family:var(--mono); font-size:0.66rem; color:var(--af-grey); display:flex; flex-direction:column; gap:3px; margin-bottom:18px; border-top:1px dashed var(--af-grey-dim); padding-top:12px; }
 .card__specs b{ color:var(--af-white); }
-.card__footer{ display:flex; align-items:center; justify-content:space-between; }
-.card__price{ font-family:var(--mono); font-size:1.05rem; color:var(--af-white); }
+.card__footer{ display:flex; align-items:center; justify-content:space-between; margin-top:6px; padding-top:16px; border-top:1px dashed var(--af-grey-dim); }
+.card__price{ font-family:var(--mono); font-size:1.3rem; font-weight:700; color:var(--af-white); letter-spacing:0.01em; }
 .card__add{
   font-family:var(--mono); font-size:0.68rem; letter-spacing:0.05em;
   border:1px solid var(--af-grey-dim); background:transparent; color:var(--af-white);
   padding:9px 14px; transition:border-color .25s var(--ease), background .25s var(--ease), color .25s var(--ease), transform .25s var(--ease);
 }
 .card__add:hover{ border-color:var(--af-red); background:var(--af-red); color:#fff; }
+/* Instant-buy CTA: solid fill by default, not just on hover — gives a
+   customer scanning the grid an immediate visual cue for "buyable now"
+   vs the outline treatment used for quote-request/notify buttons. */
+.card__add--buy{ background:var(--af-red); border-color:var(--af-red); color:#fff; }
+.card__add--buy:hover{ background:#a80f1c; border-color:#a80f1c; transform:translateY(-1px); }
 .card__corner{ position:absolute; width:11px; height:11px; border-color:var(--af-grey-dim); opacity:0; transition:opacity .3s var(--ease), border-color .3s var(--ease), transform .3s var(--ease); }
 .card:hover .card__corner{ opacity:1; border-color:var(--af-red); }
 .card:hover .card__corner.tl{ transform:translate(-2px,-2px); }
@@ -753,6 +761,7 @@ footer .logo__mark path{ fill:#f2f0ea; }
       <a href="#faq">FAQ</a>
       <a href="#contact">CONTACT</a>
     </div>
+    <button class="cart-btn" id="accountBtn" style="margin-right:8px; display:none;" aria-label="Account">LOGIN</button>
     <button class="cart-btn" id="cartBtn" aria-label="Cart">CART <span class="cart-count" id="cartCount">[00]</span></button>
     <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
@@ -1135,10 +1144,12 @@ footer .logo__mark path{ fill:#f2f0ea; }
         <a href="#contact">Contact</a>
         <a href="#faq">Shipping</a>
         <a href="#faq">Returns</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="/privacy.html">Privacy Policy</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <div>© 2026 AETHERFORGE LLC — ALL UNITS PRINTED IN-HOUSE</div>
+      <div>© 2026 AETHERFORGE LLC — ALL UNITS PRINTED IN-HOUSE · <a href="/terms.html" style="color:inherit;">TERMS</a> · <a href="/privacy.html" style="color:inherit;">PRIVACY</a></div>
       <div class="coords mono" title="you found it">DWG NO. AF-2026-000 · REV.C · SCALE N.T.S.</div>
     </div>
   </div>
@@ -1170,6 +1181,13 @@ footer .logo__mark path{ fill:#f2f0ea; }
   <div class="checkout-box" id="captureBox">
     <button class="checkout-box__close" id="captureClose">CLOSE // ESC</button>
     <div id="captureContent"></div>
+  </div>
+</div>
+
+<div class="checkout-modal" id="authModal">
+  <div class="checkout-box" id="authBox">
+    <button class="checkout-box__close" id="authClose">CLOSE // ESC</button>
+    <div id="authContent"></div>
   </div>
 </div>
 
@@ -1212,6 +1230,8 @@ footer .logo__mark path{ fill:#f2f0ea; }
   <button id="eggClose">CLOSE // ESC</button>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="assets/auth.js"></script>
 <script>
 // === PRODUCT CATALOG ===
 // === PRINT LAB CATALOG ===
@@ -1256,7 +1276,7 @@ printGrid.innerHTML = printProducts.map(p => `
     <div class="card__specs">${p.specs.map(s => `<span>${s[0]}: <b>${s[1]}</b></span>`).join('')}</div>
     <div class="card__footer">
       <div class="card__price">${p.price}</div>
-      <button class="card__add">${p.type === 'cart' ? 'ADD TO CART' : 'REQUEST'}</button>
+      <button class="card__add ${p.type === 'cart' ? 'card__add--buy' : ''}">${p.type === 'cart' ? 'ADD TO CART' : 'REQUEST'}</button>
     </div>
   </div>
 `).join('');
@@ -1441,7 +1461,8 @@ function checkoutSummaryHTML(){
       ${items.map(i => `<div class="checkout-summary__line"><span>${i.qty} × ${i.name}</span><span>$${(i.qty*i.price).toFixed(2)}</span></div>`).join('')}
       <div class="checkout-summary__total"><span>SUBTOTAL</span><span>$${subtotal.toFixed(2)}</span></div>
     </div>
-    <p style="color:var(--af-grey); font-size:0.85rem; margin-bottom:20px; line-height:1.6;">Shipping and payment are collected on Stripe's secure checkout page — you'll be redirected there next.</p>
+    <p style="color:var(--af-grey); font-size:0.85rem; margin-bottom:12px; line-height:1.6;">Shipping and payment are collected on Stripe's secure checkout page — you'll be redirected there next.</p>
+    <p style="color:var(--af-grey); font-size:0.72rem; margin-bottom:20px; line-height:1.5;">By continuing, you agree to our <a href="/terms.html" target="_blank" style="color:var(--af-grey); text-decoration:underline;">Terms of Service</a> and <a href="/privacy.html" target="_blank" style="color:var(--af-grey); text-decoration:underline;">Privacy Policy</a>.</p>
     <div class="checkout-note" id="checkoutStatus">// Preparing secure checkout...</div>
   `;
 }
@@ -1603,6 +1624,128 @@ function closeCapture(){ captureModal.classList.remove('show'); }
 
 document.getElementById('captureClose').addEventListener('click', closeCapture);
 captureModal.addEventListener('click', (e) => { if (e.target === captureModal) closeCapture(); });
+
+// === ACCOUNT / AUTH ===
+const authModal = document.getElementById('authModal');
+const authContent = document.getElementById('authContent');
+const accountBtn = document.getElementById('accountBtn');
+
+function signInFormHTML(errorMsg){
+  return `
+    <div class="checkout-eyebrow">// LOG IN</div>
+    <h2>Welcome back</h2>
+    <form class="checkout-form" id="authForm">
+      <label>Email</label>
+      <input type="email" name="email" required>
+      <label>Password</label>
+      <input type="password" name="password" required>
+      ${errorMsg ? `<div class="checkout-note" style="color:var(--af-red); margin-bottom:14px;">// ${errorMsg}</div>` : ''}
+      <button type="submit" class="btn" style="width:100%;">LOG IN</button>
+    </form>
+    <p style="font-size:0.8rem; color:var(--af-grey); margin-top:16px;">No account yet? <a href="#" id="switchToSignUp" style="color:var(--af-red);">Sign up</a></p>
+  `;
+}
+
+function signUpFormHTML(errorMsg){
+  return `
+    <div class="checkout-eyebrow">// CREATE ACCOUNT</div>
+    <h2>Save designs to your account</h2>
+    <form class="checkout-form" id="authForm">
+      <label>Email</label>
+      <input type="email" name="email" required>
+      <label>Password</label>
+      <input type="password" name="password" required minlength="6">
+      ${errorMsg ? `<div class="checkout-note" style="color:var(--af-red); margin-bottom:14px;">// ${errorMsg}</div>` : ''}
+      <button type="submit" class="btn" style="width:100%;">SIGN UP</button>
+    </form>
+    <p style="font-size:0.8rem; color:var(--af-grey); margin-top:16px;">Already have an account? <a href="#" id="switchToSignIn" style="color:var(--af-red);">Log in</a></p>
+  `;
+}
+
+function authConfirmHTML(message){
+  return `
+    <div class="order-confirm">
+      <div class="stamp">CHECK YOUR EMAIL</div>
+      <h2>Almost there</h2>
+      <p>${message}</p>
+      <button class="btn btn--ghost" id="authDoneBtn">CLOSE</button>
+    </div>
+  `;
+}
+
+function wireAuthForm(mode){
+  document.getElementById('authForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const email = form.email.value.trim();
+    const password = form.password.value;
+    submitBtn.textContent = mode === 'signin' ? 'LOGGING IN...' : 'SIGNING UP...';
+    submitBtn.disabled = true;
+    try {
+      if (mode === 'signin') {
+        const { error } = await afSignIn(email, password);
+        if (error) {
+          authContent.innerHTML = signInFormHTML(error.message);
+          wireAuthForm('signin');
+          return;
+        }
+        closeAuth();
+        await refreshAccountUI();
+        window.location.href = 'account.html';
+      } else {
+        const { data, error } = await afSignUp(email, password);
+        if (error) {
+          authContent.innerHTML = signUpFormHTML(error.message);
+          wireAuthForm('signup');
+          return;
+        }
+        if (data.session) {
+          closeAuth();
+          await refreshAccountUI();
+          window.location.href = 'account.html';
+        } else {
+          authContent.innerHTML = authConfirmHTML('We sent a confirmation link to ' + email + ' — click it, then come back and log in.');
+          document.getElementById('authDoneBtn').addEventListener('click', closeAuth);
+        }
+      }
+    } catch (err) {
+      submitBtn.textContent = mode === 'signin' ? 'LOG IN' : 'SIGN UP';
+      submitBtn.disabled = false;
+      alert('Could not reach the server — check your connection and try again.');
+    }
+  });
+  const switchLink = document.getElementById(mode === 'signin' ? 'switchToSignUp' : 'switchToSignIn');
+  if (switchLink) {
+    switchLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      openAuth(mode === 'signin' ? 'signup' : 'signin');
+    });
+  }
+}
+
+function openAuth(mode){
+  authContent.innerHTML = mode === 'signin' ? signInFormHTML() : signUpFormHTML();
+  wireAuthForm(mode);
+  authModal.classList.add('show');
+}
+function closeAuth(){ authModal.classList.remove('show'); }
+
+document.getElementById('authClose').addEventListener('click', closeAuth);
+authModal.addEventListener('click', (e) => { if (e.target === authModal) closeAuth(); });
+
+async function refreshAccountUI(){
+  const user = await afGetUser();
+  accountBtn.style.display = 'flex';
+  if (user) {
+    accountBtn.textContent = 'MY DESIGNS';
+    accountBtn.onclick = () => { window.location.href = 'account.html'; };
+  } else {
+    accountBtn.textContent = 'LOGIN';
+    accountBtn.onclick = () => openAuth('signin');
+  }
+}
+refreshAccountUI();
 
 // print catalog "quote" buttons and hardware "notify" buttons are already
 // wired above via openCapture() — this just handles the standalone
