@@ -151,6 +151,11 @@ h2{ font-family:var(--disp); font-weight:600; font-size:1.05rem; text-transform:
 .empty{ color:var(--af-grey); font-size:0.9rem; text-align:center; padding:44px 20px; border:1px dashed var(--af-border); background:var(--af-panel); }
 .empty a{ color:var(--af-red); }
 
+.order-items{ font-family:var(--mono); font-size:0.82rem; color:#3a3a3a; margin:10px 0 14px; line-height:1.7; }
+.order-total{ font-family:var(--disp); font-weight:700; font-size:1.3rem; color:var(--af-white); }
+.tracking-link{ display:inline-block; margin-top:4px; font-family:var(--mono); font-size:0.7rem; color:var(--af-red); text-decoration:none; border-bottom:1px solid var(--af-red); }
+.tracking-number{ font-family:var(--mono); font-size:0.68rem; color:var(--af-grey); }
+
 footer{ text-align:center; font-family:var(--mono); font-size:0.68rem; color:var(--af-grey); padding:30px; border-top:1px solid var(--af-border); }
 
 @keyframes fadeUp{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:translateY(0); } }
@@ -201,6 +206,9 @@ footer{ text-align:center; font-family:var(--mono); font-size:0.68rem; color:var
       </div>
 
       <div>
+        <h2>Order Tracking</h2>
+        <div id="orderList" style="margin-bottom:32px;"><p class="empty">Loading...</p></div>
+
         <div class="panel how-it-works">
           <h2>How It Works</h2>
           <div class="steps">
@@ -255,6 +263,7 @@ const avatarRemoveBtn = document.getElementById('avatarRemoveBtn');
 const profileEmail = document.getElementById('profileEmail');
 const profileSince = document.getElementById('profileSince');
 const designList = document.getElementById('designList');
+const orderList = document.getElementById('orderList');
 const designForm = document.getElementById('designForm');
 const designFormNote = document.getElementById('designFormNote');
 const designSubmitBtn = document.getElementById('designSubmitBtn');
@@ -270,6 +279,12 @@ const STAGES = [
   { key:'quoted', label:'Quoted' },
   { key:'in_production', label:'In Production' },
   { key:'completed', label:'Completed' },
+];
+const ORDER_STAGES = [
+  { key:'paid', label:'Paid' },
+  { key:'processing', label:'Processing' },
+  { key:'shipped', label:'Shipped' },
+  { key:'delivered', label:'Delivered' },
 ];
 const MAX_FILE_BYTES = 50 * 1024 * 1024;
 const MAX_AVATAR_BYTES = 5 * 1024 * 1024;
@@ -439,15 +454,15 @@ function filenameFromPath(path){
   return base.replace(/^\d+_/, '');
 }
 
-function pipelineHTML(status){
-  if (status === 'declined') {
-    return `<div class="pipeline pipeline--declined"><span class="declined-note">This one didn't move forward — see notes below or reach out and we'll explain why.</span></div>`;
+function pipelineHTML(status, stages, terminalKeys, terminalNote){
+  if (terminalKeys && terminalKeys.includes(status)) {
+    return `<div class="pipeline pipeline--declined"><span class="declined-note">${terminalNote}</span></div>`;
   }
-  const idx = STAGES.findIndex(s => s.key === status);
+  const idx = stages.findIndex(s => s.key === status);
   const activeIdx = idx === -1 ? 0 : idx;
   return `
     <div class="pipeline">
-      ${STAGES.map((s,i) => `
+      ${stages.map((s,i) => `
         <div class="pipeline__stage ${i <= activeIdx ? 'is-done' : ''} ${i === activeIdx ? 'is-current' : ''}">
           <span class="pipeline__dot"></span>
           <span class="pipeline__label">${s.label}</span>
@@ -511,7 +526,7 @@ async function loadDesigns(user){
         <h3>${escapeHtml(d.title)}</h3>
         ${statusBadge(d.status)}
       </div>
-      ${pipelineHTML(d.status)}
+      ${pipelineHTML(d.status, STAGES, ['declined'], "This one didn't move forward — see notes below or reach out and we'll explain why.")}
       <div class="design-card__body">${d.description ? `<p>${escapeHtml(d.description)}</p>` : ''}</div>
       <div class="design-card__meta">
         <span>SUBMITTED ${submittedDate}${showUpdated ? ` · UPDATED ${relativeDate(d.updated_at)}` : ''}</span>
@@ -549,6 +564,56 @@ async function loadDesigns(user){
       startEdit(btn.closest('.design-card'), record);
     });
   });
+}
+
+function orderStatusBadge(status){
+  if (status === 'refunded' || status === 'cancelled') return `<span class="status status--declined">${status.toUpperCase()}</span>`;
+  if (status === 'delivered') return `<span class="status">DELIVERED</span>`;
+  return `<span class="status status--active">${(status || 'paid').toUpperCase()}</span>`;
+}
+
+async function loadOrders(user){
+  const { data, error } = await afSb
+    .from('orders')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    orderList.innerHTML = `<p class="empty">Couldn't load your orders — try refreshing.</p>`;
+    return;
+  }
+  if (!data || data.length === 0) {
+    orderList.innerHTML = `<p class="empty">No orders yet — parts you buy from the <a href="/#printCatalog">shop</a> will show up here.</p>`;
+    return;
+  }
+
+  orderList.innerHTML = '';
+  for (const o of data) {
+    const card = document.createElement('div');
+    card.className = 'design-card';
+    const orderDate = new Date(o.created_at).toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' });
+    const items = Array.isArray(o.items) ? o.items : [];
+    const itemsHTML = items.map(i => `<div>${i.qty}× ${escapeHtml(i.name)}</div>`).join('') || '<div>Order details unavailable</div>';
+    const total = typeof o.amount_total === 'number' ? `$${o.amount_total.toFixed(2)}` : '';
+    card.innerHTML = `
+      <span class="design-card__corner tl"></span><span class="design-card__corner br"></span>
+      <div class="design-card__top">
+        <h3>ORDER — ${orderDate}</h3>
+        ${orderStatusBadge(o.status)}
+      </div>
+      ${pipelineHTML(o.status, ORDER_STAGES, ['refunded','cancelled'], `This order was ${o.status === 'refunded' ? 'refunded' : 'cancelled'}. Reach out if that doesn't look right.`)}
+      <div class="order-items">${itemsHTML}</div>
+      <div class="design-card__meta">
+        <span class="order-total">${total}</span>
+        <span class="design-card__actions">
+          ${o.tracking_number ? `<span class="tracking-number">${escapeHtml(o.tracking_number)}</span>` : ''}
+          ${o.tracking_url ? `<a class="tracking-link" href="${escapeHtml(o.tracking_url)}" target="_blank" rel="noopener">TRACK PACKAGE</a>` : ''}
+        </span>
+      </div>
+    `;
+    orderList.appendChild(card);
+  }
 }
 
 function startEdit(cardEl, record){
@@ -658,6 +723,7 @@ async function init(){
       profileSince.textContent = `MEMBER SINCE ${since.toUpperCase()}`;
     }
     loadDesigns(user);
+    loadOrders(user);
   } else {
     dashView.style.display = 'none';
     gateView.style.display = 'block';
