@@ -1482,11 +1482,21 @@ async function openCheckout(){
   closeCart();
 
   try {
+    // If logged in, include the current session token so the server can
+    // verify it and tie this order to the account — omitted entirely for
+    // guest checkouts, which still work exactly as before.
+    let accessToken = null;
+    try {
+      const { data: { session } } = await afSb.auth.getSession();
+      accessToken = session?.access_token || null;
+    } catch { /* not logged in / auth not loaded — proceed as guest */ }
+
     const res = await fetch('/api/create-checkout-session', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        items: items.map(i => ({ id: i.id, qty: i.qty }))
+        items: items.map(i => ({ id: i.id, qty: i.qty })),
+        access_token: accessToken
       }),
     });
     const data = await res.json();
