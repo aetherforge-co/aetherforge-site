@@ -168,10 +168,11 @@ nav{
 .navlinks a::before{ content:"["; color:var(--af-grey-dim); }
 .navlinks a::after{ content:"]"; color:var(--af-grey-dim); }
 .navlinks a:hover::before, .navlinks a:hover::after{ color:var(--af-red); }
+.nav-actions{ display:flex; align-items:center; gap:14px; }
 .account-link{
   font-family:var(--mono); font-size:0.78rem; letter-spacing:0.04em;
   color:var(--af-grey); background:transparent; border:none; padding:8px 4px; cursor:pointer;
-  transition:color .15s; margin-left:14px;
+  transition:color .15s;
 }
 .account-link:hover{ color:var(--af-white); }
 .account-link::before{ content:"<"; color:var(--af-red); }
@@ -767,8 +768,10 @@ footer .logo__mark path{ fill:#f2f0ea; }
       <a href="#faq">FAQ</a>
       <a href="#contact">CONTACT</a>
     </div>
-    <button class="cart-btn" id="cartBtn" aria-label="Cart">CART <span class="cart-count" id="cartCount">[00]</span></button>
-    <button class="account-link" id="accountBtn" style="display:none;" aria-label="Account">LOGIN</button>
+    <div class="nav-actions">
+      <button class="cart-btn" id="cartBtn" aria-label="Cart">CART <span class="cart-count" id="cartCount">[00]</span></button>
+      <button class="account-link" id="accountBtn" style="display:none;" aria-label="Account">LOGIN</button>
+    </div>
     <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
