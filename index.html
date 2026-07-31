@@ -168,6 +168,15 @@ nav{
 .navlinks a::before{ content:"["; color:var(--af-grey-dim); }
 .navlinks a::after{ content:"]"; color:var(--af-grey-dim); }
 .navlinks a:hover::before, .navlinks a:hover::after{ color:var(--af-red); }
+.account-link{
+  font-family:var(--mono); font-size:0.78rem; letter-spacing:0.04em;
+  color:var(--af-grey); background:transparent; border:none; padding:8px 4px; cursor:pointer;
+  transition:color .15s; margin-right:14px;
+}
+.account-link:hover{ color:var(--af-white); }
+.account-link::before{ content:"["; color:var(--af-grey-dim); }
+.account-link::after{ content:"]"; color:var(--af-grey-dim); }
+.account-link:hover::before, .account-link:hover::after{ color:var(--af-red); }
 .cart-btn{
   display:flex; align-items:center; gap:8px;
   font-family:var(--mono); font-size:0.78rem;
@@ -759,7 +768,7 @@ footer .logo__mark path{ fill:#f2f0ea; }
       <a href="#faq">FAQ</a>
       <a href="#contact">CONTACT</a>
     </div>
-    <button class="cart-btn" id="accountBtn" style="margin-right:8px; display:none;" aria-label="Account">LOGIN</button>
+    <button class="account-link" id="accountBtn" style="display:none;" aria-label="Account">LOGIN</button>
     <button class="cart-btn" id="cartBtn" aria-label="Cart">CART <span class="cart-count" id="cartCount">[00]</span></button>
     <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
@@ -1742,7 +1751,7 @@ authModal.addEventListener('click', (e) => { if (e.target === authModal) closeAu
 
 async function refreshAccountUI(){
   const user = await afGetUser();
-  accountBtn.style.display = 'flex';
+  accountBtn.style.display = 'inline-block';
   if (user) {
     accountBtn.textContent = 'MY DESIGNS';
     accountBtn.onclick = () => { window.location.href = 'account.html'; };
