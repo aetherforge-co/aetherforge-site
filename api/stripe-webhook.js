@@ -15,18 +15,78 @@
 //      Event to send: checkout.session.completed
 //   3. Stripe will show you a signing secret (starts with "whsec_") —
 //      copy it into this project's Vercel env vars as STRIPE_WEBHOOK_SECRET.
-//   4. Test it: Stripe's webhook page has a "Send test event" button.
+//   4. Add SUPABASE_SERVICE_ROLE_KEY to Vercel's env vars too (Supabase
+//      dashboard > Project Settings > API > service_role key — the
+//      SECRET one, not the anon key already used elsewhere on the site).
+//      This is what lets the webhook write an order row even though
+//      regular customers can only ever read their own orders.
+//   5. Test it: Stripe's webhook page has a "Send test event" button.
 //      Check this function's logs in the Vercel dashboard to confirm it
 //      logged "Verified order:" — that's proof the signature check works.
 //
-// Right now this just verifies the event and logs the confirmed order to
-// Vercel's function logs, plus (optionally) emails you via the same
-// Formspree endpoint the capture forms use. There's no order database yet
-// (per the earlier scoping decision), so this is the lightest version that
-// gives you a real, tamper-proof confirmation trail — wiring it into an
-// actual fulfillment system is a bigger project for later.
+// Verifies the event, logs it, emails a notification via Formspree (same
+// as before), and — new — writes an authoritative order row to Supabase.
+// If the customer was logged in at checkout, the order is tied to their
+// account (via client_reference_id, set server-side in
+// create-checkout-session.js after verifying their session — never
+// trusted from the client unchecked). Guest checkouts still complete
+// normally, they just won't show up in anyone's "My Account" page.
 
 const crypto = require('crypto');
+
+// Same project as the rest of the site. The service role key is what
+// actually matters for security here — it's what lets this endpoint write
+// to a table regular users can only read from. Never expose this key
+// anywhere client-side.
+const SUPABASE_URL = 'https://zxzoxzzbktlxdoacxupa.supabase.co';
+
+async function recordOrder(session) {
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!serviceKey) {
+    console.error('SUPABASE_SERVICE_ROLE_KEY is not set — order was verified but not recorded in the database.');
+    return;
+  }
+
+  let items = [];
+  try {
+    items = JSON.parse(session.metadata?.items_json || '[]');
+  } catch {
+    items = [];
+  }
+
+  const body = {
+    user_id: session.client_reference_id || null,
+    stripe_session_id: session.id,
+    customer_email: session.customer_details?.email || null,
+    items,
+    amount_total: typeof session.amount_total === 'number' ? session.amount_total / 100 : null,
+    currency: (session.currency || 'usd').toLowerCase(),
+    status: 'paid',
+  };
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/orders?on_conflict=stripe_session_id`, {
+      method: 'POST',
+      headers: {
+        apikey: serviceKey,
+        Authorization: `Bearer ${serviceKey}`,
+        'Content-Type': 'application/json',
+        // on_conflict + resolution=ignore-duplicates makes this safe if
+        // Stripe ever redelivers the same event (it does retry on
+        // failure) — a second attempt just no-ops instead of erroring
+        // or double-recording the same order.
+        Prefer: 'resolution=ignore-duplicates',
+      },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      console.error('Failed to record order in Supabase:', res.status, errText);
+    }
+  } catch (err) {
+    console.error('Error reaching Supabase to record order:', err);
+  }
+}
 
 // Reuse the same Formspree inbox the quote/notify forms already use, so a
 // confirmed order shows up as an email without standing up anything new.
@@ -127,7 +187,10 @@ module.exports = async function handler(req, res) {
       currency,
       email,
       paymentStatus: session.payment_status,
+      accountLinked: Boolean(session.client_reference_id),
     });
+
+    await recordOrder(session);
 
     if (NOTIFY_FORMSPREE_ENDPOINT) {
       try {
