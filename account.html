@@ -1,256 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Account — Aetherforge</title>
-<meta name="robots" content="noindex">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://zxzoxzzbktlxdoacxupa.supabase.co; base-uri 'self'; object-src 'none';">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-:root{
-  --af-black:#f7f8fa; --af-panel:#ffffff; --af-white:#141414; --af-red:#d81324;
-  --af-grey:#5c5c5c; --af-grey-dim:#d8d6ce; --af-border:#e3e1d8;
-  --mono:'JetBrains Mono',monospace; --disp:'Rajdhani',sans-serif; --body:'Inter',sans-serif;
-  --shadow-sm: 0 1px 2px rgba(20,20,20,0.04), 0 1px 1px rgba(20,20,20,0.03);
-  --shadow-md: 0 6px 16px rgba(20,20,20,0.06), 0 2px 6px rgba(20,20,20,0.04);
-  --shadow-lg: 0 20px 50px rgba(20,20,20,0.10), 0 6px 18px rgba(20,20,20,0.06);
-}
-*{box-sizing:border-box;}
-body{
-  margin:0; background:var(--af-black); color:var(--af-white); font-family:var(--body); line-height:1.6;
-  background-image:
-    linear-gradient(rgba(20,20,20,0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(20,20,20,0.035) 1px, transparent 1px);
-  background-size: 28px 28px;
-  background-attachment: fixed;
-}
-header{ display:flex; align-items:center; justify-content:space-between; padding:20px 5%; border-bottom:1px solid var(--af-border); background:rgba(255,255,255,0.9); backdrop-filter:blur(6px); position:sticky; top:0; z-index:10; }
-.logo{ font-family:var(--disp); font-weight:700; font-size:1.1rem; letter-spacing:0.02em; text-decoration:none; color:var(--af-white); display:flex; align-items:center; gap:10px; }
-header a.back{ font-family:var(--mono); font-size:0.78rem; color:var(--af-grey); text-decoration:none; background:transparent; border:1px solid var(--af-grey-dim); padding:8px 14px; }
-header a.back:hover{ border-color:var(--af-red); color:var(--af-red); }
-
-main{ max-width:1120px; margin:0 auto; padding:48px 24px 100px; }
-.eyebrow{ font-family:var(--mono); font-size:0.72rem; color:var(--af-red); letter-spacing:0.08em; margin-bottom:10px; }
-h1{ font-family:var(--disp); font-weight:700; font-size:2.1rem; text-transform:uppercase; margin:0 0 32px; letter-spacing:0.01em; }
-h2{ font-family:var(--disp); font-weight:600; font-size:1.05rem; text-transform:uppercase; margin:0 0 16px; }
-
-.dash-layout{ display:grid; grid-template-columns:270px 1fr; gap:28px; align-items:start; }
-@media (max-width:860px){ .dash-layout{ grid-template-columns:1fr; } .sidebar{ position:static !important; } }
-
-/* ===== sidebar / profile card ===== */
-.sidebar{ position:sticky; top:96px; }
-.profile-card{
-  background:var(--af-panel); border:1px solid var(--af-border); padding:28px 24px; text-align:center;
-  box-shadow:var(--shadow-md); position:relative; margin-bottom:20px;
-}
-.profile-card__corner{ position:absolute; width:10px; height:10px; border-color:var(--af-red); opacity:0.6; }
-.profile-card__corner.tl{ top:8px; left:8px; border-top:1px solid; border-left:1px solid; }
-.profile-card__corner.br{ bottom:8px; right:8px; border-bottom:1px solid; border-right:1px solid; }
-.profile-avatar{
-  width:72px; height:72px; margin:0 auto 16px; background:var(--af-white); color:#fff;
-  display:flex; align-items:center; justify-content:center; font-family:var(--disp); font-weight:700;
-  font-size:2rem; letter-spacing:0.02em; position:relative; border:1px solid var(--af-white);
-  cursor:pointer; overflow:hidden; background-size:cover; background-position:center;
-}
-.profile-avatar::before, .profile-avatar::after{ content:''; position:absolute; width:8px; height:8px; border-color:var(--af-red); z-index:2; }
-.profile-avatar::before{ top:-1px; left:-1px; border-top:2px solid; border-left:2px solid; }
-.profile-avatar::after{ bottom:-1px; right:-1px; border-bottom:2px solid; border-right:2px solid; }
-.profile-avatar__overlay{
-  position:absolute; inset:0; background:rgba(20,20,20,0.72); color:#fff; opacity:0;
-  display:flex; align-items:center; justify-content:center; text-align:center;
-  font-family:var(--mono); font-size:0.56rem; letter-spacing:0.03em; text-transform:uppercase;
-  transition:opacity .2s; z-index:1; padding:6px;
-}
-.profile-avatar:hover .profile-avatar__overlay{ opacity:1; }
-.profile-avatar input{ display:none; }
-.profile-avatar-remove{ font-family:var(--mono); font-size:0.6rem; color:var(--af-grey); text-decoration:underline; cursor:pointer; background:none; border:none; margin:0 0 18px; display:block; margin-left:auto; margin-right:auto; }
-.profile-avatar-remove:hover{ color:var(--af-red); }
-.profile-email{ font-family:var(--disp); font-weight:600; font-size:1.05rem; word-break:break-word; margin-bottom:4px; }
-.profile-since{ font-family:var(--mono); font-size:0.64rem; color:var(--af-grey); letter-spacing:0.05em; text-transform:uppercase; margin-bottom:22px; }
-.profile-stats{ border-top:1px solid var(--af-border); padding-top:18px; margin-bottom:20px; text-align:left; }
-.profile-stat{ display:flex; justify-content:space-between; align-items:baseline; padding:7px 0; font-family:var(--mono); font-size:0.66rem; color:var(--af-grey); letter-spacing:0.04em; text-transform:uppercase; }
-.profile-stat strong{ font-family:var(--disp); font-size:1.3rem; color:var(--af-white); font-weight:700; }
-.profile-stat--accent strong{ color:var(--af-red); }
-.btn{ font-family:var(--mono); font-size:0.78rem; letter-spacing:0.04em; background:var(--af-white); color:#fff; border:1px solid var(--af-white); padding:12px 20px; cursor:pointer; transition:opacity .2s; }
-.btn:hover{ opacity:0.85; }
-.btn:disabled{ opacity:0.5; cursor:default; }
-.btn--ghost{ background:transparent; color:var(--af-white); border:1px solid var(--af-grey-dim); }
-.btn--ghost:hover{ opacity:1; border-color:var(--af-red); color:var(--af-red); }
-.btn--small{ padding:7px 12px; font-size:0.68rem; }
-.btn--full{ width:100%; }
-
-.sidebar-note{ background:var(--af-panel); border:1px solid var(--af-border); padding:16px 18px; font-size:0.78rem; color:var(--af-grey); line-height:1.6; }
-.sidebar-note strong{ color:var(--af-white); }
-
-/* ===== gate (logged out) ===== */
-.gate{ text-align:center; padding:70px 20px; max-width:420px; margin:0 auto; }
-.gate .af-form{ margin:24px auto 0; text-align:left; }
-.gate h1{ margin-bottom:8px; }
-
-/* ===== panels ===== */
-.panel{ background:var(--af-panel); border:1px solid var(--af-border); padding:30px; margin-bottom:24px; box-shadow:var(--shadow-sm); position:relative; }
-.panel::before{ content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, var(--af-red), transparent 65%); }
-
-.steps{ display:grid; grid-template-columns:repeat(4,1fr); gap:22px; }
-.step__num{ font-family:var(--mono); font-size:0.7rem; color:var(--af-red); margin-bottom:8px; }
-.step h4{ font-family:var(--disp); font-weight:600; font-size:0.95rem; text-transform:uppercase; margin:0 0 6px; }
-.step p{ font-size:0.8rem; color:var(--af-grey); margin:0; line-height:1.5; }
-@media (max-width:640px){ .steps{ grid-template-columns:1fr 1fr; } }
-
-/* ===== form ===== */
-.af-form label{ display:block; font-family:var(--mono); font-size:0.62rem; letter-spacing:0.06em; color:var(--af-grey); margin-bottom:6px; text-transform:uppercase; }
-.af-form input, .af-form textarea{ width:100%; background:transparent; border:1px solid var(--af-grey-dim); color:var(--af-white); font-family:var(--body); font-size:0.9rem; padding:10px 12px; margin-bottom:6px; }
-.af-form input:focus, .af-form textarea:focus{ outline:none; border-color:var(--af-red); }
-.char-count{ text-align:right; font-family:var(--mono); font-size:0.62rem; color:var(--af-grey-dim); margin-bottom:14px; }
-.char-count.is-near{ color:var(--af-red); }
-.note{ font-family:var(--mono); font-size:0.72rem; color:var(--af-grey); margin-top:-2px; margin-bottom:14px; }
-.note--error{ color:var(--af-red); }
-.note--ok{ color:#1a7a2e; }
-
-.dropzone{ border:1px dashed var(--af-grey-dim); padding:22px; text-align:center; cursor:pointer; margin-bottom:6px; transition:border-color .2s, background .2s; }
-.dropzone:hover, .dropzone.is-drag{ border-color:var(--af-red); background:#fdf6f6; }
-.dropzone__label{ font-family:var(--mono); font-size:0.78rem; color:var(--af-grey); }
-.dropzone__label strong{ color:var(--af-white); }
-.dropzone__file{ font-family:var(--mono); font-size:0.78rem; color:var(--af-red); margin-top:4px; }
-.dropzone input{ display:none; }
-.file-hint{ font-family:var(--mono); font-size:0.62rem; color:var(--af-grey-dim); margin-bottom:16px; }
-
-/* ===== design cards ===== */
-.design-card{ background:var(--af-panel); border:1px solid var(--af-border); padding:22px 24px; margin-bottom:16px; position:relative; box-shadow:var(--shadow-sm); transition:box-shadow .2s, transform .2s; }
-.design-card:hover{ box-shadow:var(--shadow-lg); transform:translateY(-2px); }
-.design-card__corner{ position:absolute; width:9px; height:9px; border-color:var(--af-grey-dim); }
-.design-card__corner.tl{ top:7px; left:7px; border-top:1px solid; border-left:1px solid; }
-.design-card__corner.br{ bottom:7px; right:7px; border-bottom:1px solid; border-right:1px solid; }
-.design-card__top{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:4px; }
-.design-card h3{ font-family:var(--disp); font-weight:600; font-size:1.15rem; margin:0; text-transform:uppercase; }
-.status{ font-family:var(--mono); font-size:0.62rem; letter-spacing:0.05em; text-transform:uppercase; padding:3px 8px; border:1px solid var(--af-grey-dim); color:var(--af-grey); white-space:nowrap; }
-.status--active{ color:var(--af-red); border-color:var(--af-red); }
-.status--declined{ color:var(--af-grey); border-color:var(--af-grey-dim); text-decoration:line-through; }
-.design-card p{ font-size:0.88rem; color:#3a3a3a; margin:10px 0 14px; }
-
-.pipeline{ display:flex; align-items:flex-start; margin:16px 0 18px; }
-.pipeline__stage{ flex:1; display:flex; flex-direction:column; align-items:center; text-align:center; position:relative; }
-.pipeline__stage:not(:last-child)::after{ content:''; position:absolute; top:5px; left:50%; width:100%; height:2px; background:var(--af-grey-dim); z-index:0; }
-.pipeline__stage.is-done:not(:last-child)::after{ background:var(--af-red); }
-.pipeline__dot{ width:11px; height:11px; border-radius:50%; background:var(--af-grey-dim); border:2px solid var(--af-panel); position:relative; z-index:1; margin-bottom:6px; }
-.pipeline__stage.is-done .pipeline__dot{ background:var(--af-red); }
-.pipeline__stage.is-current .pipeline__dot{ background:var(--af-white); box-shadow:0 0 0 3px rgba(216,19,36,0.15); }
-.pipeline__label{ font-family:var(--mono); font-size:0.56rem; letter-spacing:0.02em; color:var(--af-grey-dim); text-transform:uppercase; }
-.pipeline__stage.is-done .pipeline__label, .pipeline__stage.is-current .pipeline__label{ color:var(--af-white); }
-.pipeline--declined{ margin:16px 0 18px; }
-.pipeline--declined .declined-note{ font-family:var(--mono); font-size:0.72rem; color:var(--af-grey); border-left:2px solid var(--af-grey-dim); padding-left:10px; }
-
-.design-card__meta{ display:flex; justify-content:space-between; align-items:center; font-family:var(--mono); font-size:0.68rem; color:var(--af-grey); flex-wrap:wrap; gap:8px; }
-.design-card__meta a{ color:var(--af-red); text-decoration:none; }
-.design-card__meta .file-tag{ border:1px solid var(--af-grey-dim); padding:2px 6px; margin-right:4px; color:var(--af-grey); }
-.design-card__actions{ display:flex; gap:14px; align-items:center; }
-.design-card__actions button{ background:none; border:none; color:var(--af-grey); font-family:var(--mono); font-size:0.68rem; cursor:pointer; text-decoration:underline; padding:0; }
-.design-card__actions button:hover{ color:var(--af-red); }
-.empty{ color:var(--af-grey); font-size:0.9rem; text-align:center; padding:44px 20px; border:1px dashed var(--af-border); background:var(--af-panel); }
-.empty a{ color:var(--af-red); }
-
-.order-items{ font-family:var(--mono); font-size:0.82rem; color:#3a3a3a; margin:10px 0 14px; line-height:1.7; }
-.order-total{ font-family:var(--disp); font-weight:700; font-size:1.3rem; color:var(--af-white); }
-.tracking-link{ display:inline-block; margin-top:4px; font-family:var(--mono); font-size:0.7rem; color:var(--af-red); text-decoration:none; border-bottom:1px solid var(--af-red); }
-.tracking-number{ font-family:var(--mono); font-size:0.68rem; color:var(--af-grey); }
-
-footer{ text-align:center; font-family:var(--mono); font-size:0.68rem; color:var(--af-grey); padding:30px; border-top:1px solid var(--af-border); }
-
-@keyframes fadeUp{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:translateY(0); } }
-.dash-layout{ animation:fadeUp .4s ease; }
-</style>
-</head>
-<body>
-<header>
-  <a class="logo" href="/">AETHERFORGE</a>
-  <a class="back" href="/">← BACK TO SITE</a>
-</header>
-
-<main>
-  <div id="gateView" style="display:none;" class="gate">
-    <div class="eyebrow">// MY ACCOUNT</div>
-    <h1>Log in to see your designs</h1>
-    <p style="color:var(--af-grey); font-size:0.9rem; margin-bottom:0;">Save the things you want us to build, and check on their status any time.</p>
-    <div id="gateForm" class="af-form"></div>
-  </div>
-
-  <div id="dashView" style="display:none;">
-    <div class="eyebrow">// MY ACCOUNT</div>
-    <h1>Saved Designs</h1>
-
-    <div class="dash-layout">
-      <div class="sidebar">
-        <div class="profile-card">
-          <span class="profile-card__corner tl"></span><span class="profile-card__corner br"></span>
-          <div class="profile-avatar" id="profileAvatar">
-            <span id="profileAvatarInitial">A</span>
-            <div class="profile-avatar__overlay" id="avatarOverlay">CHANGE<br>PHOTO</div>
-            <input type="file" id="avatarInput" accept="image/*">
-          </div>
-          <button class="profile-avatar-remove" id="avatarRemoveBtn" style="display:none;">Remove photo</button>
-          <div class="profile-email" id="profileEmail"></div>
-          <div class="profile-since" id="profileSince"></div>
-          <div class="profile-stats">
-            <div class="profile-stat"><span>Submitted</span><strong id="statTotal">0</strong></div>
-            <div class="profile-stat profile-stat--accent"><span>In Progress</span><strong id="statProgress">0</strong></div>
-            <div class="profile-stat"><span>Completed</span><strong id="statDone">0</strong></div>
-          </div>
-          <button id="logoutBtn" class="btn btn--ghost btn--full">LOG OUT</button>
-        </div>
-        <div class="sidebar-note">
-          <strong>Questions about a submission?</strong><br>
-          Email <a href="mailto:aetherforge.eng@gmail.com" style="color:var(--af-red);">aetherforge.eng@gmail.com</a> and mention the design title.
-        </div>
-      </div>
-
-      <div>
-        <h2>Order Tracking</h2>
-        <div id="orderList" style="margin-bottom:32px;"><p class="empty">Loading...</p></div>
-
-        <div class="panel how-it-works">
-          <h2>How It Works</h2>
-          <div class="steps">
-            <div class="step"><div class="step__num">[ 01 ]</div><h4>Submit</h4><p>Send a title, description, and a file if you have one.</p></div>
-            <div class="step"><div class="step__num">[ 02 ]</div><h4>We Review</h4><p>We check feasibility, usually within 1 business day.</p></div>
-            <div class="step"><div class="step__num">[ 03 ]</div><h4>Quoted</h4><p>Pricing and lead time show up right here on this page.</p></div>
-            <div class="step"><div class="step__num">[ 04 ]</div><h4>Built &amp; Shipped</h4><p>Once approved, it's produced and shipped when done.</p></div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <h2>Submit a New Design</h2>
-          <form class="af-form" id="designForm">
-            <label>Title</label>
-            <input type="text" name="title" required maxlength="120" placeholder="e.g. Bracket for wall-mounted monitor arm">
-            <label>Description</label>
-            <textarea name="description" rows="4" maxlength="1000" placeholder="Dimensions, material, quantity, deadline, anything we should know..."></textarea>
-            <div class="char-count" id="charCount">0 / 1000</div>
-            <label>Reference file (optional — image, STL, PDF, etc.)</label>
-            <div class="dropzone" id="dropzone">
-              <div class="dropzone__label"><strong>Click to choose a file</strong> or drag one here</div>
-              <div class="dropzone__file" id="dropzoneFile"></div>
-              <input type="file" name="file" id="fileInput">
-            </div>
-            <div class="file-hint">Max ~50MB. Images, STL, STEP, PDF, and most common formats are fine.</div>
-            <div id="designFormNote"></div>
-            <button type="submit" class="btn" id="designSubmitBtn">SUBMIT DESIGN</button>
-          </form>
-        </div>
-
-        <h2>Your Submissions</h2>
-        <div id="designList"><p class="empty">Loading...</p></div>
-      </div>
-    </div>
-  </div>
-</main>
-
-<footer>© 2026 AETHERFORGE LLC — <a href="/terms.html" style="color:var(--af-grey);">TERMS</a> · <a href="/privacy.html" style="color:var(--af-grey);">PRIVACY</a></footer>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="assets/auth.js"></script>
-<script>
+// Dashboard logic for account.html. Kept in its own file (rather than inline)
+// so the site's CSP can forbid inline scripts entirely — with 'unsafe-inline'
+// removed, an injected <script> or attribute handler simply won't execute.
 const gateView = document.getElementById('gateView');
 const dashView = document.getElementById('dashView');
 const gateForm = document.getElementById('gateForm');
@@ -331,7 +81,7 @@ function wireGateForm(mode){
         if (data.session) {
           init();
         } else {
-          gateForm.innerHTML = `<div class="note note--ok">Check ${email} for a confirmation link, then log in below.</div>` + loginFormHTML();
+          gateForm.innerHTML = `<div class="note note--ok">Check ${escapeHtml(email)} for a confirmation link, then log in below.</div>` + loginFormHTML();
           wireGateForm('login');
         }
       }
@@ -531,7 +281,7 @@ async function loadDesigns(user){
       <div class="design-card__meta">
         <span>SUBMITTED ${submittedDate}${showUpdated ? ` · UPDATED ${relativeDate(d.updated_at)}` : ''}</span>
         <span class="design-card__actions">
-          ${d.file_path ? `<a href="#" class="file-link" data-path="${d.file_path}"><span class="file-tag">${fileTag(d.file_path)}</span>${escapeHtml(filenameFromPath(d.file_path))}</a>` : ''}
+          ${d.file_path ? `<a href="#" class="file-link" data-path="${escapeHtml(d.file_path)}"><span class="file-tag">${fileTag(d.file_path)}</span>${escapeHtml(filenameFromPath(d.file_path))}</a>` : ''}
           ${d.status === 'submitted' ? `<button class="edit-btn" data-id="${d.id}">EDIT</button>` : ''}
           <button class="delete-btn" data-id="${d.id}">DELETE</button>
         </span>
@@ -608,7 +358,7 @@ async function loadOrders(user){
         <span class="order-total">${total}</span>
         <span class="design-card__actions">
           ${o.tracking_number ? `<span class="tracking-number">${escapeHtml(o.tracking_number)}</span>` : ''}
-          ${o.tracking_url ? `<a class="tracking-link" href="${escapeHtml(o.tracking_url)}" target="_blank" rel="noopener">TRACK PACKAGE</a>` : ''}
+          ${o.tracking_url ? `<a class="tracking-link" href="${escapeHtml(safeUrl(o.tracking_url))}" target="_blank" rel="noopener">TRACK PACKAGE</a>` : ''}
         </span>
       </div>
     `;
@@ -641,7 +391,7 @@ function startEdit(cardEl, record){
     const noteEl = body.querySelector('.edit-note');
     if (!title) { noteEl.innerHTML = `<div class="note note--error">Title can't be empty.</div>`; return; }
     const { error } = await afSb.from('designs').update({ title, description }).eq('id', record.id);
-    if (error) { noteEl.innerHTML = `<div class="note note--error">${error.message}</div>`; return; }
+    if (error) { noteEl.innerHTML = `<div class="note note--error">${escapeHtml(error.message)}</div>`; return; }
     const user = await afGetUser();
     loadDesigns(user);
   });
@@ -649,8 +399,23 @@ function startEdit(cardEl, record){
 
 function escapeHtml(str){
   const div = document.createElement('div');
-  div.textContent = str;
+  div.textContent = String(str ?? '');
   return div.innerHTML;
+}
+
+// Only allow http/https in hrefs we render. Blocks javascript:, data: and
+// other script-bearing schemes from ever reaching an anchor.
+function safeUrl(u){
+  try {
+    const parsed = new URL(String(u), window.location.origin);
+    return (parsed.protocol === 'http:' || parsed.protocol === 'https:') ? parsed.href : '#';
+  } catch { return '#'; }
+}
+
+// Storage keys are user-supplied filenames; keep them to a predictable
+// character set so they can't carry quotes, angle brackets or path segments.
+function safeFileName(name){
+  return String(name).replace(/[^A-Za-z0-9._-]/g, '_').slice(-80) || 'upload';
 }
 
 designForm.addEventListener('submit', async (e) => {
@@ -673,10 +438,10 @@ designForm.addEventListener('submit', async (e) => {
   try {
     let file_path = null;
     if (file) {
-      const path = `${user.id}/${Date.now()}_${file.name}`;
+      const path = `${user.id}/${Date.now()}_${safeFileName(file.name)}`;
       const { error: upErr } = await afSb.storage.from('designs').upload(path, file);
       if (upErr) {
-        designFormNote.innerHTML = `<div class="note note--error">Upload failed: ${upErr.message}</div>`;
+        designFormNote.innerHTML = `<div class="note note--error">Upload failed: ${escapeHtml(upErr.message)}</div>`;
         designSubmitBtn.disabled = false;
         designSubmitBtn.textContent = 'SUBMIT DESIGN';
         return;
@@ -687,7 +452,7 @@ designForm.addEventListener('submit', async (e) => {
       user_id: user.id, title, description, file_path
     });
     if (insErr) {
-      designFormNote.innerHTML = `<div class="note note--error">${insErr.message}</div>`;
+      designFormNote.innerHTML = `<div class="note note--error">${escapeHtml(insErr.message)}</div>`;
       designSubmitBtn.disabled = false;
       designSubmitBtn.textContent = 'SUBMIT DESIGN';
       return;
@@ -732,6 +497,3 @@ async function init(){
   }
 }
 init();
-</script>
-</body>
-</html>
