@@ -875,3 +875,71 @@ html{ overflow-x:hidden; }
    zones so step numbers and phase markers stay readable. */
 .dark-zone .step__num,
 .dark-zone .roadmap__num{ color:#9a9a9a; }
+
+/* ============================================================
+   TRANSITIONS & MOTION
+   Everything here sits inside prefers-reduced-motion guards or
+   degrades to a plain state, so nothing below is load-bearing.
+   ============================================================ */
+
+/* ---- Cross-page transitions -------------------------------
+   The site is a real multi-page app now, so every nav click was
+   a hard white cut. This hands the browser a snapshot of the old
+   page and cross-fades it into the new one. Chromium and Safari
+   honour it; anywhere else navigation just works as before. */
+@view-transition { navigation: auto; }
+
+::view-transition-old(root),
+::view-transition-new(root){ animation-timing-function: var(--ease); }
+
+@media (prefers-reduced-motion: no-preference){
+  ::view-transition-old(root){ animation: af-page-out .18s both; }
+  ::view-transition-new(root){ animation: af-page-in .34s both; }
+}
+@keyframes af-page-out{ to   { opacity:0; transform:translateY(-6px); } }
+@keyframes af-page-in { from { opacity:0; transform:translateY(10px); } }
+
+/* Chrome the user shouldn't see move between pages: naming these keeps
+   them out of the page snapshot so they hold still while the body
+   changes underneath, rather than fading out and back in. */
+header{ view-transition-name: af-header; }
+footer{ view-transition-name: af-footer; }
+.aether-launcher{ view-transition-name: af-launcher; }
+
+/* ---- Section rule draws itself in -------------------------
+   A red line traces along the section divider as it scrolls into
+   view — reads like a drafting pen laying down a rule. */
+.section-head{ position:relative; }
+.section-head::after{
+  content:''; position:absolute; left:0; bottom:-1px;
+  width:100%; height:1px; background:var(--af-red);
+  transform:scaleX(0); transform-origin:left center;
+  transition:transform 1.1s var(--ease);
+}
+.section-head.rule-in::after{ transform:scaleX(1); }
+
+/* ---- Nav brackets open on hover --------------------------- */
+.navlinks a::before, .navlinks a::after{
+  display:inline-block;
+  transition:transform .28s var(--ease), color .15s var(--ease);
+}
+.navlinks a:hover::before, .navlinks a.is-current::before{ transform:translateX(-3px); }
+.navlinks a:hover::after,  .navlinks a.is-current::after { transform:translateX(3px); }
+
+/* ---- Counting stats --------------------------------------- */
+/* Tabular figures stop the numbers jittering in width as they climb. */
+.print-stats strong, .route-card__meta strong, .spec-strip strong{
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Buttons: accent sweeps across on hover ---------------- */
+/* inline-block so the sweep clips correctly even outside a flex container */
+.btn{ position:relative; overflow:hidden; display:inline-block; }
+.btn::after{
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+  transform:translateX(-120%);
+  transition:transform .55s var(--ease);
+  pointer-events:none;
+}
+.btn:hover::after{ transform:translateX(120%); }
