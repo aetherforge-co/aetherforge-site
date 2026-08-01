@@ -81,17 +81,38 @@ async function isRateLimited(key, max, windowSeconds) {
   }
   try {
     const redisKey = `ratelimit:checkout:${key}`;
+    // INCR, set the window on first hit, then read the TTL back so we can
+    // confirm the key will actually expire.
     const res = await fetch(`${url}/pipeline`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
       body: JSON.stringify([
         ['INCR', redisKey],
         ['EXPIRE', redisKey, windowSeconds, 'NX'],
+        ['TTL', redisKey],
       ]),
     });
+    if (!res.ok) {
+      console.error('Upstash returned', res.status, '— falling back to in-memory limiter.');
+      return isRateLimitedMemory(key, max, windowSeconds * 1000);
+    }
     const data = await res.json();
     const count = data?.[0]?.result;
+    const ttl = data?.[2]?.result;
     if (typeof count !== 'number') return isRateLimitedMemory(key, max, windowSeconds * 1000);
+
+    // A counter with no expiry (-1) would climb forever and lock this IP out
+    // of checkout permanently — the worst possible failure for a customer
+    // trying to pay. If EXPIRE didn't take for any reason, force it here.
+    if (ttl === -1) {
+      console.error('Rate-limit key had no TTL — repairing:', redisKey);
+      try {
+        await fetch(`${url}/expire/${encodeURIComponent(redisKey)}/${windowSeconds}`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      } catch { /* best effort — the limiter still works this request */ }
+    }
     return count > max;
   } catch (err) {
     console.error('Upstash rate limit error, falling back to in-memory:', err);
