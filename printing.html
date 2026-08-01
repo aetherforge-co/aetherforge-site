@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D Printing & Print Shop — AETHERFORGE</title>
+<meta name="description" content="In-house FDM and resin 3D printing. Custom enclosures, rapid prototyping, small-batch production, finishing, and printed accessories. 24-48h turnaround.">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Baseline CSP: this is a single-file static site with no build step, so
+     inline <script>/<style> are allowed (no nonce/hash pipeline available),
+     but everything else is locked to the exact external hosts this page
+     actually talks to — Google Fonts, picsum.photos placeholder images,
+     Formspree (capture forms), and the AETHER chat proxy on Vercel. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://picsum.photos https://fastly.picsum.photos; connect-src 'self' https://formspree.io https://aether-tts-proxy.vercel.app https://zxzoxzzbktlxdoacxupa.supabase.co; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none';">
+
+<!-- Open Graph / social link previews. og:image is a placeholder photo (1200x630,
+     the standard OG ratio) — swap for a real branded image when you have one. -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.aetherforgeco.com/">
+<meta property="og:title" content="AETHERFORGE — Precision 3D Printing">
+<meta property="og:description" content="In-house 3D printing shop — dialed-in FDM and resin, 24-48h turnaround, shipped from our own floor. CNC metal work coming soon.">
+<meta property="og:image" content="https://picsum.photos/seed/af-hero-printfarm/1200/630">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AETHERFORGE — Precision 3D Printing">
+<meta name="twitter:description" content="In-house 3D printing shop — dialed-in FDM and resin, 24-48h turnaround, shipped from our own floor. CNC metal work coming soon.">
+<meta name="twitter:image" content="https://picsum.photos/seed/af-hero-printfarm/1200/630">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAACY0lEQVR4nOxWX2hSURw+lj6opJvasC1osF4aLRm0uWCYZldaUkHNWjW2hIKion8v0caSIgg0g7YVRg9FVgYLQqhW6jATN51t9LIeVluw1oPkplfzQbnSicHlbrt/zi0GDfZxH875zu/7fXy/ey5coUqlAksJIVhiLH+DVYAnbFc7edXzM2g9eth6rM28exe6RIB+i+RyWSgYKCmRT0//0O8w5fN5FNVqiUQC0NDZcVmrrYMLmWxNoVCIxoZRVKgJNlZV+X2vBQLB3DaXy203mBKJBKcQNYHL1bu+ooLcikSisrK1/f3vOIVI13TvHnN93dbkzIzegOF4BvAB94jEYnFw4K1arY4NxyORQeoRQRR7eu8Vi0UWOXeCM6dPwu5wAUPAZ8EpjuMPHz1mkXMkKC9fFwr64cSZCmZnU406Qzb7i6mAI8E1WxfsDodjOXgE/BXYDHS6RgwzwsXU1PcL58+yVHq9r75OTNAeMY5IKBQGfG8qKzcABMTjIwcsLfR9mDRWaxvsDq/m+PgXgIDaWs3o6KfFPH0CpUIR/jAAv8HjJ075/AHwD6A3uGW/2dy8H15w+HoBMsLhSHfPXW4DjWaL92Uf4A+CIIxY0+TkNypJ8w5uXLctYIaiMYAGE7bTdf8Bm0HLIUtNzWYq8+Sp50pHF2CAorS0vb2V3Eok4m0N2sGhKMnMG5FUKg2996uUSpJJpdI6vTGTyXbfcSop/BwcjtvxjyPPPe4GbT1Jjo19bjLvo09w6eI51fwudoczncahsdv9DCzCz2TyT43d+aLPQ5LV1ZuoNYKVH68Vg//f4DcAAAD//0hFN8wAAAAGSURBVAMA8MC7FLxASIcAAAAASUVORK5CYII=">
+<link rel="icon" type="image/png" sizes="16x16" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAABHUlEQVR4nLSSP2vCUBTF01Z4JUNdQqB+gjrbmKXtUDp0KO1e2qG0UNsU24KDoKCo4OAHUNwEQREXh+CkIqKiLgq6+QfUiKIQiHHIFO8kGoOYwcODd955/Hj3Xa6OIAhMi3SYRh2rpiRJMt8WDYDTYf+1MgbD+V4AdWl6enxACAG2fXu0/ek0myqWyplMDnx/MOC40S7g9eXZ53Wvjt1u7/buXpZldUCvPyvks8FQuF5vrMLpdNbudNQBr8dF02ae59ffXIiLL8YqSZISMBovoPpPy48gCNim5qLYbLaUQDIRoygTlFup1hQAhH//tvF4Av4Ex3HYoI8f729gYvFEJBIFMxxysPz+wM31FTpFtJli2TSm2tbd0jxLhweWAAAA//8Pxq0CAAAABklEQVQDAD1HYiJDXZiWAAAAAElFTkSuQmCC">
+<link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<!--
+  // AETHERFORGE.SITE — BUILD LOG
+  // rev.C — if you're reading the source, you're the kind of person we build for.
+  // three of us started this in a garage with one CNC and no idea how to price titanium.
+  // we're always looking for machinists who read HTML comments. hiring@aetherforge.example
+-->
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="index.html" class="logo" style="cursor:pointer;"><span class="logo__mark"><svg viewBox="0 0 72.84 62.11" xmlns="http://www.w3.org/2000/svg">
+  <path d="M 17.46 62.11 L 23.49 51.61 L 66.72 51.61 L 62.63 44.66 L 17.17 44.66 L 19.72 40.19 L 59.96 40.19 L 55.98 33.35 L 23.72 33.35 L 26.56 28.88 L 53.35 28.88 L 49.29 21.98 L 30.33 21.98 L 33.00 17.23 L 46.57 17.23 L 36.42 0.00 L 0.00 62.11 Z" fill="#141414"/>
+  <path d="M 25.57 58.80 L 48.66 58.80 L 47.03 56.02 L 27.20 56.02 Z" fill="#141414"/>
+  <path d="M 51.73 54.28 L 56.08 62.11 L 72.84 62.11 L 68.29 54.28 Z" fill="#141414"/>
+</svg></span>AETHERFORGE <span class="logo__rev" id="revStamp">REV.C</span></a>
+    <div class="navlinks">
+      <a href="printing.html">3D PRINTING</a>
+      <a href="printing.html#printCatalog">SHOP</a>
+      <a href="metal-fab.html">METAL FAB<span class="nav-badge">SOON</span></a>
+      <a href="faq.html">FAQ</a>
+      <a href="index.html#contact">CONTACT</a>
+    </div>
+    <div class="nav-actions">
+      <button class="cart-btn" id="cartBtn" aria-label="Cart">CART <span class="cart-count" id="cartCount">[00]</span></button>
+      <button class="account-link" id="accountBtn" style="display:none;" aria-label="Account">LOGIN</button>
+    </div>
+    <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+<div class="mobile-nav-drawer" id="mobileNavDrawer">
+  <div class="mobile-nav-drawer__header">
+    <div class="mono" style="font-size:0.7rem; color:var(--af-grey); letter-spacing:0.1em;">// MENU</div>
+    <button class="cart-drawer__close" id="mobileNavClose">CLOSE // ESC</button>
+  </div>
+  <div class="mobile-nav-drawer__links">
+    <a href="printing.html">3D PRINTING</a>
+    <a href="printing.html#printCatalog">SHOP</a>
+    <a href="metal-fab.html">METAL FAB<span class="nav-badge">SOON</span></a>
+    <a href="faq.html">FAQ</a>
+    <a href="index.html#contact">CONTACT</a>
+  </div>
+</div>
+
+
+<section class="page-head">
+  <div class="page-head__inner">
+    <div class="eyebrow">// PRINT FARM — LIVE</div>
+    <h1>3D Printing</h1>
+    <p>Everything shipping today comes off our in-house print farm — dialed-in FDM and resin, checked against spec before it leaves the floor. Browse the shop below, or send us a model for something custom.</p>
+  </div>
+</section>
+
+<section id="print" class="print-lab">
+  <div class="section-inner">
+    <div class="print-top">
+      <div class="print-copy reveal">
+        <div class="print-stats">
+          <div><strong>4</strong>PRINTERS RUNNING</div>
+          <div><strong>0.08MM</strong>MIN LAYER HEIGHT</div>
+          <div><strong>6</strong>MATERIALS STOCKED</div>
+          <div><strong>24-48H</strong>TYPICAL TURNAROUND</div>
+        </div>
+        <div class="hero__cta">
+          <a href="#printCatalog" class="btn">VIEW PRINT SHOP</a>
+        </div>
+      </div>
+      <div class="print-visual reveal">
+        <div class="print-visual__label">FIG. 02 — <span>FRESH OFF THE BED</span></div>
+        <img src="https://picsum.photos/seed/af-print-freshpart/900/900" alt="Finished 3D print fresh off the build plate" class="hero-photo">
+      </div>
+    </div>
+
+    <div class="howitworks reveal-stagger">
+      <div class="step">
+        <div class="step__num">[ 01 ]</div>
+        <h4>Upload</h4>
+        <p>Send us an STL or STEP file, or describe what you need built.</p>
+      </div>
+      <div class="step">
+        <div class="step__num">[ 02 ]</div>
+        <h4>Quote</h4>
+        <p>We price material, layer height, and turnaround — usually within a day.</p>
+      </div>
+      <div class="step">
+        <div class="step__num">[ 03 ]</div>
+        <h4>Print &amp; Inspect</h4>
+        <p>Printed in-house and checked against spec before it leaves the floor.</p>
+      </div>
+      <div class="step">
+        <div class="step__num">[ 04 ]</div>
+        <h4>Ship</h4>
+        <p>Out the door in 24-48 hours for most jobs.</p>
+      </div>
+    </div>
+
+    <div id="printCatalog">
+      <div class="section-head reveal" style="margin-bottom:30px; padding-bottom:16px;">
+        <h2 style="font-size:1.3rem;">Print Lab Offerings</h2>
+        <div class="tag mono">// 06 SERVICES / LINES</div>
+      </div>
+      <div class="grid reveal-stagger" id="printGrid"></div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact" class="dark-zone-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo"><span class="logo__mark"><svg viewBox="0 0 72.84 62.11" xmlns="http://www.w3.org/2000/svg">
+  <path d="M 17.46 62.11 L 23.49 51.61 L 66.72 51.61 L 62.63 44.66 L 17.17 44.66 L 19.72 40.19 L 59.96 40.19 L 55.98 33.35 L 23.72 33.35 L 26.56 28.88 L 53.35 28.88 L 49.29 21.98 L 30.33 21.98 L 33.00 17.23 L 46.57 17.23 L 36.42 0.00 L 0.00 62.11 Z" fill="#141414"/>
+  <path d="M 25.57 58.80 L 48.66 58.80 L 47.03 56.02 L 27.20 56.02 Z" fill="#141414"/>
+  <path d="M 51.73 54.28 L 56.08 62.11 L 72.84 62.11 L 68.29 54.28 Z" fill="#141414"/>
+</svg></span>AETHERFORGE</div>
+        <div class="eyebrow" style="margin:6px 0 12px;">// Engineering | Design | Fabrication</div>
+        <p>Precision 3D-printed hardware, made in-house — CNC machining coming soon.</p>
+        <div class="mono" style="font-size:0.62rem; color:var(--af-grey-dim); margin-top:16px; line-height:1.8;">
+          &lt;PROJECT: AETHER&gt; &lt;STATUS: LIVE&gt;<br>
+          FIT: CLASS H7 — TOLERANCE: PRECISION REQUIRED
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>3D Printing</h4>
+        <a href="printing.html">Print farm</a>
+        <a href="printing.html#printCatalog">Request a quote</a>
+        <a href="printing.html#printCatalog">Materials</a>
+      </div>
+      <div class="footer-col">
+        <h4>Metal Fab</h4>
+        <a href="metal-fab.html">Coming soon</a>
+        <a href="metal-fab.html">Concept designs</a>
+        <a href="metal-fab.html#contact">Get notified</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="index.html#manifesto">Our process</a>
+        <a href="metal-fab.html#materials">Materials</a>
+        <a href="index.html#contact">Careers</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="index.html#contact">Contact</a>
+        <a href="faq.html">Shipping</a>
+        <a href="faq.html">Returns</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="/privacy.html">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 AETHERFORGE LLC — ALL UNITS PRINTED IN-HOUSE · <a href="/terms.html" style="color:inherit;">TERMS</a> · <a href="/privacy.html" style="color:inherit;">PRIVACY</a></div>
+      <div class="coords mono" title="you found it">DWG NO. AF-2026-000 · REV.C · SCALE N.T.S.</div>
+    </div>
+  </div>
+</footer>
+
+<div class="cart-overlay-bg" id="cartOverlayBg"></div>
+
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-drawer__header">
+    <h3>Cart</h3>
+    <button class="cart-drawer__close" id="cartClose">CLOSE // ESC</button>
+  </div>
+  <div class="cart-drawer__items" id="cartItems"></div>
+  <div class="cart-drawer__footer">
+    <div class="cart-subtotal"><span>SUBTOTAL</span><span id="cartSubtotal">$0</span></div>
+    <button class="btn" id="checkoutBtn">PROCEED TO CHECKOUT</button>
+    <button class="btn btn--ghost" id="continueShoppingBtn">CONTINUE SHOPPING</button>
+  </div>
+</div>
+
+<div class="checkout-modal" id="checkoutModal">
+  <div class="checkout-box" id="checkoutBox">
+    <button class="checkout-box__close" id="checkoutClose">CLOSE // ESC</button>
+    <div id="checkoutContent"></div>
+  </div>
+</div>
+
+<div class="checkout-modal" id="captureModal">
+  <div class="checkout-box" id="captureBox">
+    <button class="checkout-box__close" id="captureClose">CLOSE // ESC</button>
+    <div id="captureContent"></div>
+  </div>
+</div>
+
+<div class="checkout-modal" id="authModal">
+  <div class="checkout-box" id="authBox">
+    <button class="checkout-box__close" id="authClose">CLOSE // ESC</button>
+    <div id="authContent"></div>
+  </div>
+</div>
+
+<button class="aether-launcher" id="aetherLauncher" aria-label="Open AETHER">
+  <span class="aether-orb">
+    <span class="aether-orb__ring r1"></span>
+    <span class="aether-orb__ring r2"></span>
+    <span class="aether-orb__ring r3"></span>
+    <span class="aether-orb__core"></span>
+  </span>
+  <span class="aether-launcher__badge">ASK AETHER</span>
+</button>
+
+<div class="aether-panel" id="aetherPanel">
+  <div class="aether-panel__header">
+    <span class="aether-panel__core"></span>
+    <div class="aether-panel__title">
+      <h4>AETHER</h4>
+      <span>// AGENT STATUS: ONLINE</span>
+    </div>
+    <button class="aether-panel__close" id="aetherClose">CLOSE // ESC</button>
+  </div>
+  <div class="aether-panel__body" id="aetherBody">
+    <div class="aether-msg bot"><span class="tag-mini">AETHER</span>Hey — ask me about materials, turnaround times, or what's coming with the metal work line. Order tracking isn't connected yet, so for that use the contact form below.</div>
+  </div>
+  <div class="aether-chips">
+    <button class="aether-chip" data-q="Track my order">TRACK ORDER</button>
+    <button class="aether-chip" data-q="Get a print quote">GET A QUOTE</button>
+    <button class="aether-chip" data-q="What materials do you stock?">MATERIALS</button>
+  </div>
+  <div class="aether-panel__inputrow">
+    <input type="text" id="aetherInput" placeholder="Ask AETHER something...">
+    <button id="aetherSend">SEND</button>
+  </div>
+</div>
+
+<div class="egg-overlay" id="eggOverlay">
+  <pre id="eggArt"></pre>
+  <p id="eggMsg">SYSTEM ACCESS: GRANTED<br>You typed the word. Most people just scroll.<br>Take 10% off with code <strong style="color:#d81324;">AETHER10</strong> — we'll actually honor it.</p>
+  <button id="eggClose">CLOSE // ESC</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="assets/auth.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>
