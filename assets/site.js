@@ -474,7 +474,8 @@ function signInFormHTML(errorMsg){
       ${errorMsg ? `<div class="checkout-note" style="color:var(--af-red); margin-bottom:14px;">// ${errorMsg}</div>` : ''}
       <button type="submit" class="btn" style="width:100%;">LOG IN</button>
     </form>
-    <p style="font-size:0.8rem; color:var(--af-grey); margin-top:16px;">No account yet? <a href="#" id="switchToSignUp" style="color:var(--af-red);">Sign up</a></p>
+    <p style="font-size:0.8rem; color:var(--af-grey); margin-top:14px;"><a href="account.html" id="forgotLink" style="color:var(--af-grey); text-decoration:underline;">Forgot your password?</a></p>
+    <p style="font-size:0.8rem; color:var(--af-grey); margin-top:6px;">No account yet? <a href="#" id="switchToSignUp" style="color:var(--af-red);">Sign up</a></p>
   `;
 }
 
