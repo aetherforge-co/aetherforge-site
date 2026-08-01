@@ -942,6 +942,12 @@ if (shopGrid) {
     if (state.sort === 'price-desc') list = [...list].sort((a,b) => priceOf(b) - priceOf(a));
 
     shopGrid.innerHTML = list.map(cardHTML).join('');
+    // Deal the cards in with a short stagger so a filter change reads as a
+    // change, not a flicker. Capped so a 12-card result doesn't crawl.
+    shopGrid.querySelectorAll('.card').forEach((c, i) => {
+      c.style.animationDelay = Math.min(i * 32, 300) + 'ms';
+      c.classList.add('card-enter');
+    });
     shopCount.textContent = `${list.length} ITEM${list.length === 1 ? '' : 'S'}`;
     shopEmpty.style.display = list.length ? 'none' : 'block';
     wireCards(list);
@@ -1050,4 +1056,36 @@ if (shopGrid) {
     });
   }, { threshold: 0.6 });
   stats.forEach(s => statObs.observe(s));
+})();
+
+// --- plotter wipe on the shop-floor photos, + scroll progress rule ---
+(function plotAndProgress(){
+  // Progress rule is injected rather than pasted into six pages, so there's
+  // one place to change it.
+  if (!document.querySelector('.scroll-progress')) {
+    const bar = document.createElement('div');
+    bar.className = 'scroll-progress';
+    bar.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(bar);
+  }
+
+  const items = document.querySelectorAll('.gallery-item');
+  if (!items.length) return;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reducedMotion || !('IntersectionObserver' in window)) return;  // leave photos plainly visible
+
+  // Opt into the clipped starting state only now that we know we can animate
+  // out of it again.
+  items.forEach(i => i.classList.add('plot-ready'));
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      // Offset each pass slightly so the strip reads as a sequence of
+      // passes rather than four images appearing at once.
+      const idx = [...items].indexOf(e.target);
+      setTimeout(() => e.target.classList.add('plotted'), Math.min(idx * 130, 520));
+      obs.unobserve(e.target);
+    });
+  }, { threshold: 0.2 });
+  items.forEach(i => obs.observe(i));
 })();
