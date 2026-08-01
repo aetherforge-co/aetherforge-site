@@ -26,3 +26,19 @@ async function afSignIn(email, password){
 async function afSignOut(){
   return afSb.auth.signOut();
 }
+
+// --- Password recovery -------------------------------------------------
+// Sends the "reset your password" email. redirectTo must be listed under
+// Authentication > URL Configuration > Redirect URLs in the Supabase
+// dashboard, or Supabase will refuse to send the user back here.
+async function afResetPassword(email){
+  return afSb.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + '/account.html',
+  });
+}
+
+// Called once the user is back on the site holding a recovery session,
+// to set the new password.
+async function afUpdatePassword(newPassword){
+  return afSb.auth.updateUser({ password: newPassword });
+}
