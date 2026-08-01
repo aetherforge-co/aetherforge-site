@@ -32,7 +32,7 @@ const printProducts = [
     icon:`<svg viewBox="0 0 100 100" stroke="#141414" stroke-width="1.4" fill="none"><rect x="18" y="52" width="28" height="28" rx="3"/><rect x="36" y="34" width="28" height="28" rx="3" stroke="#d8d6ce"/><rect x="54" y="16" width="28" height="28" rx="3"/></svg>`
   },
   {
-    id:"PF-06", photo:"https://picsum.photos/seed/af-pf06-finishing/500/500", status:"IN STOCK", type:"cart", name:"FINISHING & COLOR", desc:"Send us a raw print — we'll sand, prime, and color-match it to spec before it ships.",
+    id:"PF-06", photo:"https://picsum.photos/seed/af-pf06-finishing/500/500", status:"OPEN", type:"quote", name:"FINISHING & COLOR", desc:"Send us a raw print — we'll sand, prime, and color-match it to spec before it ships.",
     specs:[["OPTIONS","SAND · PRIME · DYE · PAINT"],["TURNAROUND","+1-2 DAYS"],["COLOR MATCH","PANTONE OR SAMPLE"]],
     price:"FROM $15",
     icon:`<svg viewBox="0 0 100 100" stroke="#141414" stroke-width="1.4" fill="none"><rect x="32" y="35" width="36" height="40" rx="3"/><ellipse cx="50" cy="35" rx="18" ry="6"/><line x1="50" y1="20" x2="50" y2="29" stroke="#d81324"/></svg>`
@@ -128,9 +128,32 @@ if (grid) grid.innerHTML = products.map(p => `
 // blocked still works — it just won't remember the cart between pages.
 const CART_STORAGE_KEY = 'af_cart_v1';
 function loadCart(){
+  // Treat stored cart data as untrusted input, not as our own state: it
+  // survives across sessions and is writable by anything running on this
+  // origin, so a single injected value would otherwise persist and re-execute
+  // on every future page load. Rebuild it from scratch, keeping only
+  // well-formed entries for ids that still exist in the catalog.
   try {
     const raw = localStorage.getItem(CART_STORAGE_KEY);
-    return raw ? JSON.parse(raw) : {};
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return {};
+    const known = new Map(
+      [...(typeof printProducts !== 'undefined' ? printProducts : []),
+       ...(typeof products !== 'undefined' ? products : [])].map(p => [p.id, p])
+    );
+    const clean = {};
+    for (const [id, v] of Object.entries(parsed)) {
+      const ref = known.get(id);
+      if (!ref || ref.type !== 'cart') continue;          // unknown or not purchasable
+      const qty = Math.round(Number(v && v.qty));
+      if (!Number.isFinite(qty) || qty < 1) continue;
+      // Re-derive name/price/photo from the catalog rather than trusting
+      // whatever was stored, so display values can't be tampered with either.
+      clean[id] = { id: ref.id, name: ref.name, price: parsePrice(ref.price),
+                    photo: ref.photo, qty: Math.min(99, qty) };
+    }
+    return clean;
   } catch { return {}; }
 }
 function saveCart(){
@@ -211,10 +234,10 @@ function renderCart(){
   }
   cartItemsEl.innerHTML = items.map(i => `
     <div class="cart-line">
-      <img src="${i.photo}" alt="${i.name}">
+      <img src="${escapeHtml(i.photo)}" alt="${escapeHtml(i.name)}">
       <div class="cart-line__info">
-        <div class="cid">${i.id}</div>
-        <h4>${i.name}</h4>
+        <div class="cid">${escapeHtml(i.id)}</div>
+        <h4>${escapeHtml(i.name)}</h4>
         <div class="cart-line__qty">
           <button data-action="dec" data-id="${i.id}">−</button>
           <span>${i.qty}</span>
