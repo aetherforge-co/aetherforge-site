@@ -2,37 +2,37 @@
 // === PRINT LAB CATALOG ===
 const printProducts = [
   {
-    id:"PF-01", photo:"https://picsum.photos/seed/af-pf01-enclosure/500/500", status:"OPEN", type:"quote", name:"CUSTOM ENCLOSURES", desc:"Printed housings and protective cases, designed to your dimensions.",
+    id:"PF-01", photo:"assets/img/pf01-enclosure.svg", status:"OPEN", type:"quote", name:"CUSTOM ENCLOSURES", desc:"Printed housings and protective cases, designed to your dimensions.",
     specs:[["MATERIAL","PETG / ASA"],["LEAD TIME","2-4 DAYS"],["FINISH","SANDED OR RAW"]],
     price:"FROM $45",
     icon:`<svg viewBox="0 0 100 100" stroke="#141414" stroke-width="1.4" fill="none"><rect x="22" y="30" width="56" height="40" rx="4"/><line x1="22" y1="42" x2="78" y2="42" stroke="#d8d6ce" stroke-dasharray="2 3"/><circle cx="68" cy="60" r="3"/></svg>`
   },
   {
-    id:"PF-02", photo:"https://picsum.photos/seed/af-pf02-proto/500/500", status:"OPEN", type:"quote", name:"RAPID PROTOTYPING", desc:"Upload a model, we print and ship. FDM or resin, same-week turnaround.",
+    id:"PF-02", photo:"assets/img/pf02-proto.svg", status:"OPEN", type:"quote", name:"RAPID PROTOTYPING", desc:"Upload a model, we print and ship. FDM or resin, same-week turnaround.",
     specs:[["MATERIAL","PLA / RESIN / NYLON-CF"],["LEAD TIME","24-48H"],["FILE TYPES","STL / STEP"]],
     price:"FROM $12",
     icon:`<svg viewBox="0 0 100 100" stroke="#141414" stroke-width="1.4" fill="none"><path d="M50 20 L78 35 L78 65 L50 80 L22 65 L22 35 Z"/><path d="M50 20 L50 80 M22 35 L78 65 M78 35 L22 65" stroke="#d8d6ce" stroke-width="0.8"/></svg>`
   },
   {
-    id:"PF-03", photo:"https://picsum.photos/seed/af-pf03-accessory/500/500", status:"IN STOCK", type:"cart", name:"PRINTED ACCESSORIES", desc:"Mounts, cable organizers, and desk hardware — our growing printed line.",
+    id:"PF-03", photo:"assets/img/pf03-accessory.svg", status:"IN STOCK", type:"cart", name:"PRINTED ACCESSORIES", desc:"Mounts, cable organizers, and desk hardware — our growing printed line.",
     specs:[["MATERIAL","PETG"],["WEIGHT","VARIES"],["FINISH","MATTE"]],
     price:"$18",
     icon:`<svg viewBox="0 0 100 100" stroke="#141414" stroke-width="1.4" fill="none"><rect x="30" y="45" width="40" height="12" rx="2"/><line x1="50" y1="45" x2="50" y2="20"/><circle cx="50" cy="16" r="4"/></svg>`
   },
   {
-    id:"PF-04", photo:"https://picsum.photos/seed/af-pf04-material/500/500", status:"IN STOCK", type:"cart", name:"MATERIAL LIBRARY", desc:"Spooled and bottled stock for in-house and outside print jobs.",
+    id:"PF-04", photo:"assets/img/pf04-material.svg", status:"IN STOCK", type:"cart", name:"MATERIAL LIBRARY", desc:"Spooled and bottled stock for in-house and outside print jobs.",
     specs:[["OPTIONS","PLA·PETG·ASA·NYLON-CF·RESIN"],["COLORS","12"],["UNIT","1KG / 1L"]],
     price:"$22",
     icon:`<svg viewBox="0 0 100 100" stroke="#141414" stroke-width="1.4" fill="none"><circle cx="50" cy="50" r="26"/><circle cx="50" cy="50" r="8"/><line x1="50" y1="24" x2="50" y2="18" stroke="#d81324"/></svg>`
   },
   {
-    id:"PF-05", photo:"https://picsum.photos/seed/af-pf05-batch/500/500", status:"OPEN", type:"quote", name:"SMALL-BATCH PRODUCTION", desc:"Need 25, 100, or more of the same part? We queue it across the farm and hold tolerance across the whole run.",
+    id:"PF-05", photo:"assets/img/pf05-batch.svg", status:"OPEN", type:"quote", name:"SMALL-BATCH PRODUCTION", desc:"Need 25, 100, or more of the same part? We queue it across the farm and hold tolerance across the whole run.",
     specs:[["MATERIAL","PLA / PETG / ASA / NYLON-CF"],["MIN QTY","25 UNITS"],["LEAD TIME","5-7 DAYS"]],
     price:"FROM $180",
     icon:`<svg viewBox="0 0 100 100" stroke="#141414" stroke-width="1.4" fill="none"><rect x="18" y="52" width="28" height="28" rx="3"/><rect x="36" y="34" width="28" height="28" rx="3" stroke="#d8d6ce"/><rect x="54" y="16" width="28" height="28" rx="3"/></svg>`
   },
   {
-    id:"PF-06", photo:"https://picsum.photos/seed/af-pf06-finishing/500/500", status:"OPEN", type:"quote", name:"FINISHING & COLOR", desc:"Send us a raw print — we'll sand, prime, and color-match it to spec before it ships.",
+    id:"PF-06", photo:"assets/img/pf06-finishing.svg", status:"OPEN", type:"quote", name:"FINISHING & COLOR", desc:"Send us a raw print — we'll sand, prime, and color-match it to spec before it ships.",
     specs:[["OPTIONS","SAND · PRIME · DYE · PAINT"],["TURNAROUND","+1-2 DAYS"],["COLOR MATCH","PANTONE OR SAMPLE"]],
     price:"FROM $15",
     icon:`<svg viewBox="0 0 100 100" stroke="#141414" stroke-width="1.4" fill="none"><rect x="32" y="35" width="36" height="40" rx="3"/><ellipse cx="50" cy="35" rx="18" ry="6"/><line x1="50" y1="20" x2="50" y2="29" stroke="#d81324"/></svg>`
@@ -62,37 +62,37 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matc
 
 const products = [
   {
-    id:"AF-01", photo:"https://picsum.photos/seed/af-af01-sentinel/500/500", status:"CONCEPT", name:"SENTINEL", desc:"Titanium-frame EDC folding knife, S35VN blade.",
+    id:"AF-01", photo:"assets/img/af01-sentinel.svg", status:"CONCEPT", name:"SENTINEL", desc:"Titanium-frame EDC folding knife, S35VN blade.",
     specs:[["MATERIAL","TI-6AL-4V / S35VN"],["WEIGHT","82G"],["BLADE","3.4IN DROP PT"]],
     price:"EST. $268",
     icon:`<svg viewBox="0 0 100 100" stroke="#141414" stroke-width="1.4" fill="none"><path d="M20 65 L55 20 L68 25 L38 70 Z"/><path d="M20 65 L10 82 L28 90 L38 70 Z"/><circle cx="24" cy="76" r="4"/></svg>`
   },
   {
-    id:"AF-02", photo:"https://picsum.photos/seed/af-af02-relay/500/500", status:"CONCEPT", name:"RELAY", desc:"12-function modular multi-tool, pocket-clip carry.",
+    id:"AF-02", photo:"assets/img/af02-relay.svg", status:"CONCEPT", name:"RELAY", desc:"12-function modular multi-tool, pocket-clip carry.",
     specs:[["MATERIAL","6061-T6 AL / S35VN"],["WEIGHT","96G"],["TOOLS","12"]],
     price:"EST. $142",
     icon:`<svg viewBox="0 0 100 100" stroke="#141414" stroke-width="1.4" fill="none"><rect x="30" y="15" width="14" height="70" rx="2"/><line x1="37" y1="22" x2="37" y2="78" stroke-dasharray="3 3" stroke="#6b6b6b"/><rect x="24" y="20" width="4" height="30"/><rect x="46" y="35" width="4" height="30"/></svg>`
   },
   {
-    id:"AF-03", photo:"https://picsum.photos/seed/af-af03-anchor/500/500", status:"CONCEPT", name:"ANCHOR", desc:"Machined bolt-action pen, hex-drive cap doubles as a bit driver.",
+    id:"AF-03", photo:"assets/img/af03-anchor.svg", status:"CONCEPT", name:"ANCHOR", desc:"Machined bolt-action pen, hex-drive cap doubles as a bit driver.",
     specs:[["MATERIAL","GRADE 5 TITANIUM"],["WEIGHT","34G"],["REFILL","STD D1"]],
     price:"EST. $96",
     icon:`<svg viewBox="0 0 100 100" stroke="#141414" stroke-width="1.4" fill="none"><line x1="20" y1="80" x2="75" y2="25"/><line x1="20" y1="80" x2="30" y2="90"/><circle cx="75" cy="25" r="5"/></svg>`
   },
   {
-    id:"AF-04", photo:"https://picsum.photos/seed/af-af04-node/500/500", status:"CONCEPT", name:"NODE", desc:"Magnetic multi-surface mount, quarter-turn locking base.",
+    id:"AF-04", photo:"assets/img/af04-node.svg", status:"CONCEPT", name:"NODE", desc:"Magnetic multi-surface mount, quarter-turn locking base.",
     specs:[["MATERIAL","6061-T6 AL"],["PULL FORCE","18KG"],["MOUNT","1/4-20"]],
     price:"EST. $54",
     icon:`<svg viewBox="0 0 100 100" stroke="#141414" stroke-width="1.4" fill="none"><circle cx="50" cy="55" r="26"/><rect x="38" y="18" width="24" height="14" rx="2"/><line x1="50" y1="32" x2="50" y2="42"/></svg>`
   },
   {
-    id:"AF-05", photo:"https://picsum.photos/seed/af-af05-vector/500/500", status:"CONCEPT", name:"VECTOR", desc:"Pocket bit driver with magnetic quick-swap chuck, 6 bits included.",
+    id:"AF-05", photo:"assets/img/af05-vector.svg", status:"CONCEPT", name:"VECTOR", desc:"Pocket bit driver with magnetic quick-swap chuck, 6 bits included.",
     specs:[["MATERIAL","TITANIUM / S2 STEEL"],["WEIGHT","41G"],["BITS INCL.","6"]],
     price:"EST. $88",
     icon:`<svg viewBox="0 0 100 100" stroke="#141414" stroke-width="1.4" fill="none"><rect x="42" y="18" width="16" height="50" rx="3"/><path d="M42 68 L36 84 L64 84 L58 68 Z"/><line x1="50" y1="30" x2="50" y2="50" stroke="#6b6b6b" stroke-dasharray="3 3"/></svg>`
   },
   {
-    id:"AF-06", photo:"https://picsum.photos/seed/af-af06-cipher/500/500", status:"CONCEPT", name:"CIPHER", desc:"Keychain multi-tool: bottle opener, pry bar, hex set, lanyard hole.",
+    id:"AF-06", photo:"assets/img/af06-cipher.svg", status:"CONCEPT", name:"CIPHER", desc:"Keychain multi-tool: bottle opener, pry bar, hex set, lanyard hole.",
     specs:[["MATERIAL","S35VN STEEL"],["WEIGHT","22G"],["HEX SIZES","5"]],
     price:"EST. $38",
     icon:`<svg viewBox="0 0 100 100" stroke="#141414" stroke-width="1.4" fill="none"><rect x="20" y="40" width="60" height="16" rx="4"/><circle cx="30" cy="48" r="5"/><rect x="46" y="44" width="10" height="8"/><rect x="60" y="44" width="10" height="8"/></svg>`
