@@ -992,3 +992,62 @@ if (shopGrid) {
   }
   applyFilters();
 }
+
+// === MOTION: counting stats + section rules ==================================
+// Both are pure decoration layered on top of already-correct markup: if the
+// observer never fires or the browser bails, the final values are what's in
+// the HTML, so nothing here can leave the page in a wrong state.
+(function motionExtras(){
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!('IntersectionObserver' in window)) return;
+
+  // --- section divider draws itself in as it scrolls into view ---
+  const heads = document.querySelectorAll('.section-head');
+  if (heads.length) {
+    const headObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('rule-in');
+        headObs.unobserve(e.target);
+      });
+    }, { threshold: 0.25, rootMargin: '0px 0px -30px 0px' });
+    heads.forEach(h => headObs.observe(h));
+  }
+
+  // --- stat readouts count up to their value ---
+  // Splits "±0.02MM" into prefix / number / suffix so units and symbols are
+  // preserved and only the numeric part animates. Decimal places are taken
+  // from the source text, so 0.08 stays two-decimal the whole way up.
+  const stats = document.querySelectorAll('.print-stats strong, .route-card__meta strong, .spec-strip strong');
+  if (!stats.length) return;
+
+  function runCount(el){
+    const raw = el.textContent.trim();
+    const m = raw.match(/^([^\d]*)(\d+(?:\.\d+)?)(.*)$/s);
+    if (!m) return;                                   // nothing numeric, leave it
+    const [, prefix, numText, suffix] = m;
+    const target = parseFloat(numText);
+    if (!Number.isFinite(target)) return;
+    const decimals = (numText.split('.')[1] || '').length;
+    const duration = 850;
+    const start = performance.now();
+
+    function frame(now){
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);           // ease-out cubic
+      el.textContent = prefix + (target * eased).toFixed(decimals) + suffix;
+      if (t < 1) requestAnimationFrame(frame);
+      else el.textContent = raw;                      // land exactly on the source text
+    }
+    requestAnimationFrame(frame);
+  }
+
+  const statObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      statObs.unobserve(e.target);
+      if (!reduced) runCount(e.target);
+    });
+  }, { threshold: 0.6 });
+  stats.forEach(s => statObs.observe(s));
+})();
