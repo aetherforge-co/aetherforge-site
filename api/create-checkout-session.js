@@ -131,8 +131,14 @@ module.exports = async function handler(req, res) {
     return;
   }
 
+  // Rate-limit key. Prefer x-real-ip, which Vercel sets itself. x-forwarded-for
+  // can contain values a client sent, and taking its FIRST entry would let an
+  // attacker rotate the key per request and slip the limit entirely — so if we
+  // fall back to it, take the last (closest-to-us) hop instead of the first.
+  const forwarded = req.headers['x-forwarded-for']?.toString().split(',').map(s => s.trim()).filter(Boolean);
   const ip =
-    req.headers['x-forwarded-for']?.toString().split(',')[0].trim() ||
+    req.headers['x-real-ip']?.toString().trim() ||
+    (forwarded && forwarded.length ? forwarded[forwarded.length - 1] : null) ||
     req.socket?.remoteAddress ||
     'unknown';
   if (await isRateLimited(ip, 10, 60)) {
