@@ -61,7 +61,10 @@ async function recordOrder(session) {
     items,
     amount_total: typeof session.amount_total === 'number' ? session.amount_total / 100 : null,
     currency: (session.currency || 'usd').toLowerCase(),
-    status: 'paid',
+    // checkout.session.completed also fires for async payment methods (ACH,
+    // Klarna, etc.) where the session completed but funds have NOT settled.
+    // Trust Stripe's payment_status instead of assuming the money arrived.
+    status: session.payment_status === 'paid' ? 'paid' : 'processing',
   };
 
   try {
