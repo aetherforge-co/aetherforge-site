@@ -13,7 +13,7 @@
      <style>/style= is still allowed; everything else is locked to the hosts this page
      actually talks to — Google Fonts, picsum.photos placeholder images,
      Formspree (capture forms), and the AETHER chat proxy on Vercel. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://picsum.photos https://fastly.picsum.photos; connect-src 'self' https://formspree.io https://aether-tts-proxy.vercel.app https://zxzoxzzbktlxdoacxupa.supabase.co; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://picsum.photos https://fastly.picsum.photos; connect-src 'self' https://formspree.io https://aether-tts-proxy.vercel.app https://zxzoxzzbktlxdoacxupa.supabase.co; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none';">
 
 <!-- Open Graph / social link previews. og:image is a placeholder photo (1200x630,
      the standard OG ratio) — swap for a real branded image when you have one. -->
@@ -284,7 +284,7 @@
   <button id="eggClose">CLOSE // ESC</button>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="assets/supabase.js"></script>
 <script src="assets/auth.js"></script>
 <script src="assets/site.js"></script>
 </body>
