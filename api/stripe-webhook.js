@@ -184,11 +184,14 @@ module.exports = async function handler(req, res) {
     const currency = (session.currency || 'usd').toUpperCase();
     const email = session.customer_details?.email || 'unknown';
 
+    // Deliberately NOT logging the customer's email address here. Vercel's
+    // log store is a third party we don't control and these logs are
+    // retained beyond our need for them — the order row and Stripe both
+    // already hold the email, and sessionId is enough to look an order up.
     console.log('Verified order:', {
       sessionId: session.id,
       amount,
       currency,
-      email,
       paymentStatus: session.payment_status,
       accountLinked: Boolean(session.client_reference_id),
     });
