@@ -9,11 +9,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Baseline CSP: this is a single-file static site with no build step, so
-     inline <script>/<style> are allowed (no nonce/hash pipeline available),
-     but everything else is locked to the exact external hosts this page
+     inline <script> is now FORBIDDEN (all JS lives in /assets), inline
+     <style>/style= is still allowed; everything else is locked to the hosts this page
      actually talks to — Google Fonts, picsum.photos placeholder images,
      Formspree (capture forms), and the AETHER chat proxy on Vercel. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://picsum.photos https://fastly.picsum.photos; connect-src 'self' https://formspree.io https://aether-tts-proxy.vercel.app https://zxzoxzzbktlxdoacxupa.supabase.co; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://picsum.photos https://fastly.picsum.photos; connect-src 'self' https://formspree.io https://aether-tts-proxy.vercel.app https://zxzoxzzbktlxdoacxupa.supabase.co; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none';">
 
 <!-- Open Graph / social link previews. og:image is a placeholder photo (1200x630,
      the standard OG ratio) — swap for a real branded image when you have one. -->
