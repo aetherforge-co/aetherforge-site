@@ -163,7 +163,12 @@ document.querySelectorAll('#productGrid .card__add').forEach((btn, i) => {
   btn.addEventListener('click', () => openCapture('notify', p.name));
 });
 
-function addToCart(p){
+function addToCart(p, opts){
+  // opts.openDrawer defaults to true so the existing catalog pages behave as
+  // before. The shop page passes false: it's a browse-and-filter context where
+  // popping the drawer after every add means closing it again to keep looking,
+  // and the button's own "ADDED" state already confirms the action.
+  const openDrawer = !opts || opts.openDrawer !== false;
   const price = parsePrice(p.price);
   if (cart[p.id]) {
     cart[p.id].qty++;
@@ -171,7 +176,7 @@ function addToCart(p){
     cart[p.id] = { id:p.id, name:p.name, price, photo:p.photo, qty:1 };
   }
   renderCart();
-  openCart();
+  if (openDrawer) openCart();
 }
 
 function changeQty(id, delta){
@@ -843,3 +848,123 @@ document.querySelectorAll('.mobile-nav-drawer__links a').forEach(a => {
     if (href === current) a.classList.add('is-current');
   });
 })();
+
+
+// === SHOP PAGE: unified, filterable catalog across both product lines ===
+// Only runs on shop.html. Pulls from the same two catalogs the 3D Printing
+// and Metal Fab pages use, so those pages stay the curated "highlight" view
+// and this is the full browse-everything view.
+const shopGrid = document.getElementById('shopGrid');
+if (shopGrid) {
+  const AVAIL = { 'IN STOCK':'stock', 'OPEN':'order', 'CONCEPT':'concept' };
+  const catalog = [
+    ...printProducts.map(p => ({ ...p, line:'print' })),
+    ...products.map(p => ({ ...p, line:'metal' })),
+  ].map(p => ({ ...p, avail: AVAIL[p.status] || 'order' }));
+
+  const shopCount   = document.getElementById('shopCount');
+  const shopEmpty   = document.getElementById('shopEmpty');
+  const shopSearch  = document.getElementById('shopSearch');
+  const lineBtns    = document.querySelectorAll('[data-line]');
+  const availBtns   = document.querySelectorAll('[data-avail]');
+  const sortSelect  = document.getElementById('shopSort');
+
+  let state = { line:'all', avail:'all', q:'', sort:'default' };
+
+  // "FROM $45" / "EST. $268" / "$18" -> 45 / 268 / 18, for sorting only
+  const priceOf = p => {
+    const m = String(p.price).match(/([\d,]+(?:\.\d+)?)/);
+    return m ? parseFloat(m[1].replace(/,/g,'')) : Infinity;
+  };
+
+  function cardHTML(p){
+    const isConcept = p.avail === 'concept';
+    const label = p.type === 'cart' ? 'ADD TO CART' : (isConcept ? 'NOTIFY ME' : 'REQUEST');
+    return `
+      <div class="card" data-id="${p.id}" data-line="${p.line}">
+        <span class="card__corner tl"></span><span class="card__corner tr"></span>
+        <span class="card__corner bl"></span><span class="card__corner br"></span>
+        <div class="card__id">
+          <span>${p.id}</span>
+          <span class="status">● ${p.status}</span>
+        </div>
+        <div class="card__photo-wrap">
+          <img src="${p.photo}" alt="${p.name}" loading="lazy">
+          <div class="card__icon-badge">${p.icon}</div>
+        </div>
+        <div class="shop-line-tag">${p.line === 'print' ? '3D PRINTING' : 'METAL FAB'}</div>
+        <h3>${p.name}</h3>
+        <p class="desc">${p.desc}</p>
+        <div class="card__specs">${p.specs.map(s => `<div class="spec-row"><span class="spec-row__label">${s[0]}</span><span class="spec-row__value">${s[1]}</span></div>`).join('')}</div>
+        ${isConcept ? '<div class="concept-ribbon">// CONCEPT — NOT FOR SALE YET</div>' : ''}
+        <div class="card__footer">
+          <div class="card__price">${p.price}</div>
+          <button class="card__add ${p.type === 'cart' ? 'card__add--buy' : ''}" data-id="${p.id}">${label}</button>
+        </div>
+      </div>`;
+  }
+
+  function applyFilters(){
+    let list = catalog.filter(p => {
+      if (state.line !== 'all' && p.line !== state.line) return false;
+      if (state.avail !== 'all' && p.avail !== state.avail) return false;
+      if (state.q) {
+        const hay = (p.name + ' ' + p.desc + ' ' + p.specs.map(s => s.join(' ')).join(' ')).toLowerCase();
+        if (!hay.includes(state.q)) return false;
+      }
+      return true;
+    });
+    if (state.sort === 'price-asc')  list = [...list].sort((a,b) => priceOf(a) - priceOf(b));
+    if (state.sort === 'price-desc') list = [...list].sort((a,b) => priceOf(b) - priceOf(a));
+
+    shopGrid.innerHTML = list.map(cardHTML).join('');
+    shopCount.textContent = `${list.length} ITEM${list.length === 1 ? '' : 'S'}`;
+    shopEmpty.style.display = list.length ? 'none' : 'block';
+    wireCards(list);
+  }
+
+  function wireCards(list){
+    shopGrid.querySelectorAll('.card__add').forEach(btn => {
+      const p = list.find(x => x.id === btn.dataset.id);
+      if (!p) return;
+      btn.addEventListener('click', () => {
+        if (p.type === 'cart') {
+          addToCart(p, { openDrawer:false });
+          btn.textContent = 'ADDED ✓';
+          btn.disabled = true;
+          setTimeout(() => { btn.textContent = 'ADD TO CART'; btn.disabled = false; }, 1400);
+        } else {
+          openCapture(p.avail === 'concept' ? 'notify' : 'quote', p.name);
+        }
+      });
+    });
+  }
+
+  lineBtns.forEach(b => b.addEventListener('click', () => {
+    state.line = b.dataset.line;
+    lineBtns.forEach(x => x.classList.toggle('is-active', x === b));
+    applyFilters();
+  }));
+  availBtns.forEach(b => b.addEventListener('click', () => {
+    state.avail = b.dataset.avail;
+    availBtns.forEach(x => x.classList.toggle('is-active', x === b));
+    applyFilters();
+  }));
+  if (shopSearch) shopSearch.addEventListener('input', () => {
+    state.q = shopSearch.value.trim().toLowerCase();
+    applyFilters();
+  });
+  if (sortSelect) sortSelect.addEventListener('change', () => {
+    state.sort = sortSelect.value;
+    applyFilters();
+  });
+
+  // Deep links from elsewhere on the site: shop.html?line=metal
+  const params = new URLSearchParams(window.location.search);
+  const wanted = params.get('line');
+  if (wanted === 'metal' || wanted === 'print') {
+    state.line = wanted;
+    lineBtns.forEach(x => x.classList.toggle('is-active', x.dataset.line === wanted));
+  }
+  applyFilters();
+}
