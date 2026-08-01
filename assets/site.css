@@ -943,3 +943,71 @@ footer{ view-transition-name: af-footer; }
   pointer-events:none;
 }
 .btn:hover::after{ transform:translateX(120%); }
+
+/* ---- Shop filter: cards deal in rather than snapping --------
+   Filtering replaces the whole grid at once, which read as a jump
+   cut. A short staggered entrance makes it obvious the set changed
+   and which cards survived the filter. Enter-only (no fade-out)
+   so clicking a filter still feels instant. */
+@media (prefers-reduced-motion: no-preference){
+  .card-enter{ animation: af-card-in .40s var(--ease) both; }
+}
+@keyframes af-card-in{
+  from{ opacity:0; transform:translateY(12px) scale(0.985); }
+  to  { opacity:1; transform:none; }
+}
+
+/* ---- Plotter wipe on shop-floor photos ---------------------
+   Images uncover left-to-right behind a red rule, the way a print
+   head lays down a pass. */
+/* The clipped starting state is applied by JS (.plot-ready), never by
+   default — so if site.js ever fails to load, the photos are simply
+   visible rather than invisible with no way to reveal them. */
+.gallery-item img{
+  transition: clip-path 1.15s var(--ease), transform .4s ease, filter .4s ease;
+}
+.gallery-item.plot-ready img{ clip-path: inset(0 100% 0 0); }
+.gallery-item.plot-ready.plotted img{ clip-path: inset(0 0 0 0); }
+.gallery-item::before{
+  content:''; position:absolute; top:0; bottom:0; left:0;
+  width:2px; background:var(--af-red); opacity:0; z-index:3; pointer-events:none;
+}
+.gallery-item.plot-ready.plotted::before{ animation: af-scan 1.15s var(--ease) forwards; }
+@keyframes af-scan{
+  0%   { left:0;    opacity:0; }
+  8%   { opacity:1; }
+  92%  { opacity:1; }
+  100% { left:100%; opacity:0; }
+}
+@media (prefers-reduced-motion: reduce){
+  .gallery-item img{ clip-path:none; transition:none; }
+  .gallery-item::before{ display:none; }
+}
+
+/* ---- FAQ answers slide open instead of snapping ------------
+   Progressive enhancement: browsers without ::details-content just
+   get the normal instant toggle. */
+@supports selector(::details-content){
+  :root{ interpolate-size: allow-keywords; }
+  .faq-item::details-content{
+    block-size:0; overflow:hidden;
+    transition: block-size .34s var(--ease), content-visibility .34s allow-discrete;
+  }
+  .faq-item[open]::details-content{ block-size:auto; }
+}
+
+/* ---- Scroll progress rule ----------------------------------
+   Thin red bar across the very top tracking how far down the page
+   you are. Uses a scroll-driven animation, so it costs no JS on
+   the scroll path; where that isn't supported it simply stays
+   hidden rather than degrading to something broken. */
+.scroll-progress{
+  position:fixed; top:0; left:0; height:2px; width:100%;
+  background:var(--af-red); transform:scaleX(0); transform-origin:0 50%;
+  z-index:200; pointer-events:none;
+}
+@supports (animation-timeline: scroll()){
+  .scroll-progress{ animation: af-progress auto linear; animation-timeline: scroll(root block); }
+}
+@keyframes af-progress{ from{ transform:scaleX(0); } to{ transform:scaleX(1); } }
+@media (prefers-reduced-motion: reduce){ .scroll-progress{ display:none; } }
