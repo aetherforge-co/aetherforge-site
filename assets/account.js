@@ -45,9 +45,10 @@ function loginFormHTML(errorMsg){
     <input type="email" id="gEmail" required>
     <label>Password</label>
     <input type="password" id="gPassword" required>
-    ${errorMsg ? `<div class="note note--error">${errorMsg}</div>` : ''}
+    ${errorMsg ? `<div class="note note--error">${escapeHtml(errorMsg)}</div>` : ''}
     <button class="btn btn--full" id="gSubmit">LOG IN</button>
-    <p style="font-size:0.8rem; color:var(--af-grey); margin-top:16px;">No account? <a href="#" id="gSwitch" style="color:var(--af-red);">Sign up</a></p>
+    <p style="font-size:0.8rem; color:var(--af-grey); margin-top:14px;"><a href="#" id="gForgot" style="color:var(--af-grey); text-decoration:underline;">Forgot your password?</a></p>
+    <p style="font-size:0.8rem; color:var(--af-grey); margin-top:6px;">No account? <a href="#" id="gSwitch" style="color:var(--af-red);">Sign up</a></p>
   `;
 }
 function signupFormHTML(errorMsg){
@@ -91,6 +92,14 @@ function wireGateForm(mode){
       alert('Could not reach the server — check your connection and try again.');
     }
   });
+  const forgotLink = document.getElementById('gForgot');
+  if (forgotLink) {
+    forgotLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      gateForm.innerHTML = forgotFormHTML();
+      wireForgotForm();
+    });
+  }
   const switchLink = document.getElementById('gSwitch');
   if (switchLink) {
     switchLink.addEventListener('click', (e) => {
@@ -475,7 +484,95 @@ logoutBtn.addEventListener('click', async () => {
   window.location.href = '/';
 });
 
+
+// ===== PASSWORD RECOVERY =====================================================
+// Two views: asking for the reset email, and setting the new password after
+// the user follows the link back here.
+
+function forgotFormHTML(msg, isError){
+  return `
+    <label>Email</label>
+    <input type="email" id="fEmail" required>
+    ${msg ? `<div class="note ${isError ? 'note--error' : 'note--ok'}">${escapeHtml(msg)}</div>` : ''}
+    <button class="btn btn--full" id="fSubmit">SEND RESET LINK</button>
+    <p style="font-size:0.8rem; color:var(--af-grey); margin-top:16px;"><a href="#" id="fBack" style="color:var(--af-red);">Back to log in</a></p>
+  `;
+}
+
+function wireForgotForm(){
+  document.getElementById('fSubmit').addEventListener('click', async (e) => {
+    e.preventDefault();
+    const btn = e.target;
+    const email = document.getElementById('fEmail').value.trim();
+    if (!email) { gateForm.innerHTML = forgotFormHTML('Enter the email on your account.', true); wireForgotForm(); return; }
+    btn.disabled = true; btn.textContent = 'SENDING...';
+    try {
+      await afResetPassword(email);
+    } catch (err) { /* fall through — see note below */ }
+    // Always show the same confirmation whether or not the address exists.
+    // Saying "no account with that email" would let anyone test addresses
+    // against the customer list.
+    gateForm.innerHTML = forgotFormHTML(
+      'If an account exists for that address, a reset link is on its way. Check spam if it does not arrive shortly.', false);
+    wireForgotForm();
+  });
+  document.getElementById('fBack').addEventListener('click', (e) => {
+    e.preventDefault();
+    gateForm.innerHTML = loginFormHTML();
+    wireGateForm('login');
+  });
+}
+
+function resetFormHTML(msg){
+  return `
+    <label>New password</label>
+    <input type="password" id="rPassword" required minlength="8" autocomplete="new-password">
+    <label>Confirm new password</label>
+    <input type="password" id="rPassword2" required minlength="8" autocomplete="new-password">
+    <div class="note">Use at least 8 characters. Longer is better than complicated.</div>
+    ${msg ? `<div class="note note--error">${escapeHtml(msg)}</div>` : ''}
+    <button class="btn btn--full" id="rSubmit">SET NEW PASSWORD</button>
+  `;
+}
+
+function showRecoveryView(msg){
+  dashView.style.display = 'none';
+  gateView.style.display = 'block';
+  const heading = gateView.querySelector('h1');
+  if (heading) heading.textContent = 'Choose a new password';
+  gateForm.innerHTML = resetFormHTML(msg);
+  document.getElementById('rSubmit').addEventListener('click', async (e) => {
+    e.preventDefault();
+    const btn = e.target;
+    const p1 = document.getElementById('rPassword').value;
+    const p2 = document.getElementById('rPassword2').value;
+    if (p1.length < 8)  return showRecoveryView('Password must be at least 8 characters.');
+    if (p1 !== p2)      return showRecoveryView("Those two passwords don't match.");
+    btn.disabled = true; btn.textContent = 'SAVING...';
+    const { error } = await afUpdatePassword(p1);
+    if (error) return showRecoveryView(error.message);
+    isRecovering = false;
+    if (heading) heading.textContent = 'Log in to see your designs';
+    // Drop the recovery token out of the address bar before continuing.
+    window.history.replaceState({}, '', window.location.pathname);
+    init();
+  });
+}
+
+// Supabase fires PASSWORD_RECOVERY once it has consumed the token from the
+// link. Latch it so init() shows the password form instead of the dashboard.
+let isRecovering = false;
+afSb.auth.onAuthStateChange((event) => {
+  if (event === 'PASSWORD_RECOVERY') {
+    isRecovering = true;
+    showRecoveryView();
+  }
+});
+
 async function init(){
+  // A recovery session is still a valid session, so without this check the
+  // dashboard would load and the user would never get to set a password.
+  if (isRecovering) return;
   const user = await afGetUser();
   if (user) {
     gateView.style.display = 'none';
