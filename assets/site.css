@@ -800,3 +800,18 @@ html{ overflow-x:hidden; }
   .shop-count{ margin-left:0; width:100%; }
   .shop-search{ min-width:0; flex:1; }
 }
+
+/* ===== PROCESS CHECKLIST (printing page, beside the hero visual) ===== */
+.check-list{ list-style:none; margin:0 0 28px; padding:0; }
+.check-list li{
+  position:relative; padding-left:26px; margin-bottom:14px;
+  font-size:0.92rem; line-height:1.6; color:var(--af-grey);
+}
+.check-list li strong{ color:var(--af-white); font-weight:600; }
+.check-list li::before{
+  content:''; position:absolute; left:0; top:6px;
+  width:9px; height:5px; border-left:2px solid var(--af-red); border-bottom:2px solid var(--af-red);
+  transform:rotate(-45deg);
+}
+.print-copy .lede-sm{ font-size:0.98rem; line-height:1.7; color:var(--af-grey); margin-bottom:24px; max-width:52ch; }
+.print-copy .lede-sm strong{ color:var(--af-white); font-weight:600; }
