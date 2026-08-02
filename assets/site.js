@@ -43,7 +43,7 @@ if (printGrid) printGrid.innerHTML = printProducts.map(p => `
   <div class="card">
     <span class="card__corner tl"></span><span class="card__corner tr"></span>
     <span class="card__corner bl"></span><span class="card__corner br"></span>
-    <div class="card__id"><span>${p.id}</span><span class="status">● ${p.status}</span></div>
+    <div class="card__id"><span>${p.id}</span><span class="status${['OPEN','IN STOCK'].includes(p.status) ? ' is-live' : ''}">${p.status}</span></div>
     <div class="card__photo-wrap">
       <img src="${p.photo}" alt="${p.name}" loading="lazy">
       <div class="card__icon-badge">${p.icon}</div>
@@ -104,7 +104,7 @@ if (grid) grid.innerHTML = products.map(p => `
   <div class="card">
     <span class="card__corner tl"></span><span class="card__corner tr"></span>
     <span class="card__corner bl"></span><span class="card__corner br"></span>
-    <div class="card__id"><span>${p.id}</span><span class="status">● ${p.status}</span></div>
+    <div class="card__id"><span>${p.id}</span><span class="status${['OPEN','IN STOCK'].includes(p.status) ? ' is-live' : ''}">${p.status}</span></div>
     <div class="card__photo-wrap">
       <img src="${p.photo}" alt="${p.name}" loading="lazy">
       <div class="card__icon-badge">${p.icon}</div>
@@ -221,11 +221,37 @@ function cartTotals(){
   return { items, count, subtotal };
 }
 
+let lastCartCount = null, lastSubtotal = 0;
+function bumpCartBadge(){
+  const el = document.getElementById('cartCount');
+  if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  el.classList.remove('bump');
+  void el.offsetWidth;           // restart the animation on repeat adds
+  el.classList.add('bump');
+}
+function countSubtotalTo(el, from, to){
+  if (!el) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || from === to) {
+    el.textContent = `$${to.toFixed(2)}`; return;
+  }
+  const start = performance.now(), dur = 420;
+  (function step(now){
+    const t = Math.min(1, (now - start) / dur);
+    const eased = 1 - Math.pow(1 - t, 3);
+    el.textContent = `$${(from + (to - from) * eased).toFixed(2)}`;
+    if (t < 1) requestAnimationFrame(step);
+  })(start);
+}
+
 function renderCart(){
   saveCart();
   const { items, count, subtotal } = cartTotals();
   document.getElementById('cartCount').textContent = `[${String(count).padStart(2,'0')}]`;
-  document.getElementById('cartSubtotal').textContent = `$${subtotal.toFixed(2)}`;
+  // Only react to a real change, not to every re-render (page load included).
+  if (lastCartCount !== null && count !== lastCartCount) bumpCartBadge();
+  countSubtotalTo(document.getElementById('cartSubtotal'), lastSubtotal, subtotal);
+  lastCartCount = count;
+  lastSubtotal = subtotal;
 
   const cartItemsEl = document.getElementById('cartItems');
   if (items.length === 0) {
@@ -834,7 +860,12 @@ if (faqTabs.length && faqGroups.length) {
 // === sticky header gains a shadow once the page scrolls ===
 const siteHeader = document.querySelector('header');
 if (siteHeader) {
-  const onScroll = () => siteHeader.classList.toggle('scrolled', window.scrollY > 8);
+  const onScroll = () => {
+    siteHeader.classList.toggle('scrolled', window.scrollY > 8);
+    // Give some of the fixed header height back once you're reading —
+    // matters most on phones, where it's a real slice of the screen.
+    siteHeader.classList.toggle('condensed', window.scrollY > 220);
+  };
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 }
@@ -910,7 +941,7 @@ if (shopGrid) {
         <span class="card__corner bl"></span><span class="card__corner br"></span>
         <div class="card__id">
           <span>${p.id}</span>
-          <span class="status">● ${p.status}</span>
+          <span class="status${['OPEN','IN STOCK'].includes(p.status) ? ' is-live' : ''}">${p.status}</span>
         </div>
         <div class="card__photo-wrap">
           <img src="${p.photo}" alt="${p.name}" loading="lazy">
@@ -1088,4 +1119,36 @@ if (shopGrid) {
     });
   }, { threshold: 0.2 });
   items.forEach(i => obs.observe(i));
+})();
+
+// --- FAQ: a single indicator slides between categories -----------------------
+(function faqIndicator(){
+  const list = document.getElementById('faqTabsVertical');
+  if (!list) return;
+  const bar = document.createElement('span');
+  bar.className = 'faq-indicator';
+  bar.setAttribute('aria-hidden','true');
+  list.appendChild(bar);
+
+  const place = () => {
+    const active = list.querySelector('.faq-tab.is-active');
+    if (!active) { bar.style.opacity = '0'; return; }
+    const stacked = getComputedStyle(list).flexDirection === 'column';
+    bar.classList.toggle('is-horizontal', !stacked);
+    bar.style.opacity = '1';
+    if (stacked) {
+      bar.style.transform = `translateY(${active.offsetTop}px)`;
+      bar.style.height = active.offsetHeight + 'px';
+      bar.style.width = ''; bar.style.left = '';
+    } else {
+      bar.style.transform = `translateX(${active.offsetLeft}px)`;
+      bar.style.width = active.offsetWidth + 'px';
+      bar.style.height = '';
+    }
+  };
+  list.addEventListener('click', () => requestAnimationFrame(place));
+  window.addEventListener('resize', place, { passive: true });
+  // Fonts landing late can shift tab sizes, so re-measure once they're ready.
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+  requestAnimationFrame(place);
 })();

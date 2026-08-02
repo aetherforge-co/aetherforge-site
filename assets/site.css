@@ -1039,3 +1039,65 @@ footer{ view-transition-name: af-footer; }
 }
 @keyframes af-modal-bg { from{ opacity:0; } }
 @keyframes af-modal-box{ from{ opacity:0; transform:translateY(16px) scale(0.985); } }
+
+/* ---- Status dots: the live ones breathe ---------------------
+   The bullet is drawn by CSS now rather than sitting in the text,
+   so only genuinely live states (OPEN / IN STOCK) can pulse while
+   CONCEPT and PLANNED stay still. */
+.status::before{
+  content:'●'; margin-right:5px; display:inline-block;
+}
+@media (prefers-reduced-motion: no-preference){
+  .status.is-live::before{ animation: af-status-pulse 1.9s ease-in-out infinite; }
+}
+@keyframes af-status-pulse{ 0%,100%{ opacity:1; } 50%{ opacity:0.35; } }
+
+/* ---- Header gives space back once you start reading -------- */
+header{ transition: box-shadow .3s var(--ease), padding .25s var(--ease); }
+header nav{ transition: padding .25s var(--ease); }
+.logo{ transition: font-size .25s var(--ease); }
+header.condensed nav{ padding-top:10px; padding-bottom:10px; }
+header.condensed .logo{ font-size:1.02rem; }
+@media (prefers-reduced-motion: reduce){
+  header, header nav, .logo{ transition:none; }
+}
+
+/* ---- Cart badge acknowledges the add ----------------------- */
+.cart-count{ display:inline-block; }
+.cart-count.bump{ animation: af-bump .42s var(--ease); }
+@keyframes af-bump{
+  0%{ transform:scale(1); }
+  35%{ transform:scale(1.28); color:var(--af-red); }
+  100%{ transform:scale(1); }
+}
+
+/* ---- FAQ: one indicator slides between categories ---------- */
+.faq-tabs-vertical{ position:relative; }
+.faq-indicator{
+  position:absolute; left:0; top:0; width:3px; background:var(--af-red);
+  opacity:0; pointer-events:none;
+  transition: transform .34s var(--ease), height .34s var(--ease),
+              width .34s var(--ease), opacity .2s;
+}
+.faq-indicator.is-horizontal{ top:auto; bottom:0; left:0; width:0; height:2px; }
+/* the per-tab border is now the indicator's job */
+.faq-tab.is-active{ border-left-color:transparent; }
+@media (max-width:880px){ .faq-tab.is-active{ border-bottom-color:transparent; } }
+@media (prefers-reduced-motion: reduce){ .faq-indicator{ transition:none; } }
+
+/* ---- Inputs draw their focus rule ------------------------- */
+/* Painted as a background layer rather than a border, so it can grow from
+   the left on focus — inputs can't carry pseudo-elements to animate. */
+.af-form input, .af-form textarea,
+.checkout-form input, .shop-search{
+  background-image:linear-gradient(var(--af-red), var(--af-red));
+  background-repeat:no-repeat;
+  background-position:left bottom;
+  background-size:0% 2px;
+  transition:background-size .34s var(--ease), border-color .2s var(--ease);
+}
+.af-form input:focus, .af-form textarea:focus,
+.checkout-form input:focus, .shop-search:focus{ background-size:100% 2px; }
+@media (prefers-reduced-motion: reduce){
+  .af-form input, .af-form textarea, .checkout-form input, .shop-search{ transition:none; }
+}
