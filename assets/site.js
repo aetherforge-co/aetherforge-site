@@ -338,10 +338,13 @@ async function openCheckout(){
     // verify it and tie this order to the account — omitted entirely for
     // guest checkouts, which still work exactly as before.
     let accessToken = null;
-    try {
-      const { data: { session } } = await afSb.auth.getSession();
-      accessToken = session?.access_token || null;
-    } catch { /* not logged in / auth not loaded — proceed as guest */ }
+    if (hasStoredSession()) {
+      try {
+        await ensureSupabase();
+        const { data: { session } } = await afSb.auth.getSession();
+        accessToken = session?.access_token || null;
+      } catch { /* couldn't confirm — proceed as a guest checkout */ }
+    }
 
     const res = await fetch('/api/create-checkout-session', {
       method: 'POST',
@@ -483,6 +486,36 @@ function closeCapture(){ captureModal.classList.remove('show'); }
 document.getElementById('captureClose').addEventListener('click', closeCapture);
 captureModal.addEventListener('click', (e) => { if (e.target === captureModal) closeCapture(); });
 
+
+// === SUPABASE SDK: LOADED ON DEMAND ==========================================
+// The marketing pages no longer ship the SDK (~130KB) just to decide whether
+// the header says LOGIN or MY DESIGNS. It's fetched only when checkout needs a
+// session token, which is a moment that already waits on the network anyway.
+let __sdkReady = false, __sdkPromise = null;
+function loadScriptOnce(src){
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src; s.onload = resolve; s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+function ensureSupabase(){
+  if (__sdkReady) return Promise.resolve();
+  if (!__sdkPromise) {
+    __sdkPromise = loadScriptOnce('assets/supabase.js')
+      .then(() => loadScriptOnce('assets/auth.js'))
+      .then(() => { __sdkReady = true; });
+  }
+  return __sdkPromise;
+}
+// Supabase keeps its session in localStorage. Reading whether that key exists
+// tells us which label to show without pulling in the library to ask.
+function hasStoredSession(){
+  try {
+    return Object.keys(localStorage).some(k => k.startsWith('sb-') && k.includes('auth-token'));
+  } catch { return false; }
+}
+
 // === ACCOUNT / AUTH ===
 const authModal = document.getElementById('authModal');
 const authContent = document.getElementById('authContent');
@@ -583,7 +616,10 @@ function wireAuthForm(mode){
   }
 }
 
-function openAuth(mode){
+function openAuth(){
+  window.location.href = 'account.html';
+}
+function openAuthModal_unused(mode){
   authContent.innerHTML = mode === 'signin' ? signInFormHTML() : signUpFormHTML();
   wireAuthForm(mode);
   authModal.classList.add('show');
@@ -593,28 +629,14 @@ function closeAuth(){ authModal.classList.remove('show'); }
 document.getElementById('authClose').addEventListener('click', closeAuth);
 authModal.addEventListener('click', (e) => { if (e.target === authModal) closeAuth(); });
 
-async function refreshAccountUI(){
-  // If the Supabase SDK failed to load (CDN blocked or down), fall back to
-  // showing a plain LOGIN link rather than throwing and leaving the button
-  // hidden forever — the cart and checkout must keep working regardless.
-  let user = null;
-  try {
-    user = await afGetUser();
-  } catch {
-    accountBtn.style.display = 'inline-block';
-    accountBtn.textContent = 'LOGIN';
-    accountBtn.onclick = () => { window.location.href = 'account.html'; };
-    return;
-  }
+function refreshAccountUI(){
   accountBtn.style.display = 'inline-block';
-  if (user) {
-    accountBtn.textContent = 'MY DESIGNS';
-    accountBtn.onclick = () => { window.location.href = 'account.html'; };
-  } else {
-    accountBtn.textContent = 'LOGIN';
-    accountBtn.onclick = () => openAuth('signin');
-  }
+  accountBtn.textContent = hasStoredSession() ? 'MY DESIGNS' : 'LOGIN';
+  // Both states go to the account page, which owns the full sign-in,
+  // sign-up and password-reset flow — no modal, no SDK on this page.
+  accountBtn.onclick = () => { window.location.href = 'account.html'; };
 }
+
 refreshAccountUI();
 
 // print catalog "quote" buttons and hardware "notify" buttons are already
