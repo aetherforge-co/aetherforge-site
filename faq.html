@@ -3,369 +3,253 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FAQ — AETHERFORGE</title>
-<meta name="description" content="Answers on ordering and quotes, 3D printing materials and capabilities, shipping, returns and warranty, and the upcoming metal fabrication line.">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Baseline CSP: this is a single-file static site with no build step, so
-     inline <script> is now FORBIDDEN (all JS lives in /assets), inline
-     <style>/style= is still allowed; everything else is locked to the hosts this page
-     actually talks to — Google Fonts,
-     Formspree (capture forms), and the AETHER chat proxy on Vercel. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://formspree.io https://aether-tts-proxy.vercel.app https://zxzoxzzbktlxdoacxupa.supabase.co; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none';">
-
-<!-- Open Graph / social link previews. og:image is a placeholder photo (1200x630,
-     the standard OG ratio) — swap for a real branded image when you have one. -->
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://www.aetherforgeco.com/">
-<meta property="og:title" content="AETHERFORGE — Precision 3D Printing">
-<meta property="og:description" content="In-house 3D printing shop — dialed-in FDM and resin, 24-48h turnaround, shipped from our own floor. CNC metal work coming soon.">
-<meta property="og:image" content="https://www.aetherforgeco.com/images/hero-print.jpg">
-<meta property="og:image:width" content="1100">
-<meta property="og:image:height" content="1100">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="AETHERFORGE — Precision 3D Printing">
-<meta name="twitter:description" content="In-house 3D printing shop — dialed-in FDM and resin, 24-48h turnaround, shipped from our own floor. CNC metal work coming soon.">
-<meta name="twitter:image" content="https://www.aetherforgeco.com/images/hero-print.jpg">
-<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAACY0lEQVR4nOxWX2hSURw+lj6opJvasC1osF4aLRm0uWCYZldaUkHNWjW2hIKion8v0caSIgg0g7YVRg9FVgYLQqhW6jATN51t9LIeVluw1oPkplfzQbnSicHlbrt/zi0GDfZxH875zu/7fXy/ey5coUqlAksJIVhiLH+DVYAnbFc7edXzM2g9eth6rM28exe6RIB+i+RyWSgYKCmRT0//0O8w5fN5FNVqiUQC0NDZcVmrrYMLmWxNoVCIxoZRVKgJNlZV+X2vBQLB3DaXy203mBKJBKcQNYHL1bu+ooLcikSisrK1/f3vOIVI13TvHnN93dbkzIzegOF4BvAB94jEYnFw4K1arY4NxyORQeoRQRR7eu8Vi0UWOXeCM6dPwu5wAUPAZ8EpjuMPHz1mkXMkKC9fFwr64cSZCmZnU406Qzb7i6mAI8E1WxfsDodjOXgE/BXYDHS6RgwzwsXU1PcL58+yVHq9r75OTNAeMY5IKBQGfG8qKzcABMTjIwcsLfR9mDRWaxvsDq/m+PgXgIDaWs3o6KfFPH0CpUIR/jAAv8HjJ075/AHwD6A3uGW/2dy8H15w+HoBMsLhSHfPXW4DjWaL92Uf4A+CIIxY0+TkNypJ8w5uXLctYIaiMYAGE7bTdf8Bm0HLIUtNzWYq8+Sp50pHF2CAorS0vb2V3Eok4m0N2sGhKMnMG5FUKg2996uUSpJJpdI6vTGTyXbfcSop/BwcjtvxjyPPPe4GbT1Jjo19bjLvo09w6eI51fwudoczncahsdv9DCzCz2TyT43d+aLPQ5LV1ZuoNYKVH68Vg//f4DcAAAD//0hFN8wAAAAGSURBVAMA8MC7FLxASIcAAAAASUVORK5CYII=">
-<link rel="icon" type="image/png" sizes="16x16" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAABHUlEQVR4nLSSP2vCUBTF01Z4JUNdQqB+gjrbmKXtUDp0KO1e2qG0UNsU24KDoKCo4OAHUNwEQREXh+CkIqKiLgq6+QfUiKIQiHHIFO8kGoOYwcODd955/Hj3Xa6OIAhMi3SYRh2rpiRJMt8WDYDTYf+1MgbD+V4AdWl6enxACAG2fXu0/ek0myqWyplMDnx/MOC40S7g9eXZ53Wvjt1u7/buXpZldUCvPyvks8FQuF5vrMLpdNbudNQBr8dF02ae59ffXIiLL8YqSZISMBovoPpPy48gCNim5qLYbLaUQDIRoygTlFup1hQAhH//tvF4Av4Ex3HYoI8f729gYvFEJBIFMxxysPz+wM31FTpFtJli2TSm2tbd0jxLhweWAAAA//8Pxq0CAAAABklEQVQDAD1HYiJDXZiWAAAAAElFTkSuQmCC">
-<link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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">
+<title>My Account — Aetherforge</title>
+<meta name="robots" content="noindex">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://zxzoxzzbktlxdoacxupa.supabase.co; base-uri 'self'; object-src 'none';">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<!--
-  // AETHERFORGE.SITE — BUILD LOG
-  // rev.C — if you're reading the source, you're the kind of person we build for.
-  // three of us started this in a garage with one CNC and no idea how to price titanium.
-  // we're always looking for machinists who read HTML comments. hiring@aetherforge.example
--->
-<link rel="stylesheet" href="assets/site.css">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400..600&family=JetBrains+Mono:wght@400..700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --af-black:#f7f8fa; --af-panel:#ffffff; --af-white:#141414; --af-red:#d81324;
+  --af-grey:#5c5c5c; --af-grey-dim:#d8d6ce; --af-border:#e3e1d8;
+  --mono:'JetBrains Mono',monospace; --disp:'Rajdhani',sans-serif; --body:'Inter',sans-serif;
+  --shadow-sm: 0 1px 2px rgba(20,20,20,0.04), 0 1px 1px rgba(20,20,20,0.03);
+  --shadow-md: 0 6px 16px rgba(20,20,20,0.06), 0 2px 6px rgba(20,20,20,0.04);
+  --shadow-lg: 0 20px 50px rgba(20,20,20,0.10), 0 6px 18px rgba(20,20,20,0.06);
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--af-black); color:var(--af-white); font-family:var(--body); line-height:1.6;
+  background-image:
+    linear-gradient(rgba(20,20,20,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20,20,20,0.035) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-attachment: fixed;
+}
+header{ display:flex; align-items:center; justify-content:space-between; padding:20px 5%; border-bottom:1px solid var(--af-border); background:rgba(255,255,255,0.9); backdrop-filter:blur(6px); position:sticky; top:0; z-index:10; }
+.logo{ font-family:var(--disp); font-weight:700; font-size:1.1rem; letter-spacing:0.02em; text-decoration:none; color:var(--af-white); display:flex; align-items:center; gap:10px; }
+header a.back{ font-family:var(--mono); font-size:0.78rem; color:var(--af-grey); text-decoration:none; background:transparent; border:1px solid var(--af-grey-dim); padding:8px 14px; }
+header a.back:hover{ border-color:var(--af-red); color:var(--af-red); }
+
+main{ max-width:1120px; margin:0 auto; padding:48px 24px 100px; }
+.eyebrow{ font-family:var(--mono); font-size:0.72rem; color:var(--af-red); letter-spacing:0.08em; margin-bottom:10px; }
+h1{ font-family:var(--disp); font-weight:700; font-size:2.1rem; text-transform:uppercase; margin:0 0 32px; letter-spacing:0.01em; }
+h2{ font-family:var(--disp); font-weight:600; font-size:1.05rem; text-transform:uppercase; margin:0 0 16px; }
+
+.dash-layout{ display:grid; grid-template-columns:270px 1fr; gap:28px; align-items:start; }
+@media (max-width:860px){ .dash-layout{ grid-template-columns:1fr; } .sidebar{ position:static !important; } }
+
+/* ===== sidebar / profile card ===== */
+.sidebar{ position:sticky; top:96px; }
+.profile-card{
+  background:var(--af-panel); border:1px solid var(--af-border); padding:28px 24px; text-align:center;
+  box-shadow:var(--shadow-md); position:relative; margin-bottom:20px;
+}
+.profile-card__corner{ position:absolute; width:10px; height:10px; border-color:var(--af-red); opacity:0.6; }
+.profile-card__corner.tl{ top:8px; left:8px; border-top:1px solid; border-left:1px solid; }
+.profile-card__corner.br{ bottom:8px; right:8px; border-bottom:1px solid; border-right:1px solid; }
+.profile-avatar{
+  width:72px; height:72px; margin:0 auto 16px; background:var(--af-white); color:#fff;
+  display:flex; align-items:center; justify-content:center; font-family:var(--disp); font-weight:700;
+  font-size:2rem; letter-spacing:0.02em; position:relative; border:1px solid var(--af-white);
+  cursor:pointer; overflow:hidden; background-size:cover; background-position:center;
+}
+.profile-avatar::before, .profile-avatar::after{ content:''; position:absolute; width:8px; height:8px; border-color:var(--af-red); z-index:2; }
+.profile-avatar::before{ top:-1px; left:-1px; border-top:2px solid; border-left:2px solid; }
+.profile-avatar::after{ bottom:-1px; right:-1px; border-bottom:2px solid; border-right:2px solid; }
+.profile-avatar__overlay{
+  position:absolute; inset:0; background:rgba(20,20,20,0.72); color:#fff; opacity:0;
+  display:flex; align-items:center; justify-content:center; text-align:center;
+  font-family:var(--mono); font-size:0.56rem; letter-spacing:0.03em; text-transform:uppercase;
+  transition:opacity .2s; z-index:1; padding:6px;
+}
+.profile-avatar:hover .profile-avatar__overlay{ opacity:1; }
+.profile-avatar input{ display:none; }
+.profile-avatar-remove{ font-family:var(--mono); font-size:0.6rem; color:var(--af-grey); text-decoration:underline; cursor:pointer; background:none; border:none; margin:0 0 18px; display:block; margin-left:auto; margin-right:auto; }
+.profile-avatar-remove:hover{ color:var(--af-red); }
+.profile-email{ font-family:var(--disp); font-weight:600; font-size:1.05rem; word-break:break-word; margin-bottom:4px; }
+.profile-since{ font-family:var(--mono); font-size:0.64rem; color:var(--af-grey); letter-spacing:0.05em; text-transform:uppercase; margin-bottom:22px; }
+.profile-stats{ border-top:1px solid var(--af-border); padding-top:18px; margin-bottom:20px; text-align:left; }
+.profile-stat{ display:flex; justify-content:space-between; align-items:baseline; padding:7px 0; font-family:var(--mono); font-size:0.66rem; color:var(--af-grey); letter-spacing:0.04em; text-transform:uppercase; }
+.profile-stat strong{ font-family:var(--disp); font-size:1.3rem; color:var(--af-white); font-weight:700; }
+.profile-stat--accent strong{ color:var(--af-red); }
+.btn{ font-family:var(--mono); font-size:0.78rem; letter-spacing:0.04em; background:var(--af-white); color:#fff; border:1px solid var(--af-white); padding:12px 20px; cursor:pointer; transition:opacity .2s; }
+.btn:hover{ opacity:0.85; }
+.btn:disabled{ opacity:0.5; cursor:default; }
+.btn--ghost{ background:transparent; color:var(--af-white); border:1px solid var(--af-grey-dim); }
+.btn--ghost:hover{ opacity:1; border-color:var(--af-red); color:var(--af-red); }
+.btn--small{ padding:7px 12px; font-size:0.68rem; }
+.btn--full{ width:100%; }
+
+.sidebar-note{ background:var(--af-panel); border:1px solid var(--af-border); padding:16px 18px; font-size:0.78rem; color:var(--af-grey); line-height:1.6; }
+.sidebar-note strong{ color:var(--af-white); }
+
+/* ===== gate (logged out) ===== */
+.gate{ text-align:center; padding:70px 20px; max-width:420px; margin:0 auto; }
+.gate .af-form{ margin:24px auto 0; text-align:left; }
+.gate h1{ margin-bottom:8px; }
+
+/* ===== panels ===== */
+.panel{ background:var(--af-panel); border:1px solid var(--af-border); padding:30px; margin-bottom:24px; box-shadow:var(--shadow-sm); position:relative; }
+.panel::before{ content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, var(--af-red), transparent 65%); }
+
+.steps{ display:grid; grid-template-columns:repeat(4,1fr); gap:22px; }
+.step__num{ font-family:var(--mono); font-size:0.7rem; color:var(--af-red); margin-bottom:8px; }
+.step h4{ font-family:var(--disp); font-weight:600; font-size:0.95rem; text-transform:uppercase; margin:0 0 6px; }
+.step p{ font-size:0.8rem; color:var(--af-grey); margin:0; line-height:1.5; }
+@media (max-width:640px){ .steps{ grid-template-columns:1fr 1fr; } }
+
+/* ===== form ===== */
+.af-form label{ display:block; font-family:var(--mono); font-size:0.62rem; letter-spacing:0.06em; color:var(--af-grey); margin-bottom:6px; text-transform:uppercase; }
+.af-form input, .af-form textarea{ width:100%; background:transparent; border:1px solid var(--af-grey-dim); color:var(--af-white); font-family:var(--body); font-size:0.9rem; padding:10px 12px; margin-bottom:6px; }
+.af-form input:focus, .af-form textarea:focus{ outline:none; border-color:var(--af-red); }
+.char-count{ text-align:right; font-family:var(--mono); font-size:0.62rem; color:var(--af-grey-dim); margin-bottom:14px; }
+.char-count.is-near{ color:var(--af-red); }
+.note{ font-family:var(--mono); font-size:0.72rem; color:var(--af-grey); margin-top:-2px; margin-bottom:14px; }
+.note--error{ color:var(--af-red); }
+.note--ok{ color:#1a7a2e; }
+
+.dropzone{ border:1px dashed var(--af-grey-dim); padding:22px; text-align:center; cursor:pointer; margin-bottom:6px; transition:border-color .2s, background .2s; }
+.dropzone:hover, .dropzone.is-drag{ border-color:var(--af-red); background:#fdf6f6; }
+.dropzone__label{ font-family:var(--mono); font-size:0.78rem; color:var(--af-grey); }
+.dropzone__label strong{ color:var(--af-white); }
+.dropzone__file{ font-family:var(--mono); font-size:0.78rem; color:var(--af-red); margin-top:4px; }
+.dropzone input{ display:none; }
+.file-hint{ font-family:var(--mono); font-size:0.62rem; color:var(--af-grey-dim); margin-bottom:16px; }
+
+/* ===== design cards ===== */
+.design-card{ background:var(--af-panel); border:1px solid var(--af-border); padding:22px 24px; margin-bottom:16px; position:relative; box-shadow:var(--shadow-sm); transition:box-shadow .2s, transform .2s; }
+.design-card:hover{ box-shadow:var(--shadow-lg); transform:translateY(-2px); }
+.design-card__corner{ position:absolute; width:9px; height:9px; border-color:var(--af-grey-dim); }
+.design-card__corner.tl{ top:7px; left:7px; border-top:1px solid; border-left:1px solid; }
+.design-card__corner.br{ bottom:7px; right:7px; border-bottom:1px solid; border-right:1px solid; }
+.design-card__top{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:4px; }
+.design-card h3{ font-family:var(--disp); font-weight:600; font-size:1.15rem; margin:0; text-transform:uppercase; }
+.status{ font-family:var(--mono); font-size:0.62rem; letter-spacing:0.05em; text-transform:uppercase; padding:3px 8px; border:1px solid var(--af-grey-dim); color:var(--af-grey); white-space:nowrap; }
+.status--active{ color:var(--af-red); border-color:var(--af-red); }
+.status--declined{ color:var(--af-grey); border-color:var(--af-grey-dim); text-decoration:line-through; }
+.design-card p{ font-size:0.88rem; color:#3a3a3a; margin:10px 0 14px; }
+
+.pipeline{ display:flex; align-items:flex-start; margin:16px 0 18px; }
+.pipeline__stage{ flex:1; display:flex; flex-direction:column; align-items:center; text-align:center; position:relative; }
+.pipeline__stage:not(:last-child)::after{ content:''; position:absolute; top:5px; left:50%; width:100%; height:2px; background:var(--af-grey-dim); z-index:0; }
+.pipeline__stage.is-done:not(:last-child)::after{ background:var(--af-red); }
+.pipeline__dot{ width:11px; height:11px; border-radius:50%; background:var(--af-grey-dim); border:2px solid var(--af-panel); position:relative; z-index:1; margin-bottom:6px; }
+.pipeline__stage.is-done .pipeline__dot{ background:var(--af-red); }
+.pipeline__stage.is-current .pipeline__dot{ background:var(--af-white); box-shadow:0 0 0 3px rgba(216,19,36,0.15); }
+.pipeline__label{ font-family:var(--mono); font-size:0.56rem; letter-spacing:0.02em; color:var(--af-grey-dim); text-transform:uppercase; }
+.pipeline__stage.is-done .pipeline__label, .pipeline__stage.is-current .pipeline__label{ color:var(--af-white); }
+.pipeline--declined{ margin:16px 0 18px; }
+.pipeline--declined .declined-note{ font-family:var(--mono); font-size:0.72rem; color:var(--af-grey); border-left:2px solid var(--af-grey-dim); padding-left:10px; }
+
+.design-card__meta{ display:flex; justify-content:space-between; align-items:center; font-family:var(--mono); font-size:0.68rem; color:var(--af-grey); flex-wrap:wrap; gap:8px; }
+.design-card__meta a{ color:var(--af-red); text-decoration:none; }
+.design-card__meta .file-tag{ border:1px solid var(--af-grey-dim); padding:2px 6px; margin-right:4px; color:var(--af-grey); }
+.design-card__actions{ display:flex; gap:14px; align-items:center; }
+.design-card__actions button{ background:none; border:none; color:var(--af-grey); font-family:var(--mono); font-size:0.68rem; cursor:pointer; text-decoration:underline; padding:0; }
+.design-card__actions button:hover{ color:var(--af-red); }
+.empty{ color:var(--af-grey); font-size:0.9rem; text-align:center; padding:44px 20px; border:1px dashed var(--af-border); background:var(--af-panel); }
+.empty a{ color:var(--af-red); }
+
+.order-items{ font-family:var(--mono); font-size:0.82rem; color:#3a3a3a; margin:10px 0 14px; line-height:1.7; }
+.order-total{ font-family:var(--disp); font-weight:700; font-size:1.3rem; color:var(--af-white); }
+.tracking-link{ display:inline-block; margin-top:4px; font-family:var(--mono); font-size:0.7rem; color:var(--af-red); text-decoration:none; border-bottom:1px solid var(--af-red); }
+.tracking-number{ font-family:var(--mono); font-size:0.68rem; color:var(--af-grey); }
+
+footer{ text-align:center; font-family:var(--mono); font-size:0.68rem; color:var(--af-grey); padding:30px; border-top:1px solid var(--af-border); }
+
+@keyframes fadeUp{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:translateY(0); } }
+.dash-layout{ animation:fadeUp .4s ease; }
+</style>
 </head>
 <body>
-
 <header>
-  <nav>
-    <a href="index.html" class="logo" style="cursor:pointer;"><span class="logo__mark"><svg viewBox="0 0 72.84 62.11" xmlns="http://www.w3.org/2000/svg">
-  <path d="M 17.46 62.11 L 23.49 51.61 L 66.72 51.61 L 62.63 44.66 L 17.17 44.66 L 19.72 40.19 L 59.96 40.19 L 55.98 33.35 L 23.72 33.35 L 26.56 28.88 L 53.35 28.88 L 49.29 21.98 L 30.33 21.98 L 33.00 17.23 L 46.57 17.23 L 36.42 0.00 L 0.00 62.11 Z" fill="#141414"/>
-  <path d="M 25.57 58.80 L 48.66 58.80 L 47.03 56.02 L 27.20 56.02 Z" fill="#141414"/>
-  <path d="M 51.73 54.28 L 56.08 62.11 L 72.84 62.11 L 68.29 54.28 Z" fill="#141414"/>
-</svg></span>AETHERFORGE <span class="logo__rev" id="revStamp">REV.C</span></a>
-    <div class="navlinks">
-      <a href="printing.html">3D PRINTING</a>
-      <a href="metal-fab.html">METAL FAB<span class="nav-badge">SOON</span></a>
-      <a href="shop.html">SHOP</a>
-      <a href="faq.html">FAQ</a>
-      <a href="index.html#contact">CONTACT</a>
-    </div>
-    <div class="nav-actions">
-      <button class="cart-btn" id="cartBtn" aria-label="Cart">CART <span class="cart-count" id="cartCount">[00]</span></button>
-      <button class="account-link" id="accountBtn" style="display:none;" aria-label="Account">LOGIN</button>
-    </div>
-    <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
+  <a class="logo" href="/">AETHERFORGE</a>
+  <a class="back" href="/">← BACK TO SITE</a>
 </header>
 
-<div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
-<div class="mobile-nav-drawer" id="mobileNavDrawer">
-  <div class="mobile-nav-drawer__header">
-    <div class="mono" style="font-size:0.7rem; color:var(--af-grey); letter-spacing:0.1em;">// MENU</div>
-    <button class="cart-drawer__close" id="mobileNavClose">CLOSE // ESC</button>
+<main>
+  <div id="gateView" style="display:none;" class="gate">
+    <div class="eyebrow">// MY ACCOUNT</div>
+    <h1>Log in to see your designs</h1>
+    <p style="color:var(--af-grey); font-size:0.9rem; margin-bottom:0;">Save the things you want us to build, and check on their status any time.</p>
+    <div id="gateForm" class="af-form"></div>
   </div>
-  <div class="mobile-nav-drawer__links">
-    <a href="printing.html">3D PRINTING</a>
-    <a href="metal-fab.html">METAL FAB<span class="nav-badge">SOON</span></a>
-    <a href="shop.html">SHOP</a>
-    <a href="faq.html">FAQ</a>
-    <a href="index.html#contact">CONTACT</a>
-    <a href="account.html">MY ACCOUNT</a>
-  </div>
-</div>
 
+  <div id="dashView" style="display:none;">
+    <div class="eyebrow">// MY ACCOUNT</div>
+    <h1>Saved Designs</h1>
 
-<section class="page-head">
-  <div class="page-head__inner">
-    <div class="eyebrow">// SHIPPING · RETURNS · ORDERING</div>
-    <h1>FAQ</h1>
-    <p>Answers on how ordering and quotes work, what we can print and in what materials, shipping and turnaround, returns, and where the metal fabrication line stands.</p>
-  </div>
-</section>
-
-<section id="faq" class="dark-zone-faq">
-  <div class="section-inner">
-
-    <div class="faq-layout">
-    <div class="faq-tabs-vertical" id="faqTabsVertical">
-      <button class="faq-tab" data-target="faq-ordering">Ordering &amp; Quotes</button>
-      <button class="faq-tab" data-target="faq-printing">3D Printing</button>
-      <button class="faq-tab" data-target="faq-shipping">Shipping</button>
-      <button class="faq-tab" data-target="faq-returns">Returns &amp; Warranty</button>
-      <button class="faq-tab" data-target="faq-metalfab">Metal Fab (Coming Soon)</button>
-    </div>
-
-    <div class="faq-col" id="faqCol">
-
-    <div class="faq-group" id="faq-ordering">
-      <details class="faq-item">
-        <summary>How do quotes work for custom prints?</summary>
-        <div class="faq-item__body">Upload a model or describe what you need through the print shop's request form. We price it by material, layer height, and turnaround — usually back to you within a day. No account or commitment needed to get a number.</div>
-      </details>
-      <details class="faq-item">
-        <summary>What file formats do you accept?</summary>
-        <div class="faq-item__body">STL and STEP cover almost everything. If you're starting from a sketch or photo instead of a file, describe it in the request and we'll work out the rest with you before quoting.</div>
-      </details>
-      <details class="faq-item">
-        <summary>Can I change or cancel an order after placing it?</summary>
-        <div class="faq-item__body">If it hasn't started printing yet, yes — reply to your order confirmation and we'll adjust or cancel it. Once a job is on the bed, we can't stop it partway through.</div>
-      </details>
-      <details class="faq-item">
-        <summary>Do I need an account to order?</summary>
-        <div class="faq-item__body">No. Checkout works fine as a guest. An account is only useful if you want to save designs you're planning to have made, or check an order's status later — you can create one any time from the header.</div>
-      </details>
-      <details class="faq-item">
-        <summary>What's the minimum order?</summary>
-        <div class="faq-item__body">There isn't one for stock items or one-off custom prints — we'll happily print a single part. Small-batch pricing kicks in at 25 units, where the per-unit cost drops because we can queue the whole run at once.</div>
-      </details>
-      <details class="faq-item">
-        <summary>Can you sign an NDA before I send a design?</summary>
-        <div class="faq-item__body">Yes — email us before uploading and we'll get one signed. Regardless of paperwork, we don't share, resell, or reuse customer designs; that's written into our terms, not just a promise.</div>
-      </details>
-    </div>
-
-    <div class="faq-group" id="faq-printing">
-      <details class="faq-item">
-        <summary>What materials do you print in?</summary>
-        <div class="faq-item__body">PLA, PETG, ASA, Nylon-CF, and resin, stocked in-house. Full specs and use cases are in the Material Library over in the print shop.</div>
-      </details>
-      <details class="faq-item">
-        <summary>Do you print functional parts, or just prototypes?</summary>
-        <div class="faq-item__body">Both. Rapid Prototyping is for quick iteration; Custom Enclosures and Printed Accessories are meant to be the actual part you use, not a placeholder for a "real" one later.</div>
-      </details>
-      <details class="faq-item">
-        <summary>How big can you print?</summary>
-        <div class="faq-item__body">Up to 256 × 256 × 256 mm in FDM, and 218 × 123 × 235 mm in resin. Larger parts can be split, printed in sections, and bonded — we'll flag it in the quote if that's the route.</div>
-      </details>
-      <details class="faq-item">
-        <summary>Can you match a specific color?</summary>
-        <div class="faq-item__body">Usually. We stock 12 filament colors outright, and for anything else we can paint and color-match to a Pantone reference or a physical sample as part of the finishing service.</div>
-      </details>
-      <details class="faq-item">
-        <summary>How strong are printed parts, really?</summary>
-        <div class="faq-item__body">Strong enough to be the actual part in most applications — Nylon-CF and PETG hold up well under real load. They are not a drop-in substitute for machined metal, and we'll say so upfront if we think your part should wait for the CNC line.</div>
-      </details>
-      <details class="faq-item">
-        <summary>Do you do design work, or only printing?</summary>
-        <div class="faq-item__body">We print, and we'll give feedback on manufacturability for free — wall thickness, overhangs, orientation, that kind of thing. Full design from scratch is case by case; ask and we'll tell you honestly if it's a fit.</div>
-      </details>
-    </div>
-
-    <div class="faq-group" id="faq-shipping">
-      <details class="faq-item">
-        <summary>Where do orders ship from, and how fast?</summary>
-        <div class="faq-item__body">Everything ships from Bay 4, Unit B. Typical turnaround is 24-48 hours from order to shipment for in-stock print items; custom jobs depend on the queue and we'll give you a specific estimate with your quote.</div>
-      </details>
-      <details class="faq-item">
-        <summary>Do you ship internationally?</summary>
-        <div class="faq-item__body">Domestic shipping only for now. International shipping is on the list as the print farm — and eventually the metal work line — grows.</div>
-      </details>
-      <details class="faq-item">
-        <summary>How much is shipping?</summary>
-        <div class="faq-item__body">Calculated at checkout by weight and destination — you'll see the exact cost before paying. Larger batch runs ship freight and get quoted separately.</div>
-      </details>
-      <details class="faq-item">
-        <summary>Can I get it faster?</summary>
-        <div class="faq-item__body">Sometimes. If a job is small and the queue allows, we can bump it. Email us before ordering with your deadline and we'll tell you straight whether it's doable, rather than take the order and miss it.</div>
-      </details>
-      <details class="faq-item">
-        <summary>Do you offer local pickup?</summary>
-        <div class="faq-item__body">Yes, from Bay 4, Unit B. Mention it when you order and we'll hold it instead of shipping, and refund the shipping cost.</div>
-      </details>
-    </div>
-
-    <div class="faq-group" id="faq-returns">
-      <details class="faq-item">
-        <summary>What's your return policy?</summary>
-        <div class="faq-item__body">If a printed part arrives with a defect — layer separation, warping, a dimension that's off from spec — we'll reprint or refund it, no questions asked. If you just changed your mind on a custom job, reach out and we'll figure out something fair; custom prints can't always go back on the shelf the way stocked items can.</div>
-      </details>
-      <details class="faq-item">
-        <summary>What if my part arrives damaged in shipping?</summary>
-        <div class="faq-item__body">Send a photo through the contact form within 7 days of delivery and we'll get a replacement out — no need to ship the damaged one back first.</div>
-      </details>
-      <details class="faq-item">
-        <summary>What counts as a defect?</summary>
-        <div class="faq-item__body">Layer separation, warping, stringing that changes fit, or any dimension measurably outside what we quoted. Normal layer lines and minor surface texture are inherent to the process rather than defects — if you need a smoother result, that's what the finishing service is for.</div>
-      </details>
-      <details class="faq-item">
-        <summary>Is there a warranty on printed parts?</summary>
-        <div class="faq-item__body">We stand behind the print itself: if it fails from a manufacturing fault, we'll replace it. We can't warranty a part against use it wasn't designed for, and we'll say so during quoting if we think an application is beyond what the material can take.</div>
-      </details>
-    </div>
-
-    <div class="faq-group" id="faq-metalfab">
-      <details class="faq-item">
-        <summary>When will CNC hardware actually be available?</summary>
-        <div class="faq-item__body">No fixed date yet — we're not shipping metal parts before we can hold the tolerances we'd put our name on. The Metal Fab section has the current concept lineup and a "get notified" option for when that changes.</div>
-      </details>
-      <details class="faq-item">
-        <summary>Can I pre-order or reserve a concept design?</summary>
-        <div class="faq-item__body">Not yet, and deliberately so — we're not taking money for hardware we can't promise a date on. Use the notify option on any concept and you'll be first to know when it's real.</div>
-      </details>
-      <details class="faq-item">
-        <summary>Are the concept prices final?</summary>
-        <div class="faq-item__body">No. Every price on the Metal Fab page is an estimate based on current material costs and projected machine time. They'll move before launch — up or down — and nothing is a commitment until the item is actually orderable.</div>
-      </details>
-      <details class="faq-item">
-        <summary>Will you do custom CNC work when the line opens?</summary>
-        <div class="faq-item__body">That's the plan, starting with simpler geometries and expanding as the process gets dialed in. If you have a specific job in mind, send it now — it helps us prioritize what to tool up for first.</div>
-      </details>
-    </div>
-
-    </div>
-    </div>
-  </div>
-</section>
-
-
-<section class="cta-band">
-  <div class="cta-band__inner">
-    <div class="cta-band__copy">
-      <div class="eyebrow">// STILL STUCK?</div>
-      <h2>Ask a person instead</h2>
-      <p>If your question isn't here, email us and you'll get a real answer from whoever's on the floor that day — not a ticket number. AETHER, the assistant in the corner, can also handle most quick material and turnaround questions.</p>
-    </div>
-    <div class="cta-band__actions">
-      <a href="mailto:aetherforge.eng@gmail.com" class="btn">EMAIL US</a>
-      <a href="printing.html#printCatalog" class="btn btn--ghost">REQUEST A QUOTE</a>
-    </div>
-  </div>
-</section>
-
-<footer id="contact" class="dark-zone-footer">
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="logo"><span class="logo__mark"><svg viewBox="0 0 72.84 62.11" xmlns="http://www.w3.org/2000/svg">
-  <path d="M 17.46 62.11 L 23.49 51.61 L 66.72 51.61 L 62.63 44.66 L 17.17 44.66 L 19.72 40.19 L 59.96 40.19 L 55.98 33.35 L 23.72 33.35 L 26.56 28.88 L 53.35 28.88 L 49.29 21.98 L 30.33 21.98 L 33.00 17.23 L 46.57 17.23 L 36.42 0.00 L 0.00 62.11 Z" fill="#141414"/>
-  <path d="M 25.57 58.80 L 48.66 58.80 L 47.03 56.02 L 27.20 56.02 Z" fill="#141414"/>
-  <path d="M 51.73 54.28 L 56.08 62.11 L 72.84 62.11 L 68.29 54.28 Z" fill="#141414"/>
-</svg></span>AETHERFORGE</div>
-        <div class="eyebrow" style="margin:6px 0 12px;">// Engineering | Design | Fabrication</div>
-        <p>Precision 3D-printed hardware, made in-house — CNC machining coming soon.</p>
-        <div class="mono" style="font-size:0.62rem; color:var(--af-grey-dim); margin-top:16px; line-height:1.8;">
-          &lt;PROJECT: AETHER&gt; &lt;STATUS: LIVE&gt;<br>
-          FIT: CLASS H7 — TOLERANCE: PRECISION REQUIRED
+    <div class="dash-layout">
+      <div class="sidebar">
+        <div class="profile-card">
+          <span class="profile-card__corner tl"></span><span class="profile-card__corner br"></span>
+          <div class="profile-avatar" id="profileAvatar">
+            <span id="profileAvatarInitial">A</span>
+            <div class="profile-avatar__overlay" id="avatarOverlay">CHANGE<br>PHOTO</div>
+            <input type="file" id="avatarInput" accept="image/*">
+          </div>
+          <button class="profile-avatar-remove" id="avatarRemoveBtn" style="display:none;">Remove photo</button>
+          <div class="profile-email" id="profileEmail"></div>
+          <div class="profile-since" id="profileSince"></div>
+          <div class="profile-stats">
+            <div class="profile-stat"><span>Submitted</span><strong id="statTotal">0</strong></div>
+            <div class="profile-stat profile-stat--accent"><span>In Progress</span><strong id="statProgress">0</strong></div>
+            <div class="profile-stat"><span>Completed</span><strong id="statDone">0</strong></div>
+          </div>
+          <button id="logoutBtn" class="btn btn--ghost btn--full">LOG OUT</button>
+        </div>
+        <div class="sidebar-note">
+          <strong>Questions about a submission?</strong><br>
+          Email <a href="mailto:aetherforge.eng@gmail.com" style="color:var(--af-red);">aetherforge.eng@gmail.com</a> and mention the design title.
         </div>
       </div>
-      <div class="footer-col">
-        <h4>3D Printing</h4>
-        <a href="printing.html">Print farm</a>
-        <a href="printing.html#printCatalog">Request a quote</a>
-        <a href="printing.html#printCatalog">Materials</a>
-      </div>
-      <div class="footer-col">
-        <h4>Metal Fab</h4>
-        <a href="metal-fab.html">Coming soon</a>
-        <a href="metal-fab.html">Concept designs</a>
-        <a href="metal-fab.html#contact">Get notified</a>
-      </div>
-      <div class="footer-col">
-        <h4>Company</h4>
-        <a href="index.html#manifesto">Our process</a>
-        <a href="metal-fab.html#materials">Materials</a>
-        <a href="index.html#contact">Careers</a>
-      </div>
-      <div class="footer-col">
-        <h4>Support</h4>
-        <a href="index.html#contact">Contact</a>
-        <a href="faq.html">Shipping</a>
-        <a href="faq.html">Returns</a>
-        <a href="/terms.html">Terms of Service</a>
-        <a href="/privacy.html">Privacy Policy</a>
+
+      <div>
+        <h2>Order Tracking</h2>
+        <div id="orderList" style="margin-bottom:32px;"><p class="empty">Loading...</p></div>
+
+        <div class="panel how-it-works">
+          <h2>How It Works</h2>
+          <div class="steps">
+            <div class="step"><div class="step__num">[ 01 ]</div><h4>Submit</h4><p>Send a title, description, and a file if you have one.</p></div>
+            <div class="step"><div class="step__num">[ 02 ]</div><h4>We Review</h4><p>We check feasibility, usually within 1 business day.</p></div>
+            <div class="step"><div class="step__num">[ 03 ]</div><h4>Quoted</h4><p>Pricing and lead time show up right here on this page.</p></div>
+            <div class="step"><div class="step__num">[ 04 ]</div><h4>Built &amp; Shipped</h4><p>Once approved, it's produced and shipped when done.</p></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Submit a New Design</h2>
+          <form class="af-form" id="designForm">
+            <label>Title</label>
+            <input type="text" name="title" required maxlength="120" placeholder="e.g. Bracket for wall-mounted monitor arm">
+            <label>Description</label>
+            <textarea name="description" rows="4" maxlength="1000" placeholder="Dimensions, material, quantity, deadline, anything we should know..."></textarea>
+            <div class="char-count" id="charCount">0 / 1000</div>
+            <label>Reference file (optional — image, STL, PDF, etc.)</label>
+            <div class="dropzone" id="dropzone">
+              <div class="dropzone__label"><strong>Click to choose a file</strong> or drag one here</div>
+              <div class="dropzone__file" id="dropzoneFile"></div>
+              <input type="file" name="file" id="fileInput">
+            </div>
+            <div class="file-hint">Max ~50MB. Images, STL, STEP, PDF, and most common formats are fine.</div>
+            <div id="designFormNote"></div>
+            <button type="submit" class="btn" id="designSubmitBtn">SUBMIT DESIGN</button>
+          </form>
+        </div>
+
+        <h2>Your Submissions</h2>
+        <div id="designList"><p class="empty">Loading...</p></div>
       </div>
     </div>
-    <div class="footer-bottom">
-      <div>© 2026 AETHERFORGE LLC — ALL UNITS PRINTED IN-HOUSE · <a href="/terms.html" style="color:inherit;">TERMS</a> · <a href="/privacy.html" style="color:inherit;">PRIVACY</a></div>
-      <div class="coords mono" title="you found it">DWG NO. AF-2026-000 · REV.C · SCALE N.T.S.</div>
-    </div>
   </div>
-</footer>
+</main>
 
-<div class="cart-overlay-bg" id="cartOverlayBg"></div>
+<footer>© 2026 AETHERFORGE LLC — <a href="/terms.html" style="color:var(--af-grey);">TERMS</a> · <a href="/privacy.html" style="color:var(--af-grey);">PRIVACY</a></footer>
 
-<div class="cart-drawer" id="cartDrawer">
-  <div class="cart-drawer__header">
-    <h3>Cart</h3>
-    <button class="cart-drawer__close" id="cartClose">CLOSE // ESC</button>
-  </div>
-  <div class="cart-drawer__items" id="cartItems"></div>
-  <div class="cart-drawer__footer">
-    <div class="cart-subtotal"><span>SUBTOTAL</span><span id="cartSubtotal">$0</span></div>
-    <button class="btn" id="checkoutBtn">PROCEED TO CHECKOUT</button>
-    <button class="btn btn--ghost" id="continueShoppingBtn">CONTINUE SHOPPING</button>
-  </div>
-</div>
-
-<div class="checkout-modal" id="checkoutModal">
-  <div class="checkout-box" id="checkoutBox">
-    <button class="checkout-box__close" id="checkoutClose">CLOSE // ESC</button>
-    <div id="checkoutContent"></div>
-  </div>
-</div>
-
-<div class="checkout-modal" id="captureModal">
-  <div class="checkout-box" id="captureBox">
-    <button class="checkout-box__close" id="captureClose">CLOSE // ESC</button>
-    <div id="captureContent"></div>
-  </div>
-</div>
-
-<div class="checkout-modal" id="authModal">
-  <div class="checkout-box" id="authBox">
-    <button class="checkout-box__close" id="authClose">CLOSE // ESC</button>
-    <div id="authContent"></div>
-  </div>
-</div>
-
-<button class="aether-launcher" id="aetherLauncher" aria-label="Open AETHER">
-  <span class="aether-orb">
-    <span class="aether-orb__ring r1"></span>
-    <span class="aether-orb__ring r2"></span>
-    <span class="aether-orb__ring r3"></span>
-    <span class="aether-orb__core"></span>
-  </span>
-  <span class="aether-launcher__badge">ASK AETHER</span>
-</button>
-
-<div class="aether-panel" id="aetherPanel">
-  <div class="aether-panel__header">
-    <span class="aether-panel__core"></span>
-    <div class="aether-panel__title">
-      <h4>AETHER</h4>
-      <span>// AGENT STATUS: ONLINE</span>
-    </div>
-    <button class="aether-panel__close" id="aetherClose">CLOSE // ESC</button>
-  </div>
-  <div class="aether-panel__body" id="aetherBody">
-    <div class="aether-msg bot"><span class="tag-mini">AETHER</span>Hey — ask me about materials, turnaround times, or what's coming with the metal work line. Order tracking isn't connected yet, so for that use the contact form below.</div>
-  </div>
-  <div class="aether-chips">
-    <button class="aether-chip" data-q="Track my order">TRACK ORDER</button>
-    <button class="aether-chip" data-q="Get a print quote">GET A QUOTE</button>
-    <button class="aether-chip" data-q="What materials do you stock?">MATERIALS</button>
-  </div>
-  <div class="aether-panel__inputrow">
-    <input type="text" id="aetherInput" placeholder="Ask AETHER something...">
-    <button id="aetherSend">SEND</button>
-  </div>
-</div>
-
-<div class="egg-overlay" id="eggOverlay">
-  <pre id="eggArt"></pre>
-  <p id="eggMsg">SYSTEM ACCESS: GRANTED<br>You typed the word. Most people just scroll.<br>Take 10% off with code <strong style="color:#d81324;">AETHER10</strong> — we'll actually honor it.</p>
-  <button id="eggClose">CLOSE // ESC</button>
-</div>
-
-<script src="assets/site.js"></script>
+<script src="assets/supabase.js"></script>
+<script src="assets/auth.js"></script>
+<script src="assets/account.js"></script>
 </body>
 </html>
