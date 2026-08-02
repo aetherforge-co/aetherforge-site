@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Metal Fabrication — AETHERFORGE</title>
-<meta name="description" content="CNC metal fabrication coming soon to Aetherforge: titanium, S35VN steel, and 6061 aluminum hardware. See the concept lineup and get notified at launch.">
+<title>3D Printing & Print Shop — AETHERFORGE</title>
+<meta name="description" content="In-house FDM and resin 3D printing. Custom enclosures, rapid prototyping, small-batch production, finishing, and printed accessories. 24-48h turnaround.">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -86,113 +86,116 @@
 
 <section class="page-head">
   <div class="page-head__inner">
-    <div class="eyebrow">// CNC LINE — COMING SOON</div>
-    <h1>Metal Fabrication</h1>
-    <p>The print farm comes first — CNC is next. Once the machines and the process are dialed in, titanium, S35VN steel, and 6061 aluminum hardware ship from the same building. Everything below is a preview, not a shelf.</p>
+    <div class="eyebrow">// PRINT FARM — LIVE</div>
+    <h1>3D Printing</h1>
+    <p>Everything shipping today comes off our in-house print farm — dialed-in FDM and resin, checked against spec before it leaves the floor. Browse the shop below, or send us a model for something custom.</p>
   </div>
 </section>
 
-<section id="metalwork" class="print-lab dark-zone metalwork-bg">
+<section id="print" class="print-lab dark-zone">
   <div class="section-inner">
     <div class="print-top">
-      <div class="print-copy">
-        <div class="eyebrow" style="margin-bottom:14px;">// WHY IT ISN'T FOR SALE YET</div>
-        <p class="lede-sm">Plenty of shops would take pre-orders on this and sort the machining out later. We'd rather show you exactly where the line stands and <strong>sell you nothing until it holds spec</strong>.</p>
+      <div class="print-copy reveal">
+        <div class="eyebrow" style="margin-bottom:14px;">// HOW WE WORK</div>
+        <p class="lede-sm">Nothing here is outsourced or drop-shipped. Every part is sliced, printed, and checked on <strong>our own floor</strong> — which is why we can tell you honestly what will work and what won't before you pay for it.</p>
         <ul class="check-list">
-          <li><strong>These are designed, not rendered.</strong> Every concept below has been modeled and printed at full scale to check proportion and hand feel.</li>
-          <li><strong>Tolerance has to repeat.</strong> Hitting ±0.02&nbsp;mm once isn't the bar — holding it across a full run is.</li>
-          <li><strong>Prices are estimates and will move.</strong> They're based on today's material costs and projected machine time, not a final quote.</li>
-          <li><strong>No deposits, no pre-orders.</strong> Get on the notify list and you'll hear from us when it's real — that's the whole commitment.</li>
+          <li><strong>Measured against spec</strong> before it's packed — not spot-checked at the end of a batch.</li>
+          <li><strong>Free reprint on any defect.</strong> Layer separation, warping, or a dimension out of tolerance is on us.</li>
+          <li><strong>Six materials stocked in-house</strong>, so a job doesn't sit waiting on a filament order.</li>
+          <li><strong>Straight answers on fit.</strong> If a part is better machined than printed, we'll say so rather than sell you a weak one.</li>
         </ul>
         <div class="print-stats">
-          <div><strong>3</strong>MATERIALS PLANNED</div>
-          <div><strong>±0.02MM</strong>TARGET TOLERANCE</div>
-          <div><strong>6</strong>DESIGNS IN PROGRESS</div>
+          <div><strong>4</strong>PRINTERS RUNNING</div>
+          <div><strong>0.08MM</strong>MIN LAYER HEIGHT</div>
+          <div><strong>6</strong>MATERIALS STOCKED</div>
+          <div><strong>24-48H</strong>TYPICAL TURNAROUND</div>
         </div>
         <div class="hero__cta">
-          <a href="#contact" class="btn btn--ghost">GET NOTIFIED AT LAUNCH</a>
-          <a href="#productGrid" class="btn btn--ghost">SEE THE CONCEPTS</a>
+          <a href="#printCatalog" class="btn">VIEW PRINT SHOP</a>
+          <a href="shop.html?line=print" class="btn btn--ghost">BROWSE FULL CATALOG</a>
         </div>
       </div>
-      <div class="print-visual" id="metalVisual">
-        <div class="print-visual__label">FIG. 02 — <span>CNC LINE</span></div>
-        <img src="assets/img/metalwork-filler.svg" alt="Placeholder for the upcoming CNC machining line" class="hero-photo">
-        <div class="photo-tag" style="top:auto; bottom:12px; left:12px; background:rgba(10,10,10,0.7); color:#f2f0ea;">COMING SOON</div>
+      <div class="print-visual reveal">
+        <div class="print-visual__label">FIG. 02 — <span>FRESH OFF THE BED</span></div>
+        <img src="assets/img/print-freshpart.svg" alt="Finished 3D print fresh off the build plate" class="hero-photo">
       </div>
     </div>
 
-    <div class="section-head reveal" id="materials" style="margin-bottom:30px; padding-bottom:16px;">
-      <h2>Materials</h2>
-      <div class="tag mono">// SOURCING SHEET</div>
-    </div>
-    <div class="grid reveal-stagger" style="margin-bottom:56px; grid-template-columns:repeat(3,1fr);">
-      <div class="card">
-        <div class="card__photo-wrap"><img src="assets/img/mat01-titanium.svg" alt="Grade 5 titanium stock" loading="lazy"></div>
-        <div class="card__id"><span>MAT-01</span><span class="status">PLANNED</span></div>
-        <h3>Grade 5 Titanium</h3>
-        <p class="desc">6Al-4V alloy. Aerospace-spec, corrosion resistant, roughly half the weight of steel at comparable strength.</p>
-        <div class="card__specs"><div class="spec-row"><span class="spec-row__label">DENSITY</span><span class="spec-row__value">4.43 G/CM³</span></div><div class="spec-row"><span class="spec-row__label">USE</span><span class="spec-row__value">HANDLES, HARDWARE</span></div></div>
+    <div class="howitworks reveal-stagger">
+      <div class="step">
+        <div class="step__num">[ 01 ]</div>
+        <h4>Upload</h4>
+        <p>Send us an STL or STEP file, or describe what you need built.</p>
       </div>
-      <div class="card">
-        <div class="card__photo-wrap"><img src="assets/img/mat02-steel.svg" alt="S35VN steel stock" loading="lazy"></div>
-        <div class="card__id"><span>MAT-02</span><span class="status">PLANNED</span></div>
-        <h3>S35VN Steel</h3>
-        <p class="desc">Powder-metallurgy stainless with niobium carbides. Holds an edge well past where most steels give up.</p>
-        <div class="card__specs"><div class="spec-row"><span class="spec-row__label">HARDNESS</span><span class="spec-row__value">60-61 HRC</span></div><div class="spec-row"><span class="spec-row__label">USE</span><span class="spec-row__value">BLADES, BITS</span></div></div>
+      <div class="step">
+        <div class="step__num">[ 02 ]</div>
+        <h4>Quote</h4>
+        <p>We price material, layer height, and turnaround — usually within a day.</p>
       </div>
-      <div class="card">
-        <div class="card__photo-wrap"><img src="assets/img/mat03-aluminum.svg" alt="6061-T6 aluminum stock" loading="lazy"></div>
-        <div class="card__id"><span>MAT-03</span><span class="status">PLANNED</span></div>
-        <h3>6061-T6 Aluminum</h3>
-        <p class="desc">Heat-treated aircraft aluminum. Light, machinable to a tight finish, anodizes clean in-house.</p>
-        <div class="card__specs"><div class="spec-row"><span class="spec-row__label">DENSITY</span><span class="spec-row__value">2.70 G/CM³</span></div><div class="spec-row"><span class="spec-row__label">USE</span><span class="spec-row__value">MOUNTS, BODIES</span></div></div>
+      <div class="step">
+        <div class="step__num">[ 03 ]</div>
+        <h4>Print &amp; Inspect</h4>
+        <p>Printed in-house and checked against spec before it leaves the floor.</p>
+      </div>
+      <div class="step">
+        <div class="step__num">[ 04 ]</div>
+        <h4>Ship</h4>
+        <p>Out the door in 24-48 hours for most jobs.</p>
       </div>
     </div>
 
-    <div class="section-head reveal" style="margin-bottom:30px; padding-bottom:16px;">
-      <h2>In Development</h2>
-      <div class="tag mono"><a href="shop.html?line=metal" style="color:var(--af-red); border-bottom:1px solid var(--af-red);">SEE ALL IN SHOP →</a></div>
+    <div id="printCatalog">
+      <div class="section-head reveal" style="margin-bottom:30px; padding-bottom:16px;">
+        <h2>Print Lab Offerings</h2>
+        <div class="tag mono"><a href="shop.html?line=print" style="color:var(--af-red); border-bottom:1px solid var(--af-red);">SEE ALL IN SHOP →</a></div>
+      </div>
+      <div class="grid reveal-stagger" id="printGrid"></div>
     </div>
-    <div class="grid reveal-stagger" id="productGrid"></div>
   </div>
 </section>
 
 
-<section class="print-lab dark-zone metalwork-bg" style="border-top:1px solid rgba(247,248,250,0.12);">
+<section class="print-lab dark-zone">
   <div class="section-inner" style="padding-top:70px; padding-bottom:70px;">
     <div class="section-head reveal" style="margin-bottom:30px; padding-bottom:16px;">
-      <h2>Road To Launch</h2>
-      <div class="tag mono">// WHERE THE LINE ACTUALLY STANDS</div>
+      <h2>Capabilities</h2>
+      <div class="tag mono">// WHAT THE FLOOR CAN ACTUALLY DO</div>
     </div>
-    <p style="max-width:64ch; color:#b5b3ab; font-size:0.94rem; line-height:1.7; margin-bottom:30px;">
-      We'd rather show you the real state of things than post a countdown we can't back up. This is what's done, what's in progress, and what has to happen before anything with a blade on it ships.
+    <p style="max-width:64ch; font-size:0.94rem; line-height:1.7; margin-bottom:30px;">
+      Straight numbers, so you can check fit before you send a file. If your part sits outside any of these, send it anyway — we'll tell you honestly whether it's workable or whether you're better off elsewhere.
     </p>
-    <div class="roadmap reveal">
-      <div class="roadmap__step is-done">
-        <div class="roadmap__num">[ PHASE 01 ]</div>
-        <h4>Design</h4>
-        <p>Six concepts drawn, modeled, and revised — geometry, ergonomics, and material selection locked.</p>
-        <span class="roadmap__status">Complete</span>
-      </div>
-      <div class="roadmap__step is-done">
-        <div class="roadmap__num">[ PHASE 02 ]</div>
-        <h4>Printed Mockups</h4>
-        <p>Every concept printed in-house at full scale to check proportion and hand feel before cutting metal.</p>
-        <span class="roadmap__status">Complete</span>
-      </div>
-      <div class="roadmap__step is-active">
-        <div class="roadmap__num">[ PHASE 03 ]</div>
-        <h4>Machine &amp; Tooling</h4>
-        <p>Standing up the CNC cell, workholding, and tool library — then proving we can repeat ±0.02 mm, not just hit it once.</p>
-        <span class="roadmap__status">In progress</span>
-      </div>
-      <div class="roadmap__step">
-        <div class="roadmap__num">[ PHASE 04 ]</div>
-        <h4>First Production Run</h4>
-        <p>A short verified batch, measured piece by piece. If it holds spec, it ships. If it doesn't, phase 03 starts again.</p>
-        <span class="roadmap__status">Not started</span>
-      </div>
+    <div class="spec-sheet reveal">
+      <div class="spec-sheet__row"><span class="spec-sheet__key">Max build volume (FDM)</span><span class="spec-sheet__val">256 × 256 × 256 MM</span></div>
+      <div class="spec-sheet__row"><span class="spec-sheet__key">Max build volume (Resin)</span><span class="spec-sheet__val">218 × 123 × 235 MM</span></div>
+      <div class="spec-sheet__row"><span class="spec-sheet__key">Layer height range</span><span class="spec-sheet__val">0.08 – 0.28 MM</span></div>
+      <div class="spec-sheet__row"><span class="spec-sheet__key">Typical dimensional accuracy</span><span class="spec-sheet__val">±0.2 MM OR ±0.2%</span></div>
+      <div class="spec-sheet__row"><span class="spec-sheet__key">Nozzle sizes</span><span class="spec-sheet__val">0.25 / 0.40 / 0.60 MM</span></div>
+      <div class="spec-sheet__row"><span class="spec-sheet__key">Minimum wall thickness</span><span class="spec-sheet__val">0.8 MM (FDM) · 0.5 MM (RESIN)</span></div>
+      <div class="spec-sheet__row"><span class="spec-sheet__key">Accepted file types</span><span class="spec-sheet__val">STL · STEP · 3MF · OBJ</span></div>
+      <div class="spec-sheet__row"><span class="spec-sheet__key">Infill range</span><span class="spec-sheet__val">10 – 100%</span></div>
+      <div class="spec-sheet__row"><span class="spec-sheet__key">Finishes available</span><span class="spec-sheet__val">RAW · SANDED · PRIMED · PAINTED</span></div>
+      <div class="spec-sheet__row"><span class="spec-sheet__key">Batch capacity</span><span class="spec-sheet__val">UP TO 500 UNITS / RUN</span></div>
     </div>
+  </div>
+</section>
+
+<section class="print-lab dark-zone">
+  <div class="section-inner" style="padding-top:70px; padding-bottom:70px;">
+    <div class="section-head reveal" style="margin-bottom:30px; padding-bottom:16px;">
+      <h2>Materials We Stock</h2>
+      <div class="tag mono">// ON THE SHELF, NOT SPECIAL-ORDER</div>
+    </div>
+    <div class="spec-sheet reveal">
+      <div class="spec-sheet__row"><span class="spec-sheet__key">PLA</span><span class="spec-sheet__val">EASY, RIGID — PROTOTYPES &amp; DISPLAY PARTS</span></div>
+      <div class="spec-sheet__row"><span class="spec-sheet__key">PETG</span><span class="spec-sheet__val">TOUGH, LIGHT CHEMICAL RESISTANCE — ENCLOSURES</span></div>
+      <div class="spec-sheet__row"><span class="spec-sheet__key">ASA</span><span class="spec-sheet__val">UV STABLE — OUTDOOR &amp; AUTOMOTIVE</span></div>
+      <div class="spec-sheet__row"><span class="spec-sheet__key">Nylon-CF</span><span class="spec-sheet__val">STIFF, LOW CREEP — FUNCTIONAL BRACKETS</span></div>
+      <div class="spec-sheet__row"><span class="spec-sheet__key">Standard Resin</span><span class="spec-sheet__val">FINE DETAIL — MINIATURES &amp; MASTERS</span></div>
+      <div class="spec-sheet__row"><span class="spec-sheet__key">Tough Resin</span><span class="spec-sheet__val">IMPACT RESISTANT — SNAP-FIT &amp; LIVING HINGES</span></div>
+    </div>
+    <p style="color:var(--af-grey-dim); font-family:var(--mono); font-size:0.66rem; margin-top:16px; letter-spacing:0.04em;">
+      // NEED SOMETHING NOT LISTED? ASK — WE CAN USUALLY SOURCE IT FOR A BATCH RUN.
+    </p>
   </div>
 </section>
 
@@ -200,13 +203,13 @@
 <section class="cta-band">
   <div class="cta-band__inner">
     <div class="cta-band__copy">
-      <div class="eyebrow">// DON'T WANT TO WAIT?</div>
-      <h2>The print farm is running today</h2>
-      <p>Metal is still in development, but the 3D printing side ships now — including functional Nylon-CF and PETG parts that cover a lot of what people come to CNC for.</p>
+      <div class="eyebrow">// NEXT STEP</div>
+      <h2>Send us the file</h2>
+      <p>Upload an STL or STEP and we'll quote material, layer height, and turnaround — usually back to you the same day. No account needed to get a number.</p>
     </div>
     <div class="cta-band__actions">
-      <a href="printing.html" class="btn">VIEW 3D PRINTING</a>
-      <a href="faq.html" class="btn btn--ghost">METAL FAB FAQ</a>
+      <a href="#printCatalog" class="btn">REQUEST A QUOTE</a>
+      <a href="metal-fab.html" class="btn btn--ghost">SEE METAL FAB</a>
     </div>
   </div>
 </section>
