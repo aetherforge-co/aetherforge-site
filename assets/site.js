@@ -852,7 +852,8 @@ if ('IntersectionObserver' in window) {
       }
     });
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => revealObserver.observe(el));
+  afterFirstPaint(() =>
+    document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => revealObserver.observe(el)));
 } else {
   document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => el.classList.add('in-view'));
 }
@@ -877,6 +878,16 @@ if (faqTabs.length && faqGroups.length) {
     tab.addEventListener('click', () => activateFaqTab(tab.dataset.target));
   });
   activateFaqTab(faqTabs[0].dataset.target);
+}
+
+
+// A CSS transition only runs if the browser painted the starting state first.
+// If an observer fires in the same frame the script initialises, the class
+// flips before that paint and the element simply snaps to its end state — which
+// showed up as animations working on some loads and not others. Waiting two
+// frames guarantees the start state has been rendered before anything moves.
+function afterFirstPaint(fn){
+  requestAnimationFrame(() => requestAnimationFrame(fn));
 }
 
 // === sticky header gains a shadow once the page scrolls ===
@@ -1070,7 +1081,7 @@ if (shopGrid) {
         headObs.unobserve(e.target);
       });
     }, { threshold: 0.25, rootMargin: '0px 0px -30px 0px' });
-    heads.forEach(h => headObs.observe(h));
+    afterFirstPaint(() => heads.forEach(h => headObs.observe(h)));
   }
 
   // --- stat readouts count up to their value ---
@@ -1108,7 +1119,7 @@ if (shopGrid) {
       if (!reduced) runCount(e.target);
     });
   }, { threshold: 0.6 });
-  stats.forEach(s => statObs.observe(s));
+  afterFirstPaint(() => stats.forEach(s => statObs.observe(s)));
 })();
 
 // --- plotter wipe on the shop-floor photos, + scroll progress rule ---
@@ -1130,6 +1141,7 @@ if (shopGrid) {
   // Opt into the clipped starting state only now that we know we can animate
   // out of it again.
   items.forEach(i => i.classList.add('plot-ready'));
+  // start state must be on screen before the reveal is allowed to begin
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (!e.isIntersecting) return;
@@ -1140,7 +1152,7 @@ if (shopGrid) {
       obs.unobserve(e.target);
     });
   }, { threshold: 0.2 });
-  items.forEach(i => obs.observe(i));
+  afterFirstPaint(() => items.forEach(i => obs.observe(i)));
 })();
 
 // --- FAQ: a single indicator slides between categories -----------------------
