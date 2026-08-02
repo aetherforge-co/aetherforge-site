@@ -4,9 +4,12 @@
   --af-white:#141414;
   --af-white-pure:#000000;
   --af-red:#d81324;
-  --af-grey:#5c5c5c;
-  --af-grey-dim:#d8d6ce;
-  --af-border:#e3e1d8;
+  --af-grey:#5a5d63;
+  --af-grey-dim:#d4d7dd;
+  /* Cool-neutral, not beige. These two draw every hairline and every grid
+     gutter on the site (~65 uses), so a warm cast here read as a tint across
+     the whole layout while the surfaces around them are blue-leaning. */
+  --af-border:#dfe1e6;
   --mono: 'JetBrains Mono', monospace;
   --disp: 'Rajdhani', sans-serif;
   --body: 'Inter', sans-serif;
@@ -420,7 +423,20 @@ section{ position:relative; z-index:1; }
 }
 
 /* ===== PRODUCT GRID ===== */
-.grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--af-border); border:1px solid var(--af-border); }
+.grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--af-border);
+  border:1px solid var(--af-border); grid-auto-flow:dense; }
+/* Bento-style hierarchy: the lead item in a catalogue takes a 2x2 cell so the
+   flagship isn't the same size as a filament spool. Only kicks in from three
+   items up, so a narrow filter result doesn't leave a giant tile beside a hole. */
+.grid > .card:first-child:nth-last-child(n+3){ grid-column:span 2; grid-row:span 2; }
+.grid > .card:first-child:nth-last-child(n+3) .card__photo-wrap img{ height:340px; }
+.grid > .card:first-child:nth-last-child(n+3) h3{ font-size:1.6rem; }
+.grid > .card:first-child:nth-last-child(n+3) .desc{ font-size:1rem; max-width:46ch; }
+@media (max-width:900px){
+  .grid > .card:first-child:nth-last-child(n+3){ grid-column:span 1; grid-row:span 1; }
+  .grid > .card:first-child:nth-last-child(n+3) .card__photo-wrap img{ height:150px; }
+  .grid > .card:first-child:nth-last-child(n+3) h3{ font-size:1.25rem; }
+}
 .card{
   background:var(--af-panel); padding:32px 28px 28px; position:relative;
   transition:background .3s var(--ease), transform .3s var(--ease), box-shadow .3s var(--ease);
