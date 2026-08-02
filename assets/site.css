@@ -1270,3 +1270,49 @@ header.condensed .logo{ font-size:1.02rem; }
 .select-opt.is-active{ background:rgba(216,19,36,0.10); color:var(--af-black); border-left-color:var(--af-red); }
 .select-opt.is-selected{ color:var(--af-black); }
 .select-opt.is-selected::after{ content:' ✓'; color:var(--af-red); }
+
+
+/* ===== DRAFTING DETAIL IN THE LIGHT SECTIONS =====
+   The page headers and CTA bands are wide, and their copy only fills the left
+   side — so the right half sat as blank white while every dark section carries
+   texture. These add a faint graph grid plus a registration plate to occupy
+   that space. Both are pseudo-elements with pointer-events:none, so they add
+   nothing to layout and can't intercept a click. Kept very low contrast: the
+   point is to stop the void reading as unfinished, not to draw the eye. */
+.page-head, .cta-band{ position:relative; overflow:hidden; }
+.page-head__inner, .cta-band__inner{ position:relative; z-index:2; }
+
+/* Graph grid, masked so it fades in across the empty half and leaves the
+   text side on clean white. */
+.page-head::before, .cta-band::before{
+  content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(20,20,20,0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20,20,20,0.045) 1px, transparent 1px);
+  background-size:26px 26px;
+  -webkit-mask-image:linear-gradient(to right, transparent 30%, black 78%);
+  mask-image:linear-gradient(to right, transparent 30%, black 78%);
+}
+
+/* Registration plate, sitting in the widest part of the gap. */
+.page-head::after{
+  content:''; position:absolute; z-index:1; pointer-events:none;
+  right:5%; top:50%; transform:translateY(-50%);
+  width:min(270px, 22vw); aspect-ratio:1;
+  background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20240%20240'%3E%3Cg%20fill='none'%20stroke='%23141414'%20stroke-width='1.1'%3E%3Ccircle%20cx='120'%20cy='120'%20r='96'/%3E%3Ccircle%20cx='120'%20cy='120'%20r='54'/%3E%3Cline%20x1='163.8'%20y1='163.8'%20x2='176.6'%20y2='176.6'/%3E%3Cline%20x1='76.2'%20y1='163.8'%20x2='63.4'%20y2='176.6'/%3E%3Cline%20x1='163.8'%20y1='76.2'%20x2='176.6'%20y2='63.4'/%3E%3Cline%20x1='76.2'%20y1='76.2'%20x2='63.4'%20y2='63.4'/%3E%3Cpath%20d='M120%206%20V60%20M120%20180%20V234'%20stroke-dasharray='6%205'/%3E%3Cpath%20d='M6%20120%20H60%20M180%20120%20H234'%20stroke-dasharray='6%205'/%3E%3Cpath%20d='M14%2014%20H36%20M14%2014%20V36'/%3E%3Cpath%20d='M226%20226%20H204%20M226%20226%20V204'/%3E%3Cpath%20d='M40%20218%20H200'/%3E%3Cpath%20d='M40%20213%20V223%20M200%20213%20V223'/%3E%3C/g%3E%3Ccircle%20cx='120'%20cy='120'%20r='3'%20fill='%23141414'/%3E%3C/svg%3E") center/contain no-repeat;
+  opacity:0.13;
+}
+.cta-band::after{
+  content:''; position:absolute; z-index:1; pointer-events:none;
+  right:2%; top:50%; transform:translateY(-50%);
+  width:min(200px, 16vw); aspect-ratio:1;
+  background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20240%20240'%3E%3Cg%20fill='none'%20stroke='%23141414'%20stroke-width='1.1'%3E%3Ccircle%20cx='120'%20cy='120'%20r='96'/%3E%3Ccircle%20cx='120'%20cy='120'%20r='54'/%3E%3Cline%20x1='163.8'%20y1='163.8'%20x2='176.6'%20y2='176.6'/%3E%3Cline%20x1='76.2'%20y1='163.8'%20x2='63.4'%20y2='176.6'/%3E%3Cline%20x1='163.8'%20y1='76.2'%20x2='176.6'%20y2='63.4'/%3E%3Cline%20x1='76.2'%20y1='76.2'%20x2='63.4'%20y2='63.4'/%3E%3Cpath%20d='M120%206%20V60%20M120%20180%20V234'%20stroke-dasharray='6%205'/%3E%3Cpath%20d='M6%20120%20H60%20M180%20120%20H234'%20stroke-dasharray='6%205'/%3E%3Cpath%20d='M14%2014%20H36%20M14%2014%20V36'/%3E%3Cpath%20d='M226%20226%20H204%20M226%20226%20V204'/%3E%3Cpath%20d='M40%20218%20H200'/%3E%3Cpath%20d='M40%20213%20V223%20M200%20213%20V223'/%3E%3C/g%3E%3Ccircle%20cx='120'%20cy='120'%20r='3'%20fill='%23141414'/%3E%3C/svg%3E") center/contain no-repeat;
+  opacity:0.07;
+}
+
+/* On narrow screens the copy fills the width, so there's no void to fill and
+   the texture would just sit behind the text. */
+@media (max-width:900px){
+  .page-head::before, .cta-band::before,
+  .page-head::after,  .cta-band::after{ display:none; }
+}
