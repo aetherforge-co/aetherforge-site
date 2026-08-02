@@ -1186,3 +1186,38 @@ if (shopGrid) {
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
   requestAnimationFrame(place);
 })();
+
+// === CONTACT PAGE FORM =======================================================
+// Posts to the same Formspree endpoint the quote/notify modals use, so
+// everything lands in one inbox.
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn  = document.getElementById('contactSubmit');
+    const note = document.getElementById('contactNote');
+    btn.disabled = true; btn.textContent = 'SENDING...';
+    note.innerHTML = '';
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(contactForm),
+      });
+      if (res.ok) {
+        contactForm.innerHTML =
+          '<div class="order-confirm" style="text-align:left;">' +
+          '<div class="stamp">MESSAGE SENT</div>' +
+          '<h2>Thanks — that reached us.</h2>' +
+          "<p>We'll come back to you at the address you gave, usually within one business day.</p>" +
+          '</div>';
+      } else {
+        btn.disabled = false; btn.textContent = 'SEND MESSAGE';
+        note.innerHTML = '<div class="note note--error">That didn\'t send. Try again, or email us directly at aetherforge.eng@gmail.com.</div>';
+      }
+    } catch {
+      btn.disabled = false; btn.textContent = 'SEND MESSAGE';
+      note.innerHTML = '<div class="note note--error">Could not reach the server. Check your connection, or email aetherforge.eng@gmail.com.</div>';
+    }
+  });
+}

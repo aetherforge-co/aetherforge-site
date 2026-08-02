@@ -1128,3 +1128,39 @@ header.condensed .logo{ font-size:1.02rem; }
 @media (prefers-reduced-motion: reduce){
   .af-form input, .af-form textarea, .checkout-form input, .shop-search{ transition:none; }
 }
+
+/* ===== CONTACT PAGE ===== */
+.contact-layout{ display:grid; grid-template-columns:1.35fr 1fr; gap:54px; align-items:start; }
+.contact-form-wrap{ min-width:0; }
+.contact-aside{ min-width:0; }
+.contact-block{ padding-bottom:22px; margin-bottom:22px; border-bottom:1px solid rgba(247,248,250,0.12); }
+.contact-block:last-child{ border-bottom:none; margin-bottom:0; padding-bottom:0; }
+.contact-block .eyebrow{ margin-bottom:10px; }
+.contact-block p{ color:#b5b3ab; font-size:0.9rem; line-height:1.7; margin:0; }
+.contact-block p strong{ color:var(--af-black); }
+.contact-block a{ color:var(--af-red); }
+.contact-email{
+  display:inline-block; font-family:var(--mono); font-size:0.95rem;
+  color:var(--af-black) !important; border-bottom:1px solid var(--af-red);
+  padding-bottom:2px; margin-bottom:10px; word-break:break-all;
+}
+.contact-email:hover{ color:var(--af-red) !important; }
+.contact-select{
+  width:100%; background:transparent; border:1px solid var(--af-grey-dim);
+  color:var(--af-white); font-family:var(--body); font-size:0.9rem;
+  padding:10px 12px; margin-bottom:16px;
+}
+.contact-select:focus{ outline:none; border-color:var(--af-red); }
+/* the form sits in a dark zone, so its fields need light text */
+.dark-zone .checkout-form input,
+.dark-zone .checkout-form textarea,
+.dark-zone .contact-select{
+  color:var(--af-black); border-color:rgba(247,248,250,0.22);
+}
+.dark-zone .checkout-form input::placeholder,
+.dark-zone .checkout-form textarea::placeholder{ color:#6f6f6f; }
+.dark-zone .checkout-form label{ color:#8a8a8a; }
+.dark-zone .contact-select option{ color:var(--af-white); background:var(--af-panel); }
+@media (max-width:900px){
+  .contact-layout{ grid-template-columns:1fr; gap:44px; }
+}
