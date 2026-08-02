@@ -1164,3 +1164,31 @@ header.condensed .logo{ font-size:1.02rem; }
 @media (max-width:900px){
   .contact-layout{ grid-template-columns:1fr; gap:44px; }
 }
+
+/* ===== TEXTAREAS =====
+   The shared stylesheet styled inputs but never textareas, so the contact
+   message box fell back to the browser default — monospace at 13px, which
+   is why its placeholder looked like a different typeface to everything
+   around it. Match the inputs, and give the message box real room. */
+.checkout-form textarea,
+.af-form textarea{
+  width:100%; background:transparent;
+  border:1px solid var(--af-grey-dim); color:var(--af-white);
+  font-family:var(--body); font-size:0.9rem; line-height:1.65;
+  padding:12px; margin-bottom:16px; resize:vertical;
+}
+.checkout-form textarea:focus,
+.af-form textarea:focus{ outline:none; border-color:var(--af-red); }
+
+/* Placeholders inherit unreliably across browsers — state it outright so
+   they always read as the same family and size as the text you type. */
+.checkout-form input::placeholder, .checkout-form textarea::placeholder,
+.af-form input::placeholder, .af-form textarea::placeholder,
+.shop-search::placeholder{
+  font-family:var(--body); font-size:0.9rem; color:var(--af-grey); opacity:1;
+}
+.dark-zone .checkout-form input::placeholder,
+.dark-zone .checkout-form textarea::placeholder{ color:#7c7f86; }
+
+/* The contact form is the one place someone writes more than a line. */
+#contactForm textarea{ min-height:250px; }
