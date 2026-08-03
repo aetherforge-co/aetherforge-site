@@ -549,12 +549,21 @@ section{ position:relative; z-index:1; }
     var(--surface-dark);
   border-top:1px solid rgba(247,248,250,0.1); border-bottom:1px solid rgba(247,248,250,0.1);
 }
-.manifesto .section-inner{ padding:90px 32px; display:grid; grid-template-columns:0.9fr 1.1fr; gap:60px; align-items:start; }
+/* The photo column was a proportion of the page, so the portrait grew to
+   roughly twice the height of the paragraph beside it and dragged the whole
+   section left. Fixed widths cap the photo, justify-content centres the pair
+   so leftover space splits evenly instead of pooling on the right, and
+   centring the items balances the two blocks against each other. */
+.manifesto .section-inner{
+  padding:90px 32px; display:grid;
+  grid-template-columns:minmax(0,340px) minmax(0,620px);
+  justify-content:center; gap:64px; align-items:center;
+}
 .manifesto__people-label{ font-family:var(--mono); font-size:0.72rem; color:var(--af-red); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:16px; }
 /* height:auto matters here — the img's height attribute (added so the
    browser can reserve space before the photo loads) otherwise acts as a
    presentational hint and overrides aspect-ratio, stretching the frame. */
-.manifesto__photo{ width:100%; height:auto; aspect-ratio:4/5; object-fit:cover; display:block; border:1px solid rgba(247,248,250,0.15); }
+.manifesto__photo{ width:100%; max-width:340px; height:auto; aspect-ratio:4/5; object-fit:cover; display:block; border:1px solid rgba(247,248,250,0.15); }
 .manifesto__body p{ font-size:1.05rem; line-height:1.8; color:#b5b3ab; margin-bottom:20px; max-width:56ch; }
 .manifesto__body p:last-child{ margin-bottom:0; }
 .manifesto__body strong{ color:var(--af-black); }
