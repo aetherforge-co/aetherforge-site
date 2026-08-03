@@ -768,7 +768,18 @@ footer .logo__mark path{ fill:#f2f0ea; }
 .page-head p{ max-width:62ch; color:var(--af-grey); font-size:1rem; line-height:1.7; }
 
 /* ===== ROUTE CARDS (home: send people into the service pages) ===== */
-.route-cards{ display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--af-border); border-top:1px solid var(--af-border); border-bottom:1px solid var(--af-border); }
+/* These sat outside the section's content container, so they ran the full
+   width of the screen while the heading above them stayed centred. Matching
+   the content column (shell minus its 32px padding) lines the cards up with
+   that heading and turns them into an inset white panel on the dark surface,
+   the same way the CTA band works. */
+.route-cards{
+  display:grid; grid-template-columns:1fr 1fr; gap:1px;
+  max-width:calc(var(--shell) - 64px); margin:0 auto;
+  background:var(--af-border); border:1px solid var(--af-border);
+  box-shadow:0 18px 44px rgba(0,0,0,0.28);
+}
+@media (max-width:1340px){ .route-cards{ box-shadow:none; } }
 .route-card{ background:var(--af-panel); padding:46px 42px 40px; position:relative; display:block; transition:background .3s var(--ease); }
 .route-card:hover{ background:#fff; }
 .route-card__label{ font-family:var(--mono); font-size:0.66rem; letter-spacing:0.1em; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
