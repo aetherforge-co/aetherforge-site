@@ -319,7 +319,6 @@ section{ position:relative; z-index:1; }
   background-color: var(--af-black);
   background-repeat: repeat, no-repeat;
   background-size: 900px 900px, 100% 100%;
-  border-top:1px solid var(--af-border); border-bottom:none;
   position:relative;
 }
 /* fades the line-grid in only within the darkening zone, so the pattern
@@ -1315,20 +1314,23 @@ header.condensed .logo{ font-size:1.02rem; }
 
 
 
+
+
 /* ===== SECTION TRANSITIONS =====
-   The hairline between sections used to run the full width of the screen,
-   which on a wide monitor drew a grey line right across the page. These rules
-   are now the width of the content column and centred, so a transition reads
-   as a drafting rule under the content rather than a band across the window.
-   Adjacent dark sections need no rule at all — they share one surface, and a
-   line between them only created a seam. */
-.print-lab, .cta-band, footer{ position:relative; }
-.print-lab::before, .cta-band::before, footer::before{
-  content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
-  width:min(var(--shell), calc(100% - 64px)); height:1px;
-  pointer-events:none; z-index:2;
+   One rule for the whole site: content sections do not draw dividers. Every
+   boundary is a change of surface — white panel to dark dotted ground — and
+   that change is the transition. Lines were being drawn in the light border
+   colour on top of dark sections, which showed up as bright grey streaks, and
+   they differed page to page depending on which section happened to be first.
+   Borders are now reserved for chrome that genuinely needs an edge: the
+   sticky header, and the shop's sticky filter bar. */
+.print-lab, .dark-zone, .gallery-strip, .manifesto, .dark-zone-faq,
+.cta-band, .page-head, footer{
+  border-top:none; border-bottom:none;
 }
-.print-lab::before{ background:var(--af-border); }
-.cta-band::before, footer::before{ background:rgba(247,248,250,0.14); }
-/* A dark section directly following another needs no divider. */
-.dark-zone + .dark-zone::before{ display:none; }
+/* Chrome. The shop toolbar sits between two light surfaces and floats over
+   dark content once stuck, so it needs edges on both sides to read as a bar. */
+.shop-toolbar{
+  border-top:1px solid var(--af-border);
+  border-bottom:1px solid var(--af-border);
+}
