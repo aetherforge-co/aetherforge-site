@@ -761,7 +761,16 @@ footer .logo__mark path{ fill:#f2f0ea; }
 /* ===== PAGE HEADER (sub-pages) ===== */
 /* Compact intro block that opens each interior page, in place of the
    full-height hero that only the home page carries. */
-.page-head{ border-bottom:1px solid var(--af-border); background:var(--af-panel); }
+/* The white used to bleed to both screen edges, which on a wide monitor read
+   as an unfinished band. Now the section itself carries the same dark dotted
+   surface as its neighbours and the white sits inside it as a panel the width
+   of the content column — a sheet laid on the page rather than a stripe
+   across it. Below the shell's breakpoint the panel fills the width anyway,
+   so narrow screens look exactly as they did. */
+.page-head{
+  background: var(--dot-grid) 0 0/896px 280px, var(--surface-dark);
+  border-bottom:1px solid rgba(247,248,250,0.10);
+}
 .page-head__inner{ max-width:var(--shell); margin:0 auto; padding:64px 32px 56px; }
 .page-head .eyebrow{ margin-bottom:14px; }
 .page-head h1{
@@ -810,7 +819,10 @@ footer .logo__mark path{ fill:#f2f0ea; }
 @media (max-width:520px){ .roadmap{ grid-template-columns:1fr; } }
 
 /* ===== CTA BAND (consistent close on every page) ===== */
-.cta-band{ border-top:1px solid var(--af-border); background:var(--af-panel); }
+.cta-band{
+  background: var(--dot-grid) 0 0/896px 280px, var(--surface-dark);
+  border-top:1px solid rgba(247,248,250,0.10);
+}
 .cta-band__inner{ max-width:var(--shell); margin:0 auto; padding:60px 32px; display:flex; align-items:center; justify-content:space-between; gap:36px; flex-wrap:wrap; }
 .cta-band__copy{ max-width:56ch; }
 .cta-band .eyebrow{ margin-bottom:10px; }
@@ -1294,24 +1306,22 @@ header.condensed .logo{ font-size:1.02rem; }
   :root{ --shell:100%; }
 }
 
-/* ===== CONTENT COLUMN EDGES =====
-   With a wider shell there's still margin on very large screens. Marking the
-   column edges with a hairline and tick marks makes that margin read as a
-   drafting sheet border rather than as space nobody filled. Only drawn where
-   there's genuinely room for it. */
-@media (min-width:1500px){
-  .page-head__inner, .cta-band__inner{
-    border-left:1px solid var(--af-border);
-    border-right:1px solid var(--af-border);
-    position:relative;
+
+
+/* The inset panels themselves. */
+.page-head__inner, .cta-band__inner, .shop-toolbar__inner{
+  background:var(--af-panel);
+  border-left:1px solid var(--af-border);
+  border-right:1px solid var(--af-border);
+  box-shadow:0 0 0 1px rgba(0,0,0,0.03), 0 18px 44px rgba(0,0,0,0.28);
+}
+/* Edge borders only make sense once there's margin to sit against. */
+@media (max-width:1340px){
+  .page-head__inner, .cta-band__inner, .shop-toolbar__inner{
+    border-left:none; border-right:none; box-shadow:none;
   }
-  .page-head__inner::before, .page-head__inner::after,
-  .cta-band__inner::before, .cta-band__inner::after{
-    content:''; position:absolute; top:0; bottom:0; width:7px;
-    pointer-events:none;
-    background-image:repeating-linear-gradient(
-      to bottom, var(--af-border) 0 1px, transparent 1px 34px);
-  }
-  .page-head__inner::before, .cta-band__inner::before{ left:0; }
-  .page-head__inner::after,  .cta-band__inner::after{ right:0; }
+}
+.shop-toolbar{
+  background: var(--dot-grid) 0 0/896px 280px, var(--surface-dark);
+  border-bottom:1px solid rgba(247,248,250,0.10);
 }
