@@ -893,6 +893,19 @@ function afterFirstPaint(fn){
 // === sticky header gains a shadow once the page scrolls ===
 const siteHeader = document.querySelector('header');
 if (siteHeader) {
+  // Anything pinned below the header needs to know how tall it currently is.
+  // The header condenses on scroll, so a hard-coded offset leaves a strip of
+  // page showing through the difference — publish the real height instead.
+  const publishHeaderHeight = () => {
+    document.documentElement.style.setProperty(
+      '--header-h', Math.round(siteHeader.getBoundingClientRect().height) + 'px');
+  };
+  publishHeaderHeight();
+  // ResizeObserver catches the condense transition frame by frame, so the
+  // bar below follows the header down rather than snapping once it ends.
+  if (window.ResizeObserver) new ResizeObserver(publishHeaderHeight).observe(siteHeader);
+  window.addEventListener('resize', publishHeaderHeight, { passive: true });
+
   const onScroll = () => {
     siteHeader.classList.toggle('scrolled', window.scrollY > 8);
     // Give some of the fixed header height back once you're reading —
