@@ -521,108 +521,8 @@ const authModal = document.getElementById('authModal');
 const authContent = document.getElementById('authContent');
 const accountBtn = document.getElementById('accountBtn');
 
-function signInFormHTML(errorMsg){
-  return `
-    <div class="checkout-eyebrow">// LOG IN</div>
-    <h2>Welcome back</h2>
-    <form class="checkout-form" id="authForm">
-      <label>Email</label>
-      <input type="email" name="email" required>
-      <label>Password</label>
-      <input type="password" name="password" required>
-      ${errorMsg ? `<div class="checkout-note" style="color:var(--af-red); margin-bottom:14px;">// ${errorMsg}</div>` : ''}
-      <button type="submit" class="btn" style="width:100%;">LOG IN</button>
-    </form>
-    <p style="font-size:0.8rem; color:var(--af-grey); margin-top:14px;"><a href="account.html" id="forgotLink" style="color:var(--af-grey); text-decoration:underline;">Forgot your password?</a></p>
-    <p style="font-size:0.8rem; color:var(--af-grey); margin-top:6px;">No account yet? <a href="#" id="switchToSignUp" style="color:var(--af-red);">Sign up</a></p>
-  `;
-}
-
-function signUpFormHTML(errorMsg){
-  return `
-    <div class="checkout-eyebrow">// CREATE ACCOUNT</div>
-    <h2>Save designs to your account</h2>
-    <form class="checkout-form" id="authForm">
-      <label>Email</label>
-      <input type="email" name="email" required>
-      <label>Password</label>
-      <input type="password" name="password" required minlength="6">
-      ${errorMsg ? `<div class="checkout-note" style="color:var(--af-red); margin-bottom:14px;">// ${errorMsg}</div>` : ''}
-      <button type="submit" class="btn" style="width:100%;">SIGN UP</button>
-    </form>
-    <p style="font-size:0.8rem; color:var(--af-grey); margin-top:16px;">Already have an account? <a href="#" id="switchToSignIn" style="color:var(--af-red);">Log in</a></p>
-  `;
-}
-
-function authConfirmHTML(message){
-  return `
-    <div class="order-confirm">
-      <div class="stamp">CHECK YOUR EMAIL</div>
-      <h2>Almost there</h2>
-      <p>${message}</p>
-      <button class="btn btn--ghost" id="authDoneBtn">CLOSE</button>
-    </div>
-  `;
-}
-
-function wireAuthForm(mode){
-  document.getElementById('authForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const email = form.email.value.trim();
-    const password = form.password.value;
-    submitBtn.textContent = mode === 'signin' ? 'LOGGING IN...' : 'SIGNING UP...';
-    submitBtn.disabled = true;
-    try {
-      if (mode === 'signin') {
-        const { error } = await afSignIn(email, password);
-        if (error) {
-          authContent.innerHTML = signInFormHTML(error.message);
-          wireAuthForm('signin');
-          return;
-        }
-        closeAuth();
-        await refreshAccountUI();
-        window.location.href = 'account.html';
-      } else {
-        const { data, error } = await afSignUp(email, password);
-        if (error) {
-          authContent.innerHTML = signUpFormHTML(error.message);
-          wireAuthForm('signup');
-          return;
-        }
-        if (data.session) {
-          closeAuth();
-          await refreshAccountUI();
-          window.location.href = 'account.html';
-        } else {
-          authContent.innerHTML = authConfirmHTML('We sent a confirmation link to ' + email + ' — click it, then come back and log in.');
-          document.getElementById('authDoneBtn').addEventListener('click', closeAuth);
-        }
-      }
-    } catch (err) {
-      submitBtn.textContent = mode === 'signin' ? 'LOG IN' : 'SIGN UP';
-      submitBtn.disabled = false;
-      alert('Could not reach the server — check your connection and try again.');
-    }
-  });
-  const switchLink = document.getElementById(mode === 'signin' ? 'switchToSignUp' : 'switchToSignIn');
-  if (switchLink) {
-    switchLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      openAuth(mode === 'signin' ? 'signup' : 'signin');
-    });
-  }
-}
-
 function openAuth(){
   window.location.href = 'account.html';
-}
-function openAuthModal_unused(mode){
-  authContent.innerHTML = mode === 'signin' ? signInFormHTML() : signUpFormHTML();
-  wireAuthForm(mode);
-  authModal.classList.add('show');
 }
 function closeAuth(){ authModal.classList.remove('show'); }
 
@@ -766,7 +666,9 @@ const layerReadout = document.getElementById('layerReadout');
 const tempReadout = document.getElementById('tempReadout');
 let currentLayer = 184;
 let totalLayers = 240;
-setInterval(() => {
+// Only the home page has this readout. Without the guard the timer kept
+// firing every two seconds on the other five pages with nothing to update.
+if (layerReadout) setInterval(() => {
   currentLayer++;
   if (currentLayer > totalLayers) {
     totalLayers = 180 + Math.floor(Math.random() * 140); // next job: 180–320 layers
