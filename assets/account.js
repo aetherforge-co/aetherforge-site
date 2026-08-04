@@ -234,7 +234,9 @@ function pipelineHTML(status, stages, terminalKeys, terminalNote){
 function statusBadge(status){
   if (status === 'declined') return `<span class="status status--declined">DECLINED</span>`;
   if (status === 'completed') return `<span class="status">COMPLETED</span>`;
-  return `<span class="status status--active">${(status || 'submitted').replace(/_/g,' ').toUpperCase()}</span>`;
+  // status comes from the database. Escaped because a row's own owner can
+  // reach this column through the API, so it is not ours to trust.
+  return `<span class="status status--active">${escapeHtml((status || 'submitted').replace(/_/g,' ').toUpperCase())}</span>`;
 }
 
 function relativeDate(iso){
@@ -326,9 +328,9 @@ async function loadDesigns(user){
 }
 
 function orderStatusBadge(status){
-  if (status === 'refunded' || status === 'cancelled') return `<span class="status status--declined">${status.toUpperCase()}</span>`;
+  if (status === 'refunded' || status === 'cancelled') return `<span class="status status--declined">${escapeHtml(status.toUpperCase())}</span>`;
   if (status === 'delivered') return `<span class="status">DELIVERED</span>`;
-  return `<span class="status status--active">${(status || 'paid').toUpperCase()}</span>`;
+  return `<span class="status status--active">${escapeHtml((status || 'paid').toUpperCase())}</span>`;
 }
 
 async function loadOrders(user){
