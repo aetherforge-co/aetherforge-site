@@ -1,3 +1,8 @@
+// Tell the stylesheet the script is alive. Until this lands, a CSS failsafe
+// reveals all content after 2.5s so a missing or broken site.js degrades to a
+// plain readable page instead of an empty one.
+document.documentElement.classList.add('js-ready');
+
 // === PRODUCT CATALOG ===
 // === PRINT LAB CATALOG ===
 const printProducts = [
