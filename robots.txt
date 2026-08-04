@@ -1,0 +1,10 @@
+# aetherforgeco.com
+# Everything public is crawlable. The account area is private per-customer
+# data behind a login, so it's excluded — it also carries a noindex tag.
+
+User-agent: *
+Allow: /
+Disallow: /account.html
+Disallow: /api/
+
+Sitemap: https://www.aetherforgeco.com/sitemap.xml
