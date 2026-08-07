@@ -1226,3 +1226,39 @@ if (contactForm) {
     choose(index);
   });
 })();
+
+// === RFQ INTAKE (capabilities page) ==========================================
+// Same Formspree inbox as the other forms. Deliberately has no file upload:
+// accepting attachments here would risk receiving export-controlled technical
+// data before status is confirmed, which is the thing we cannot lawfully do.
+const rfqForm = document.getElementById('rfqForm');
+if (rfqForm) {
+  rfqForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn  = document.getElementById('rfqSubmit');
+    const note = document.getElementById('rfqNote');
+    btn.disabled = true; btn.textContent = 'SENDING...';
+    note.innerHTML = '';
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST', headers: { 'Accept': 'application/json' },
+        body: new FormData(rfqForm),
+      });
+      if (res.ok) {
+        rfqForm.innerHTML =
+          '<div class="order-confirm" style="text-align:left;">' +
+          '<div class="stamp">RFQ RECEIVED</div>' +
+          '<h2>Thanks — that reached us.</h2>' +
+          "<p>We'll come back within one business day with a price and lead time, " +
+          'or an honest answer that the part is better made elsewhere. If the package ' +
+          'is export controlled we will confirm handling before anything is sent.</p></div>';
+      } else {
+        btn.disabled = false; btn.textContent = 'SUBMIT RFQ';
+        note.innerHTML = '<div class="note note--error">That didn\'t send. Try again, or email aetherforge.eng@gmail.com directly.</div>';
+      }
+    } catch {
+      btn.disabled = false; btn.textContent = 'SUBMIT RFQ';
+      note.innerHTML = '<div class="note note--error">Could not reach the server. Email aetherforge.eng@gmail.com instead.</div>';
+    }
+  });
+}

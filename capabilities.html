@@ -220,6 +220,64 @@
   </div>
 </section>
 
+<section class="print-lab dark-zone" id="rfq">
+  <div class="section-inner" style="padding-top:60px; padding-bottom:70px;">
+    <div class="section-head reveal">
+      <h2>Request For Quote</h2>
+      <div class="tag mono">// SUPPLIER INTAKE</div>
+    </div>
+
+    <div class="note note--error" style="max-width:70ch; margin-bottom:28px;">
+      <strong>Do not attach drawings to this form.</strong> Tell us the export
+      control status first. We are not ITAR-registered, so we cannot lawfully
+      receive ITAR-controlled technical data — including by email. Once status is
+      confirmed and an NDA is in place, we will give you a route to send the package.
+    </div>
+
+    <form class="af-form checkout-form" id="rfqForm" style="max-width:70ch;">
+      <input type="hidden" name="_subject" value="Aetherforge RFQ — subcontract enquiry">
+      <input type="hidden" name="form" value="RFQ / capabilities">
+
+      <label for="rCompany">Company / prime</label>
+      <input type="text" id="rCompany" name="company" required autocomplete="organization">
+
+      <label for="rName">Your name</label>
+      <input type="text" id="rName" name="name" required autocomplete="name">
+
+      <label for="rEmail">Email</label>
+      <input type="email" id="rEmail" name="email" required autocomplete="email">
+
+      <label for="rExport">Export control status of this package</label>
+      <select id="rExport" name="export_status" class="contact-select" required>
+        <option value="">— select before continuing —</option>
+        <option>Not export controlled — commercial / unclassified</option>
+        <option>EAR-controlled</option>
+        <option>ITAR-controlled</option>
+        <option>Unsure — needs review before anything is sent</option>
+      </select>
+
+      <label for="rPart">Part number or program reference</label>
+      <input type="text" id="rPart" name="part_reference">
+
+      <label for="rQty">Quantity</label>
+      <input type="text" id="rQty" name="quantity" placeholder="e.g. 25 ea, or 5 prototype + 200 production">
+
+      <label for="rMaterial">Material call-out</label>
+      <input type="text" id="rMaterial" name="material" placeholder="e.g. PA-CF, ASA, or 'advise'">
+
+      <label for="rDate">Required date</label>
+      <input type="text" id="rDate" name="required_date" placeholder="e.g. 6 weeks ARO, or a firm date">
+
+      <label for="rNotes">Scope and requirements</label>
+      <textarea id="rNotes" name="notes" rows="6" required
+        placeholder="What the part does, tolerance or finish requirements, whether first article and a Certificate of Conformance are required, and any flow-down clauses we should be aware of."></textarea>
+
+      <div id="rfqNote"></div>
+      <button type="submit" class="btn" id="rfqSubmit">SUBMIT RFQ</button>
+    </form>
+  </div>
+</section>
+
 <section class="cta-band">
   <div class="cta-band__inner">
     <div class="cta-band__copy">
@@ -228,7 +286,7 @@
       <p>Drawings, quantity, material call-out and required date. We will come back with a price, a lead time, and an honest answer on whether the part is better printed or better machined elsewhere.</p>
     </div>
     <div class="cta-band__actions">
-      <a href="contact.html" class="btn">SUBMIT AN RFQ</a>
+      <a href="#rfq" class="btn">SUBMIT AN RFQ</a>
       <a href="printing.html" class="btn btn--ghost">COMMERCIAL SHOP</a>
     </div>
   </div>
