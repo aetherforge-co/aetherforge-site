@@ -1344,3 +1344,27 @@ header.condensed .logo{ font-size:1.02rem; }
   border-top:1px solid var(--af-border);
   border-bottom:1px solid var(--af-border);
 }
+
+/* ===== PAST PERFORMANCE ENTRIES ===== */
+.perf{ margin-bottom:38px; }
+.perf:last-of-type{ margin-bottom:22px; }
+.perf__head{
+  display:flex; align-items:baseline; justify-content:space-between;
+  gap:18px; flex-wrap:wrap; margin-bottom:14px;
+  padding-bottom:12px; border-bottom:1px solid rgba(247,248,250,0.12);
+}
+.perf__head h3{
+  font-family:var(--disp); font-weight:700; font-size:1.25rem;
+  text-transform:uppercase; letter-spacing:0.01em; color:var(--af-black);
+}
+.perf__client{
+  font-family:var(--mono); font-size:0.68rem; letter-spacing:0.06em;
+  color:var(--af-red); text-transform:uppercase;
+}
+.perf__note{
+  margin-top:14px; font-size:0.9rem; line-height:1.7; color:#b5b3ab; max-width:72ch;
+}
+.perf__note strong{ color:var(--af-black); }
+@media (max-width:600px){
+  .perf__head{ flex-direction:column; gap:6px; }
+}
