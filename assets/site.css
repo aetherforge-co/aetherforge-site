@@ -416,7 +416,7 @@ section{ position:relative; z-index:1; }
 .howitworks{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--af-border); border:1px solid var(--af-border); margin-bottom:56px; }
 .step{ background:var(--af-panel); padding:22px 20px; position:relative; }
 .step__num{ font-family:var(--mono); font-size:0.7rem; color:#5c5c5c; margin-bottom:10px; }
-.step h4{ font-family:var(--disp); font-weight:600; font-size:1.05rem; text-transform:uppercase; margin-bottom:6px; }
+.step h4, .step h3{ font-family:var(--disp); font-weight:600; font-size:1.05rem; text-transform:uppercase; margin-bottom:6px; }
 .step p{ font-size:0.8rem; color:var(--af-grey); line-height:1.5; }
 
 /* ===== GALLERY ===== */
@@ -592,7 +592,7 @@ footer{
 .footer-brand .logo{ margin-bottom:14px; color:var(--af-black); }
 footer .logo__mark path{ fill:#f2f0ea; }
 .footer-brand p{ font-size:0.85rem; color:#8a8a8a; max-width:32ch; line-height:1.6; }
-.footer-col h4{ font-family:var(--mono); font-size:0.68rem; letter-spacing:0.1em; color:#8a8a8a; text-transform:uppercase; margin-bottom:16px; }
+.footer-col h4, .footer-col .footer-col__title{ font-family:var(--mono); font-size:0.68rem; letter-spacing:0.1em; color:#8a8a8a; text-transform:uppercase; margin-bottom:16px; }
 .footer-col a{ display:block; font-size:0.85rem; color:#8a8a8a; margin-bottom:10px; transition:color .15s; }
 .footer-col a:hover{ color:var(--af-black); }
 .footer-bottom{
@@ -818,7 +818,7 @@ footer .logo__mark path{ fill:#f2f0ea; }
 .roadmap{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:rgba(247,248,250,0.14); border:1px solid rgba(247,248,250,0.14); }
 .roadmap__step{ background:#141414; padding:26px 22px 24px; position:relative; }
 .roadmap__num{ font-family:var(--mono); font-size:0.62rem; color:var(--af-grey); letter-spacing:0.1em; margin-bottom:10px; }
-.roadmap__step h4{ font-family:var(--disp); font-weight:600; font-size:1.05rem; text-transform:uppercase; color:#f2f0ea; margin-bottom:8px; }
+.roadmap__step h4, .roadmap__step h3{ font-family:var(--disp); font-weight:600; font-size:1.05rem; text-transform:uppercase; color:#f2f0ea; margin-bottom:8px; }
 .roadmap__step p{ font-size:0.82rem; line-height:1.6; color:#b5b3ab; margin:0 0 14px; }
 .roadmap__status{ font-family:var(--mono); font-size:0.58rem; letter-spacing:0.08em; text-transform:uppercase; padding:3px 7px; border:1px solid rgba(247,248,250,0.2); color:#8a8a8a; display:inline-block; }
 .roadmap__step.is-done .roadmap__status{ color:var(--af-red); border-color:var(--af-red); }
@@ -1367,4 +1367,71 @@ header.condensed .logo{ font-size:1.02rem; }
 .perf__note strong{ color:var(--af-black); }
 @media (max-width:600px){
   .perf__head{ flex-direction:column; gap:6px; }
+}
+
+/* ===== IN-PAGE SECTION INDEX (capabilities) =====
+   The capability page is long by design — buyers scan for one section rather
+   than read top to bottom. This lets them jump straight to it. */
+.page-index{ background:var(--af-panel); border-bottom:1px solid var(--af-border); }
+.page-index__inner{
+  max-width:var(--shell); margin:0 auto; padding:14px 32px;
+  display:flex; align-items:center; gap:8px 20px; flex-wrap:wrap;
+}
+.page-index__label{
+  font-family:var(--mono); font-size:0.6rem; letter-spacing:0.1em;
+  color:var(--af-grey-dim); text-transform:uppercase;
+}
+.page-index a{
+  font-family:var(--mono); font-size:0.72rem; letter-spacing:0.04em;
+  color:var(--af-grey); border-bottom:1px solid transparent; padding-bottom:2px;
+  transition:color .2s var(--ease), border-color .2s var(--ease);
+}
+.page-index a:hover{ color:var(--af-white); border-bottom-color:var(--af-red); }
+.page-index a.is-cta{ color:var(--af-red); border-bottom-color:var(--af-red); }
+/* land clear of the sticky header when jumping */
+#competencies, #capability, #materials, #quality,
+#performance, #compliance, #company, #rfq{
+  scroll-margin-top:calc(var(--header-h, 72px) + 16px);
+}
+@media (max-width:700px){ .page-index__inner{ padding:12px 22px; gap:6px 14px; } }
+
+/* ===== SKIP LINK =====
+   First focusable element on every page. Keyboard and screen-reader users can
+   jump straight past the navigation instead of tabbing through it on each
+   page — WCAG 2.4.1, and an expectation for Section 508 conformance. */
+.skip-link{
+  position:absolute; left:8px; top:-48px; z-index:300;
+  background:var(--af-red); color:#fff;
+  font-family:var(--mono); font-size:0.78rem; letter-spacing:0.05em;
+  padding:10px 16px; border:2px solid #fff;
+  transition:top .18s var(--ease);
+}
+.skip-link:focus{ top:8px; outline:none; }
+
+/* footer/aether headings moved from h4 to h3 to close a heading-level jump —
+   keep them looking identical */
+.footer-col__title{
+  font-family:var(--mono); font-size:0.68rem; letter-spacing:0.14em;
+  text-transform:uppercase; color:var(--af-black); margin-bottom:16px; font-weight:400;
+}
+.aether-title{ font-family:var(--mono); font-size:0.72rem; letter-spacing:0.1em; }
+.dash-title{
+  font-family:var(--disp); font-weight:700; text-transform:uppercase;
+  font-size:clamp(1.5rem,3vw,2rem); line-height:1.05;
+}
+
+/* download block on the capabilities page */
+.cap-download{
+  margin-top:26px; padding:22px 24px;
+  border:1px solid rgba(247,248,250,0.16);
+  display:flex; align-items:center; justify-content:space-between;
+  gap:22px; flex-wrap:wrap;
+}
+@media (max-width:700px){ .cap-download{ flex-direction:column; align-items:flex-start; } }
+
+/* Visually hidden, still read aloud. Used where a section needs a heading for
+   document structure but showing one would be redundant on screen. */
+.sr-only{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
 }

@@ -43,6 +43,7 @@
 <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to main content</a>
 
 <header>
   <nav>
@@ -55,7 +56,8 @@
       <a href="printing.html">3D PRINTING</a>
       <a href="metal-fab.html">METAL FAB<span class="nav-badge">SOON</span></a>
       <a href="shop.html">SHOP</a>
-      <a href="faq.html">FAQ</a>
+    <a href="capabilities.html">CAPABILITIES</a>
+            <a href="faq.html">FAQ</a>
       <a href="contact.html">CONTACT</a>
     </div>
     <div class="nav-actions">
@@ -78,6 +80,7 @@
     <a href="printing.html">3D PRINTING</a>
     <a href="metal-fab.html">METAL FAB<span class="nav-badge">SOON</span></a>
     <a href="shop.html">SHOP</a>
+    <a href="capabilities.html">CAPABILITIES</a>
     <a href="faq.html">FAQ</a>
     <a href="contact.html">CONTACT</a>
     <a href="account.html">MY ACCOUNT</a>
@@ -85,6 +88,7 @@
 </div>
 
 
+<main id="main">
 <section class="page-head">
   <div class="page-head__inner">
     <div class="eyebrow">// FULL CATALOG</div>
@@ -124,6 +128,7 @@
 
 <section class="print-lab dark-zone">
   <div class="section-inner" style="padding-top:44px; padding-bottom:70px;">
+    <h2 class="sr-only">Catalogue</h2>
     <div class="grid" id="shopGrid"></div>
     <div class="shop-empty" id="shopEmpty">
       Nothing matches those filters. Try widening the line or availability, or clear the search.
@@ -160,6 +165,7 @@
   </div>
 </section>
 
+</main>
 <footer id="contact" class="dark-zone-footer">
   <div class="footer-inner">
     <div class="footer-top">
@@ -177,26 +183,26 @@
         </div>
       </div>
       <div class="footer-col">
-        <h4>3D Printing</h4>
+        <h3 class="footer-col__title">3D Printing</h3>
         <a href="printing.html">Print farm</a>
         <a href="printing.html#printCatalog">Request a quote</a>
         <a href="printing.html#printCatalog">Materials</a>
       </div>
       <div class="footer-col">
-        <h4>Metal Fab</h4>
+        <h3 class="footer-col__title">Metal Fab</h3>
         <a href="metal-fab.html">Coming soon</a>
         <a href="metal-fab.html">Concept designs</a>
         <a href="metal-fab.html#contact">Get notified</a>
       </div>
       <div class="footer-col">
-        <h4>Company</h4>
+        <h3 class="footer-col__title">Company</h3>
         <a href="index.html#manifesto">Our process</a>
         <a href="metal-fab.html#materials">Materials</a>
         <a href="capabilities.html">Capabilities</a>
           <a href="contact.html">Careers</a>
       </div>
       <div class="footer-col">
-        <h4>Support</h4>
+        <h3 class="footer-col__title">Support</h3>
         <a href="contact.html">Contact</a>
         <a href="faq.html">Shipping</a>
         <a href="faq.html">Returns</a>
@@ -261,7 +267,7 @@
   <div class="aether-panel__header">
     <span class="aether-panel__core"></span>
     <div class="aether-panel__title">
-      <h4>AETHER</h4>
+      <h3 class="aether-title">AETHER</h3>
       <span>// AGENT STATUS: ONLINE</span>
     </div>
     <button class="aether-panel__close" id="aetherClose">CLOSE // ESC</button>
@@ -275,7 +281,7 @@
     <button class="aether-chip" data-q="What materials do you stock?">MATERIALS</button>
   </div>
   <div class="aether-panel__inputrow">
-    <input type="text" id="aetherInput" placeholder="Ask AETHER something...">
+    <input type="text" id="aetherInput" aria-label="Ask AETHER a question" placeholder="Ask AETHER something...">
     <button id="aetherSend">SEND</button>
   </div>
 </div>

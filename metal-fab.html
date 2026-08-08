@@ -43,6 +43,7 @@
 <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to main content</a>
 
 <header>
   <nav>
@@ -55,7 +56,8 @@
       <a href="printing.html">3D PRINTING</a>
       <a href="metal-fab.html">METAL FAB<span class="nav-badge">SOON</span></a>
       <a href="shop.html">SHOP</a>
-      <a href="faq.html">FAQ</a>
+    <a href="capabilities.html">CAPABILITIES</a>
+            <a href="faq.html">FAQ</a>
       <a href="contact.html">CONTACT</a>
     </div>
     <div class="nav-actions">
@@ -78,6 +80,7 @@
     <a href="printing.html">3D PRINTING</a>
     <a href="metal-fab.html">METAL FAB<span class="nav-badge">SOON</span></a>
     <a href="shop.html">SHOP</a>
+    <a href="capabilities.html">CAPABILITIES</a>
     <a href="faq.html">FAQ</a>
     <a href="contact.html">CONTACT</a>
     <a href="account.html">MY ACCOUNT</a>
@@ -85,6 +88,7 @@
 </div>
 
 
+<main id="main">
 <section class="page-head">
   <div class="page-head__inner">
     <div class="eyebrow">// CNC LINE — COMING SOON</div>
@@ -171,25 +175,25 @@
     <div class="roadmap reveal">
       <div class="roadmap__step is-done">
         <div class="roadmap__num">[ PHASE 01 ]</div>
-        <h4>Design</h4>
+        <h3>Design</h3>
         <p>Six concepts drawn, modeled, and revised — geometry, ergonomics, and material selection locked.</p>
         <span class="roadmap__status">Complete</span>
       </div>
       <div class="roadmap__step is-done">
         <div class="roadmap__num">[ PHASE 02 ]</div>
-        <h4>Printed Mockups</h4>
+        <h3>Printed Mockups</h3>
         <p>Every concept printed in-house at full scale to check proportion and hand feel before cutting metal.</p>
         <span class="roadmap__status">Complete</span>
       </div>
       <div class="roadmap__step is-active">
         <div class="roadmap__num">[ PHASE 03 ]</div>
-        <h4>Machine &amp; Tooling</h4>
+        <h3>Machine &amp; Tooling</h3>
         <p>Standing up the CNC cell, workholding, and tool library — then proving we can repeat ±0.02 mm, not just hit it once.</p>
         <span class="roadmap__status">In progress</span>
       </div>
       <div class="roadmap__step">
         <div class="roadmap__num">[ PHASE 04 ]</div>
-        <h4>First Production Run</h4>
+        <h3>First Production Run</h3>
         <p>A short verified batch, measured piece by piece. If it holds spec, it ships. If it doesn't, phase 03 starts again.</p>
         <span class="roadmap__status">Not started</span>
       </div>
@@ -212,6 +216,7 @@
   </div>
 </section>
 
+</main>
 <footer id="contact" class="dark-zone-footer">
   <div class="footer-inner">
     <div class="footer-top">
@@ -229,26 +234,26 @@
         </div>
       </div>
       <div class="footer-col">
-        <h4>3D Printing</h4>
+        <h3 class="footer-col__title">3D Printing</h3>
         <a href="printing.html">Print farm</a>
         <a href="printing.html#printCatalog">Request a quote</a>
         <a href="printing.html#printCatalog">Materials</a>
       </div>
       <div class="footer-col">
-        <h4>Metal Fab</h4>
+        <h3 class="footer-col__title">Metal Fab</h3>
         <a href="metal-fab.html">Coming soon</a>
         <a href="metal-fab.html">Concept designs</a>
         <a href="metal-fab.html#contact">Get notified</a>
       </div>
       <div class="footer-col">
-        <h4>Company</h4>
+        <h3 class="footer-col__title">Company</h3>
         <a href="index.html#manifesto">Our process</a>
         <a href="metal-fab.html#materials">Materials</a>
         <a href="capabilities.html">Capabilities</a>
           <a href="contact.html">Careers</a>
       </div>
       <div class="footer-col">
-        <h4>Support</h4>
+        <h3 class="footer-col__title">Support</h3>
         <a href="contact.html">Contact</a>
         <a href="faq.html">Shipping</a>
         <a href="faq.html">Returns</a>
@@ -313,7 +318,7 @@
   <div class="aether-panel__header">
     <span class="aether-panel__core"></span>
     <div class="aether-panel__title">
-      <h4>AETHER</h4>
+      <h3 class="aether-title">AETHER</h3>
       <span>// AGENT STATUS: ONLINE</span>
     </div>
     <button class="aether-panel__close" id="aetherClose">CLOSE // ESC</button>
@@ -327,7 +332,7 @@
     <button class="aether-chip" data-q="What materials do you stock?">MATERIALS</button>
   </div>
   <div class="aether-panel__inputrow">
-    <input type="text" id="aetherInput" placeholder="Ask AETHER something...">
+    <input type="text" id="aetherInput" aria-label="Ask AETHER a question" placeholder="Ask AETHER something...">
     <button id="aetherSend">SEND</button>
   </div>
 </div>

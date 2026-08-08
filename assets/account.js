@@ -41,9 +41,9 @@ const MAX_AVATAR_BYTES = 5 * 1024 * 1024;
 
 function loginFormHTML(errorMsg){
   return `
-    <label>Email</label>
+    <label for="gEmail">Email</label>
     <input type="email" id="gEmail" required>
-    <label>Password</label>
+    <label for="gPassword">Password</label>
     <input type="password" id="gPassword" required>
     ${errorMsg ? `<div class="note note--error">${escapeHtml(errorMsg)}</div>` : ''}
     <button class="btn btn--full" id="gSubmit">LOG IN</button>
@@ -53,9 +53,9 @@ function loginFormHTML(errorMsg){
 }
 function signupFormHTML(errorMsg){
   return `
-    <label>Email</label>
+    <label for="gEmail">Email</label>
     <input type="email" id="gEmail" required>
-    <label>Password</label>
+    <label for="gPassword">Password</label>
     <input type="password" id="gPassword" required minlength="6">
     ${errorMsg ? `<div class="note note--error">${errorMsg}</div>` : ''}
     <button class="btn btn--full" id="gSubmit">SIGN UP</button>
@@ -493,7 +493,7 @@ logoutBtn.addEventListener('click', async () => {
 
 function forgotFormHTML(msg, isError){
   return `
-    <label>Email</label>
+    <label for="gEmail">Email</label>
     <input type="email" id="fEmail" required>
     ${msg ? `<div class="note ${isError ? 'note--error' : 'note--ok'}">${escapeHtml(msg)}</div>` : ''}
     <button class="btn btn--full" id="fSubmit">SEND RESET LINK</button>
@@ -527,9 +527,9 @@ function wireForgotForm(){
 
 function resetFormHTML(msg){
   return `
-    <label>New password</label>
+    <label for="rPassword">New password</label>
     <input type="password" id="rPassword" required minlength="8" autocomplete="new-password">
-    <label>Confirm new password</label>
+    <label for="rPassword2">Confirm new password</label>
     <input type="password" id="rPassword2" required minlength="8" autocomplete="new-password">
     <div class="note">Use at least 8 characters. Longer is better than complicated.</div>
     ${msg ? `<div class="note note--error">${escapeHtml(msg)}</div>` : ''}
